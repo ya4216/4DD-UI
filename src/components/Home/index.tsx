@@ -28,7 +28,6 @@ function Home() {
     speed: 300,
     slidesToShow: 5,
     slidesToScroll: 5,
-    arrows: true,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
     draggable : true, 	//드래그 가능 여부 
@@ -86,17 +85,21 @@ function Home() {
     <body>
       <Navbar />
       
+    <div className="home_search_bar_div">
+      <input className="home_search_bar" placeholder="검색" type="text"/>
+    </div>
+
       {/* <h1>메인화면(넷플릭스 참고)</h1> */}
       <div>
         <Slider {...settings1}>
           <div>
-            <h2 className="banners">새 강의</h2>
+            <div className="banners">새 강의</div>
           </div>
           <div>
-            <h2 className="banners">공지사항</h2>
+            <div className="banners">공지사항</div>
           </div>
           <div>
-            <h2 className="banners">이벤트</h2>
+            <div className="banners">이벤트</div>
           </div>
         </Slider>
       </div>
@@ -272,7 +275,7 @@ function Home() {
             rel="noopener"
             className="small-link"
           >
-            HWI ONE
+            TEAM 4DD
           </a>
           <a
             href="https://naver.com/"

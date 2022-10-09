@@ -10,6 +10,49 @@
 //   p {
 //     @include set-color
 //   }
+$wh : #ffffff;
+$bk : #000000;
+$pt :#ffc0cb;
+
+.slick-arrow {
+        z-index: 10;
+        width: 50px;
+        height: 50px;
+        background: rgba($bk, 0.2);
+        border-radius: 50%;
+        transition: background 0.5s;
+        &:hover {
+            background: rgba($pt, 0.9);
+
+            &::before {
+                color: rgba($bk, 0.5);
+            }
+        }
+        &::before {
+            font-family: 'Line Awesome Free';
+            font-weight: 900;
+            font-size: 49px;
+            transition: all 0.5s;
+        }
+    }
+    
+    .slick-prev {
+        left: 30px;
+
+        &::before {
+            content: "\f137";
+        }
+    }
+
+    .slick-next {
+        right: 30px;
+
+        &::before {
+            content: "\f138";
+        }
+    }
+
+
 
 h3 {
   border: 1px solid black; 
@@ -21,4 +64,15 @@ h3 {
 .banners {
   border: 1px solid black; 
   height: 250px;
+}
+
+.home_search_bar_div {
+  width: 100%;
+  text-align: center;
+  margin: 25px 0px 25px 0px;
+}
+
+.home_search_bar {
+  width: 45%;
+  height: 40px;
 }
