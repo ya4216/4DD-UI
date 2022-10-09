@@ -25,111 +25,233 @@ function Home() {
   const settings = {
     dots: false,
     infinite: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-    arrow: true,
+    speed: 300,
+    slidesToShow: 5,
+    slidesToScroll: 5,
+    arrows: true,
     nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />
+    prevArrow: <SamplePrevArrow />,
+    draggable : true, 	//드래그 가능 여부 
+    responsive: [ // 반응형 웹 구현 옵션
+      {  
+        breakpoint: 960, //화면 사이즈 960px
+        settings: {
+          //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
+          slidesToShow:3,
+          slidesToScroll: 3
+        } 
+      },
+      { 
+        breakpoint: 768, //화면 사이즈 768px
+        settings: {	
+          //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
+          slidesToShow:2,
+          slidesToScroll: 2
+        } 
+      }
+    ]
+  };
+
+  const settings1 = {
+    dots: true,
+    infinite: true,
+    speed: 300,
+    autoplay: true,
+    autoplaySpeed : 10000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    draggable : true, 	//드래그 가능 여부 
+    responsive: [ // 반응형 웹 구현 옵션
+      {  
+        breakpoint: 960, //화면 사이즈 960px
+        settings: {
+          //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
+          slidesToShow:1,
+          slidesToScroll: 1
+        } 
+      },
+      { 
+        breakpoint: 768, //화면 사이즈 768px
+        settings: {	
+          //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
+          slidesToShow:1,
+          slidesToScroll: 1
+        } 
+      }
+    ]
   };
 
   return (
     <body>
       <Navbar />
       
-      <h1>메인화면(넷플릭스 참고)</h1>
+      {/* <h1>메인화면(넷플릭스 참고)</h1> */}
+      <div>
+        <Slider {...settings1}>
+          <div>
+            <h2 className="banners">새 강의</h2>
+          </div>
+          <div>
+            <h2 className="banners">공지사항</h2>
+          </div>
+          <div>
+            <h2 className="banners">이벤트</h2>
+          </div>
+        </Slider>
+      </div>
 
 
       
       <div>
-        <h2>Computer Science</h2>
+        <h2>CS지식</h2>
         <Slider {...settings}>
           <div>
-            <h3 style={{border: '1px solid black'}}>네트워크</h3>
+            <h3 style={{border: '1px solid black', width: '85%', marginLeft: '22px'}}>네트워크</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>운영체제</h3>
+            <h3 style={{border: '1px solid black', width: '85%', marginLeft: '22px'}}>운영체제</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>자료구조</h3>
+            <h3 style={{border: '1px solid black', width: '85%', marginLeft: '22px'}}>자료구조</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>알고리즘</h3>
+            <h3 style={{border: '1px solid black', width: '85%', marginLeft: '22px'}}>알고리즘</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>데이터베이스</h3>
+            <h3 style={{border: '1px solid black', width: '85%', marginLeft: '22px'}}>데이터베이스</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>1</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>2</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>3</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>4</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>5</h3>
           </div>
         </Slider>
       </div>
 
       <div>
-        <h2>basic</h2>
+        <h2>웹 기초</h2>
         <Slider {...settings}>
           <div>
-            <h3 style={{border: '1px solid black'}}>HTML5</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>HTML5</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>CSS3</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>CSS3</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>JavaScript</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>JavaScript</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>4</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>4</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>5</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>5</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>6</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>6</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>7</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>8</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>9</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>10</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>11</h3>
           </div>
         </Slider>
       </div>
 
       <div>
-        <h2>Library</h2>
+        <h2>라이브러리</h2>
         <Slider {...settings}>
           <div>
-            <h3 style={{border: '1px solid black'}}>React</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>React</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>VUE</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>VUE</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>Angular</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>Angular</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>4</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>4</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>5</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>5</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>6</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>6</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>7</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>8</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>9</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>10</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>11</h3>
           </div>
         </Slider>
       </div>
 
       <div>
-        <h2>FrameWork</h2>
+        <h2>프레임워크</h2>
         <Slider {...settings}>
           <div>
-            <h3 style={{border: '1px solid black'}}>React</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>React</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>VUE</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>VUE</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>Angular</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>Angular</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>4</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>4</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>5</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>5</h3>
           </div>
           <div>
-            <h3 style={{border: '1px solid black'}}>6</h3>
+            <h3 style={{border: '1px solid black', width: '85%'}}>6</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>7</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>8</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>9</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%'}}>10</h3>
+          </div>
+          <div>
+            <h3 style={{border: '1px solid black', width: '85%', marginLeft: '26px'}}>11</h3>
           </div>
         </Slider>
       </div>
