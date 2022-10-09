@@ -8,6 +8,7 @@ import Profile from "./components/Profile";
 import Help from "./components/Help";
 import Works from "./components/Works";
 import Register from "./components/Register";
+import $ from 'jquery';
 
 function App() {
   return (
