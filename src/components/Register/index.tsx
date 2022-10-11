@@ -1,33 +1,108 @@
-import React from "react";
-import Navbar from "../Navbar";
+import React, { useState } from 'react';
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControl,
+  FormControlLabel,
+  Checkbox,
+  FormHelperText,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from '@mui/material/';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-function Register() {
+const Register = () => {
+  const theme = createTheme();
+  const [checked, setChecked] = useState(false);
+
+  // 동의 체크
+  const handleAgree = (event: any) => {
+    setChecked(event.target.checked);
+  };
+
+  // form 전송
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+  };
+
   return (
-    <body>
-      <Navbar />
-      <h1>Register</h1>
-      <h2>Vite + React + TS (Hamburger + Responsive + Router)</h2>
-      <footer className="footer">
-        <p className="footer-by">
-          A project by{" "}
-          <a
-            href="https://naver.com/"
-            rel="noopener"
-            className="small-link"
-          >
-            HWI ONE
-          </a>
-          <a
-            href="https://naver.com/"
-            rel="noopener"
-            target="_blank"
-            className="no-link icon-twitter"
-            aria-label="Follow me on Twitter"
-          ></a>
-        </p>
-      </footer>
-    </body>
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} />
+          <Typography component="h1" variant="h5">
+            회원가입
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <FormControl component="fieldset" variant="standard">
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    autoFocus
+                    fullWidth
+                    type="email"
+                    id="email"
+                    name="email"
+                    label="이메일 주소"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    type="password"
+                    id="password"
+                    name="password"
+                    label="비밀번호 (숫자+영문자+특수문자 8자리 이상)"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    type="password"
+                    id="rePassword"
+                    name="rePassword"
+                    label="비밀번호 재입력"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField required fullWidth id="name" name="name" label="이름" />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleAgree} color="primary" />}
+                    label="회원가입 약관에 동의합니다."
+                  />
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                size="large"
+              >
+                회원가입
+              </Button>
+            </FormControl>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
-}
-
+};
 export default Register;
