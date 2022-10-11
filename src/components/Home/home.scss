@@ -13,57 +13,109 @@
 $wh : #ffffff;
 $bk : #000000;
 $pt :#ffc0cb;
+	
+// $tablet: 768px;
+// $laptop: 1020px;
+// $desktop: 1400px;
+
+// @mixin desktop {
+//   @media (max-width: #{$desktop}) {
+//     @content;
+//   }
+// }
+	
+// @mixin laptop {
+//   @media (max-width: #{$laptop}) {
+//     @content;
+//   }
+// }
+
+// @mixin tablet {
+//   @media (min-width: #{$tablet}) {
+//     @content;
+//   }
+// }
+
+// const breakpoints = {
+//   sm: '30em',
+//   md: '48em',
+//   lg: '62em',
+//   xl: '80em',
+//   '2xl': '96em',
+// }
+
+@mixin breakpoint($point) {
+  @if $point == md {
+      // 768px
+      @media (max-width: 48em) {
+          @content;
+      }
+  }
+}
 
 .slick-arrow {
-        z-index: 10;
-        width: 50px;
-        height: 50px;
-        background: rgba($bk, 0.2);
-        border-radius: 50%;
-        transition: background 0.5s;
-        &:hover {
-            background: rgba($pt, 0.9);
+    z-index: 10;
+    width: 30px;
+    height: 30px;
+    background: rgba($bk, 0.2);
+    border-radius: 50%;
+    transition: background 0.5s;
+    &:hover {
+        background: rgba($pt, 0.9);
 
-            &::before {
-                color: rgba($bk, 0.5);
-            }
-        }
-        &::before {
-            font-family: 'Line Awesome Free';
-            font-weight: 900;
-            font-size: 49px;
-            transition: all 0.5s;
-        }
+        // &::before {
+        //     color: rgba($bk, 0.5);
+        // }
     }
+    // &::before {
+    //     font-family: 'Line Awesome Free';
+    //     font-weight: 900;
+    //     font-size: 49px;
+    //     transition: all 0.5s;
+    // }
+}
     
-    .slick-prev {
-        left: 30px;
+.slick-prev {
+    left: 10px;
 
-        &::before {
-            content: "\f137";
-        }
+    &::before {
+        content: "\f137";
     }
+}
 
-    .slick-next {
-        right: 30px;
+.slick-next {
+    right: 10px;
 
-        &::before {
-            content: "\f138";
-        }
+    &::before {
+        content: "\f138";
     }
+}
+
+.slick-active div div {
+  text-align: center;
+}
 
 
+
+.contens_title {
+  margin: 55px 0px 10px 15px;
+  font-weight: 600;
+  font-size: 20px;
+}
 
 .list {
   border: 1px solid black; 
-  width: 85%; 
-  margin-left: 22px;
+  width: 90%; 
   height: 250px;
+  @include breakpoint(md) {
+    height: 200px;
+  }
 }
 
 .banners {
   border: 1px solid black; 
   height: 250px;
+  width: 100%;
 }
 
 .home_search_bar_div {
@@ -75,4 +127,9 @@ $pt :#ffc0cb;
 .home_search_bar {
   width: 45%;
   height: 40px;
+
+  @include breakpoint(md) {
+    width: 75%;
+    height: 40px;
+  }
 }

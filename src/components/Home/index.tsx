@@ -1,13 +1,19 @@
 import React from "react";
 import Navbar from "../Navbar";
-import "./home.scss";
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import "./home.scss";
 import Carousel from "../../common/Carousel";
 
 function Home() {
   let propFunc = (num:number, title:string) => {
+    type pType = {
+      list : string[],
+      option : string,
+      title : string
+    };
+
     let option = 'list';
     let arr: string[];
 
@@ -16,12 +22,6 @@ function Home() {
     }else {
       option = 'list';
     }
-
-    type pType = {
-      list : string[],
-      option : string,
-      title : string
-    };
 
     //TODO : DB에서 가져오는걸로 바꿔야함
     let bnArr: string[] = ["새 강의", "공지사항", "이벤트"];

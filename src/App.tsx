@@ -8,11 +8,13 @@ import Profile from "./components/Profile";
 import Help from "./components/Help";
 import Works from "./components/Works";
 import Register from "./components/Register";
+import Contents from "./components/Details";
 import $ from 'jquery';
 
 function App() {
   return (
     <Routes>
+      <Route path="contents" element={<Contents />} />
       <Route path="profile" element={<Profile />} />
       <Route path="works" element={<Works />} />
       <Route path="help" element={<Help />} />

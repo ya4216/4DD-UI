@@ -35,6 +35,7 @@ function Navbar() {
 
   return (
     <header className="header">
+      <meta name="viewport" content="width=device-width,initial-scale=1" user-scalable="no"/>
       <div className="header__content">
         <Link to="/" className="header__content__logo">
           FOR DREAM DEVELOPER

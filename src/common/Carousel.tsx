@@ -1,6 +1,8 @@
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Link } from "react-router-dom";
+import { useCallback, useState } from "react";
 
 //TS에서는 props를 사용할때 타입을 지정해줘야한다. props : any 로 해도 되지만 그러면 TS를 사용하는 의미가 없다.
 interface IProps {
@@ -29,19 +31,36 @@ const Carousel = (props: IProps) => {
         );
     }
 
+    const [dragging, setDragging] = useState<boolean>(false);
+    // const handleBeforeChange = useCallback(() => {   
+    //     setDragging(true);  
+    // }, []); 
+    const handleAfterChange = useCallback((i: number) => { 
+        console.log("11 : ");
+        setDragging(false);  
+    }, []);
+    
+    const handleBeforeChange = useCallback(() => {
+        console.log("22 : ");
+        setDragging(true);
+    }, []);
+
     //슬라이드 옵션 세팅값
     let settings = {
         dots: props.option == 'banners' ? true : false,
-        infinite: false,
-        speed: 300,
+        infinite: props.option == 'banners' ? true : false,
+        speed: props.option == 'banners' ? 600 : 300,
         autoplay : props.option == 'banners' ? true : false,
-        autoplaySpeed : 10000,
+        autoplaySpeed : 4000,
         arrows : props.option == 'banners' ? false : true,
         slidesToShow: props.option == 'banners' ? 1 : 5,
         slidesToScroll: props.option == 'banners' ? 1 : 5,
-        nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />,
-        draggable : true, 	//드래그 가능 여부 
+        // nextArrow: <SampleNextArrow />,
+        // prevArrow: <SamplePrevArrow />,
+        draggable : true, 	//드래그 가능 여부
+        // touchThreshold : 100,
+        // beforeChange: handleBeforeChange,
+        // afterChange: handleAfterChange,
         responsive: props.option == 'banners' ? [] : [ // 반응형 웹 구현 옵션
         {  
             breakpoint: 960, //화면 사이즈 960px
@@ -91,7 +110,11 @@ const Carousel = (props: IProps) => {
         for (var i = 0; i < props.list.length; i++) {
             htmlArr.push(
                 <div>
-                    <div className={clName}>{props.list[i]}</div>
+                    <Link to="/contents">
+                        <button className={clName}>
+                            {props.list[i]}
+                        </button>
+                    </Link>
                 </div>
             )
         }
@@ -100,7 +123,7 @@ const Carousel = (props: IProps) => {
 
     return (
         <div>
-            <h2>{props.title}</h2>
+            <div className="contens_title">{props.title}</div>
             
             <Slider {...settings}>
                 { tagList() }
