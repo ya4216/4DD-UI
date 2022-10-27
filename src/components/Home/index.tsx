@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../Navbar";
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import "./home.scss";
 import Carousel from "../../common/Carousel";
+import Axios from 'axios';
 
 function Home() {
+
+  useEffect(() => {
+    Axios.get('/api/test')
+      .then(res => {
+        console.log(res);
+      })
+  }, []);
+
   let propFunc = (num:number, title:string) => {
     type pType = {
       list : string[],
@@ -76,8 +85,6 @@ function Home() {
       
       <Carousel {...propFunc(2, '프레임워크')}/>
 
-
-
       <h2>Vite + React + TS (Hamburger + Responsive + Router)</h2>
 
       <footer className="footer">
@@ -104,3 +111,24 @@ function Home() {
 }
 
 export default Home;
+
+
+
+
+
+
+// const MainPage = () => {
+
+//   useEffect(() => {
+//     Axios.get('/customers')
+//       .then(res => {
+//         console.log(res);
+//       })
+//   }, [])
+
+//   return (
+//     <></>
+//   )
+// }
+
+// export default MainPage;
