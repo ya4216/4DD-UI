@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const API_URL = process.env.API_ROOT + "/api/auth/";
-const API_URL = "http://localhost:8080/api/auth/";
+const API_URL = "http://localhost:4000/api/auth/";
 
 class AuthService {
   async login(username: string, password: string) {

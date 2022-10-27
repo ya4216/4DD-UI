@@ -9,7 +9,6 @@ import Help from "./components/Help";
 import Works from "./components/Works";
 import Register from "./components/Register";
 import Contents from "./components/Details";
-import $ from 'jquery';
 
 function App() {
   return (
