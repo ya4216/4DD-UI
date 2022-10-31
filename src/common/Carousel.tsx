@@ -36,12 +36,10 @@ const Carousel = (props: IProps) => {
     //     setDragging(true);  
     // }, []); 
     const handleAfterChange = useCallback((i: number) => { 
-        console.log("11 : ");
         setDragging(false);  
     }, []);
     
     const handleBeforeChange = useCallback(() => {
-        console.log("22 : ");
         setDragging(true);
     }, []);
 
@@ -109,7 +107,7 @@ const Carousel = (props: IProps) => {
 
         for (var i = 0; i < props.list.length; i++) {
             htmlArr.push(
-                <div>
+                <div key={i}>
                     <Link to="/contents">
                         <button className={clName}>
                             {props.list[i]}

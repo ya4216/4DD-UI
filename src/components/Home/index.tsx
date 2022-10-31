@@ -10,7 +10,7 @@ import Axios from 'axios';
 function Home() {
 
   useEffect(() => {
-    Axios.get('/api/test')
+    Axios.get('/api/635fabf8bf0c844b8f72c097')
       .then(res => {
         console.log(res);
       })
@@ -66,7 +66,7 @@ function Home() {
   };
 
   return (
-    <body>
+    <>
       <Navbar />
       
       <div className="home_search_bar_div">
@@ -106,29 +106,8 @@ function Home() {
           ></a>
         </p>
       </footer>
-    </body>
+    </>
   );
 }
 
 export default Home;
-
-
-
-
-
-
-// const MainPage = () => {
-
-//   useEffect(() => {
-//     Axios.get('/customers')
-//       .then(res => {
-//         console.log(res);
-//       })
-//   }, [])
-
-//   return (
-//     <></>
-//   )
-// }
-
-// export default MainPage;
