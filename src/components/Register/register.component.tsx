@@ -7,7 +7,7 @@ import * as Yup from "yup";
 type Props = {};
 
 type State = {
-  username: string,
+  name: string,
   email: string,
   password: string,
   password2: string,
@@ -21,7 +21,7 @@ export default class Register extends Component<Props, State> {
     this.handleRegister = this.handleRegister.bind(this);
 
     this.state = {
-      username: "",
+      name: "",
       email: "",
       password: "",
       password2: "",
@@ -32,7 +32,7 @@ export default class Register extends Component<Props, State> {
 
   validationSchema() {
     return Yup.object().shape({
-      username: Yup.string()
+      name: Yup.string()
         .required("이름을 입력해주세요.")
         .test(
           "len",
@@ -62,8 +62,8 @@ export default class Register extends Component<Props, State> {
     });
   }
 
-  handleRegister(formValue: { username: string; email: string; password: string }) {
-    const { username, email, password } = formValue;
+  handleRegister(formValue: { name: string; email: string; password: string }) {
+    const { name, email, password } = formValue;
 
     this.setState({
       message: "",
@@ -71,7 +71,7 @@ export default class Register extends Component<Props, State> {
     });
 
     // AuthService.register(
-    //   username,
+    //   name,
     //   email,
     //   password
     // ).then(
@@ -101,7 +101,7 @@ export default class Register extends Component<Props, State> {
     const { successful, message } = this.state;
 
     const initialValues = {
-      username: "",
+      name: "",
       email: "",
       password: "",
       password2: "",
@@ -125,10 +125,10 @@ export default class Register extends Component<Props, State> {
               {!successful && (
                 <div>
                   <div className="form-group">
-                    <label htmlFor="username"> 이름 </label>
-                    <Field name="username" type="text" className="form-control" />
+                    <label htmlFor="name"> 이름 </label>
+                    <Field name="name" type="text" className="form-control" />
                     <ErrorMessage
-                      name="username"
+                      name="name"
                       component="div"
                       className="alert alert-danger"
                     />

@@ -4,12 +4,12 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import AuthService from "../../services/auth";
 import * as Yup from "yup";
 import './index.scss';
-import axios from 'axios';
+import Axios from 'axios';
 
 
 
 const Register = () => {
-  const [username, setUsername] = useState(false);
+  const [name, setName] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
@@ -17,7 +17,6 @@ const Register = () => {
   const [message, setMessage] = useState('');
   let navigate = useNavigate();    
 
-  
   // const onhandlePost = async (data: any) => {
   //   const { email, name, password } = data;
   //   const postData = { email, name, password };
@@ -36,11 +35,11 @@ const Register = () => {
   // };
 
   // 회원가입 핸들러
-  const handleRegister = (formValue: { username: string; email: string; password: string }) => {
-    const { username, email, password } = formValue;
+  const handleRegister = (formValue: { name: string; email: string; password: string }) => {
+    const { name, email, password } = formValue;
 
     AuthService.register(
-      username,
+      name,
       email,
       password
     ).then(
@@ -66,7 +65,7 @@ const Register = () => {
   // Yup을 이용한 Form 제한조건
   const validationSchema = () => {
     return Yup.object().shape({
-      username: Yup.string()
+      name: Yup.string()
         .required("이름을 입력해주세요.")
         .test(
           "len",
@@ -93,7 +92,7 @@ const Register = () => {
   }
 
   const initialValues = {
-    username: "",
+    name: "",
     email: "",
     password: "",
     password2: "",
@@ -116,12 +115,12 @@ const Register = () => {
                   <div className="login__inputs">
                     <div className="form-group">                      
                       <Field 
-                        name="username"
+                        name="name"
                         type="text" 
                         placeholder="사용자 이름을 입력해주세요." 
                         className="login__input" />
                       <ErrorMessage
-                        name="username"
+                        name="name"
                         component="div"
                         className="alert alert-danger danger"
                       />

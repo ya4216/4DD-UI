@@ -1,13 +1,13 @@
 import axios from "axios";
 
 // const API_URL = process.env.API_ROOT + "/api/auth/";
-const API_URL = "http://localhost:4000/api/auth/";
+// const API_URL = "http://localhost:8080/api/user/";
 
 class AuthService {
-  async login(username: string, password: string) {
+  async login(email: string, password: string) {
     return await axios
-      .post(API_URL + "login", {
-        username,
+      .post("/api/user/login", {
+        email,
         password
       })
       .then(response => {
@@ -23,9 +23,9 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
-  async register(username: string, email: string, password: string) {
-    return await axios.post(API_URL + "register", {
-      username,
+  async register(name: string, email: string, password: string) {
+    return await axios.post("/api/user/register", {
+      name,
       email,
       password
     });
