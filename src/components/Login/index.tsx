@@ -4,36 +4,43 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from 'axios';
 import './index.scss';
+import AuthService from "../../services/auth";
 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [successful, setSuccessful] = useState('');
+  const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [registerError, setRegisterError] = useState('');
   let navigate = useNavigate();  
 
-  const onhandlePost = async (data: any) => {
-    const { email, password } = data;
-    const postData = { email, password };
+  // 회원가입 핸들러
+  const handleLogin = (formValue: { email: string; password: string }) => {
+    const { email, password } = formValue;
 
-    // post
-    await axios
-      .post('/member/login', postData)
-      .then(function (response) {
-        console.log(response, '성공');
-        navigate('/');
-      })
-      .catch(function (err: any) {
-        console.log(err);
-        setRegisterError('로그인에 실패하였습니다. 회원정보를 확인해주세요.');
-      });
-  };
+    AuthService.login(      
+      email,
+      password
+    ).then(
+      response => {
+        setSuccessful(true);
+        setMessage(response.message);
+        navigate('/home');
+      },
+      error => {
+        const resMessage =
+          (error.response &&
+            error.response &&
+            error.response.message) ||
+          error.message ||
+          error.toString();
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-  };
+          setSuccessful(false);
+          setMessage(resMessage);
+      }
+    );
+  }
 
   const initialValues = {    
     email: "",
@@ -47,7 +54,7 @@ const Login = () => {
         <div className="login__forms">
           <Formik
               initialValues={initialValues}
-              onSubmit={handleSubmit}
+              onSubmit={handleLogin}
             >
               <Form className="login__create">
                <h1 className="login__title">4 D D</h1>

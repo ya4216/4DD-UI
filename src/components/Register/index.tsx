@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import AuthService from "../../services/auth";
 import * as Yup from "yup";
-import axios from 'axios';
 import './index.scss';
+import axios from 'axios';
+
 
 
 const Register = () => {
@@ -14,8 +15,9 @@ const Register = () => {
   const [password2, setPassword2] = useState('');
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
-  let navigate = useNavigate();  
+  let navigate = useNavigate();    
 
+  
   // const onhandlePost = async (data: any) => {
   //   const { email, name, password } = data;
   //   const postData = { email, name, password };
