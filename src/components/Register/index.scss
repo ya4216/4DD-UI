@@ -248,6 +248,12 @@ img{
       margin:0 1rem;
     }
   }
+  .alert{
+    font-weight: 400;   
+    &__fail{
+      color: #FF0000;
+    }
+  }
 }
 .block{
   display:block;

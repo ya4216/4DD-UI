@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import axios from 'axios';
 import './index.scss';
 import AuthService from "../../services/auth";
+import { useCookies } from 'react-cookie';
 
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [registerError, setRegisterError] = useState('');
+  // const [cookies, setCookie] = useCookies(['refreshToken']);
   let navigate = useNavigate();  
 
-  // 회원가입 핸들러
+  // 로그인 핸들러
   const handleLogin = (formValue: { email: string; password: string }) => {
     const { email, password } = formValue;
-
+    if(!email || !password) {
+      setMessage("계정 정보를 입력해 주세요.");
+      return;
+    } 
     AuthService.login(      
       email,
       password
@@ -26,18 +27,13 @@ const Login = () => {
       response => {
         setSuccessful(true);
         setMessage(response.message);
+        // setCookie('refreshToken', response.data.refreshToken);
         navigate('/home');
       },
       error => {
-        const resMessage =
-          (error.response &&
-            error.response &&
-            error.response.message) ||
-          error.message ||
-          error.toString();
-
-          setSuccessful(false);
-          setMessage(resMessage);
+        const resMessage = error.response.data?.message;
+        setSuccessful(false);
+        setMessage(resMessage);
       }
     );
   }
@@ -114,11 +110,11 @@ const Login = () => {
                   <div className="form-group">
                     <div
                       className={
-                        successful ? "alert alert-success" : "alert alert-danger"
+                        successful ? "" : "alert__fail"
                       }
                       role="alert"
                     >
-                      {message}
+                      {message} 
                     </div>
                   </div>
                 )}

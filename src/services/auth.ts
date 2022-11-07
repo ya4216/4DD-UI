@@ -1,7 +1,5 @@
 import axios from "axios";
-
-// const API_URL = process.env.API_ROOT + "/api/auth/";
-// const API_URL = "http://localhost:8080/api/user/";
+import axiosInstance from "./auth-interceptors";
 
 class AuthService {
   async login(email: string, password: string) {
@@ -10,11 +8,10 @@ class AuthService {
         email,
         password
       })
-      .then(response => {
-        if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data));
+      .then(response => {        
+        if (response.data.data.accessToken) {
+          localStorage.setItem("user", JSON.stringify(response.data.data));
         }
-
         return response.data;
       });
   }
@@ -23,7 +20,7 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
-  async register(name: string, email: string, password: string) {
+  async register(name: string, email: string, password: string) {    
     return await axios.post("/api/user/register", {
       name,
       email,
@@ -36,6 +33,16 @@ class AuthService {
     if (userStr) return JSON.parse(userStr);
 
     return null;
+  }
+
+  async getUserInfo() {
+    return await axiosInstance
+      .get("/api/user/info")
+      .then(response => { 
+        console.log("#### getUserInfo ! ");
+        
+        return response.data;
+      });
   }
 }
 

@@ -36,8 +36,7 @@ const Register = () => {
 
   // 회원가입 핸들러
   const handleRegister = (formValue: { name: string; email: string; password: string }) => {
-    const { name, email, password } = formValue;
-
+    const { name, email, password } = formValue;    
     AuthService.register(
       name,
       email,
@@ -49,15 +48,9 @@ const Register = () => {
         navigate('/login');
       },
       error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-
-          setSuccessful(false);
-          setMessage(resMessage);
+        const resMessage = error.response.data?.message;
+        setSuccessful(false);
+        setMessage(resMessage);
       }
     );
   }
@@ -194,7 +187,7 @@ const Register = () => {
                   <div className="form-group">
                     <div
                       className={
-                        successful ? "alert alert-success" : "alert alert-danger"
+                        successful ? "" : "alert__fail"
                       }
                       role="alert"
                     >

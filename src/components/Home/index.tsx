@@ -7,6 +7,7 @@ import "./home.scss";
 import Carousel from "../../common/Carousel";
 
 function Home() {
+
   let propFunc = (num:number, title:string) => {
     type pType = {
       list : string[],

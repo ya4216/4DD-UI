@@ -132,7 +132,7 @@
                             background: linear-gradient(rgba(rgb(162, 162, 246), 0.2), rgba(rgb(162, 162, 246), 0.3));
                             color: rgb(162, 162, 246);
                         }
-                        &__login{
+                        &__login_out{
                             
                             background-color: rgb(32, 32, 32);
                             color:#fff;
@@ -144,6 +144,11 @@
         
                     &.isMenu {
                         transform: translate(100%);
+                    }
+                    .account {
+                        color: #ffffff;
+                        font-size: 25px;
+                        margin-left: 50px;
                     }
                 }
         

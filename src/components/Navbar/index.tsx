@@ -1,17 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { BiMenuAltRight } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
+import { VscAccount } from "react-icons/vsc";
 import { Link, useNavigate } from "react-router-dom";
 import "./navbar.scss";
+import AuthService from "../../services/auth";
 
-function Navbar() {
+const Navbar = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const [size, setSize] = useState({
     width: 0,
     height: 0,
   });
-  useEffect(() => {
+
+  const getUserInfo = () => {
+    AuthService.getUserInfo()
+    .then(
+      response => {
+        console.log("### getUserInfo : "+ JSON.stringify(response));
+        
+      },
+      error => {
+        
+      }
+    );
+  }
+  
+  
+  useEffect(() => {    
+    if(localStorage.getItem('user') !== null) {
+      setIsLogin(true);
+    }
     const handleResize = () => {
       setSize({
         width: window.innerWidth,
@@ -31,6 +52,12 @@ function Navbar() {
 
   const menuToggleHandler = () => {
     setMenuOpen((p) => !p);
+  };
+
+  const logout = () => {
+    AuthService.logout();
+    navigate('/home');
+    setIsLogin(false);
   };
 
   return (
@@ -59,12 +86,23 @@ function Navbar() {
               <Link to="/mypage">마이페이지</Link>
             </li>
 
-            <Link to="/register">
+            {/* <Link to="/register">
               <button className="btn">회원가입</button>
-            </Link>
-            <Link to="/login">
-              <button className="btn btn__login">로그인</button>
-            </Link>
+            </Link> */}
+            {!isLogin ?
+              <Link to="/login">
+                <button className="btn btn__login_out">로그인</button>
+              </Link>
+              : 
+              <div style={{display: "contents"}}>
+                <Link to="/logout">
+                  <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
+                </Link>
+                <Link to="/account">
+                  <VscAccount className="account" onClick={getUserInfo}></VscAccount>
+                </Link>
+              </div>
+            }
           </ul>
         </nav>
         <div className="header__content__toggle">
