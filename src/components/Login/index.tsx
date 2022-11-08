@@ -4,13 +4,13 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import './index.scss';
 import AuthService from "../../services/auth";
 import { useCookies } from 'react-cookie';
-
+import axios from 'axios';
 
 const Login = () => {
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [registerError, setRegisterError] = useState('');
-  // const [cookies, setCookie] = useCookies(['refreshToken']);
+  const [cookies, setCookie] = useCookies(['accessToken']);
   let navigate = useNavigate();  
 
   // 로그인 핸들러
@@ -27,7 +27,7 @@ const Login = () => {
       response => {
         setSuccessful(true);
         setMessage(response.message);
-        // setCookie('refreshToken', response.data.refreshToken);
+        // setCookie('accessToken', response.data.accessToken);
         navigate('/home');
       },
       error => {

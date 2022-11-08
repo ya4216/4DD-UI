@@ -9,8 +9,8 @@ class AuthService {
         password
       })
       .then(response => {        
-        if (response.data.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data.data));
+        if (response.data.data.accessToken) {                    
+          localStorage.setItem("user", JSON.stringify(response.data.data));        
         }
         return response.data;
       });
@@ -39,7 +39,6 @@ class AuthService {
     return await axiosInstance
       .get("/api/user/info")
       .then(response => { 
-        console.log("#### getUserInfo ! ");
         
         return response.data;
       });

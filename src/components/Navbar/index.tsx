@@ -19,7 +19,6 @@ const Navbar = () => {
     AuthService.getUserInfo()
     .then(
       response => {
-        console.log("### getUserInfo : "+ JSON.stringify(response));
         
       },
       error => {

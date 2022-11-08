@@ -4,9 +4,11 @@ import authHeader from './auth-header';
 const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
-    'authorization': authHeader()
+    'Authorization': authHeader()
   },
 });
+
+const token = localStorage.getItem('accessToken');
 
 axiosInstance.interceptors.response.use(
   (response: any) => {
@@ -17,7 +19,7 @@ axiosInstance.interceptors.response.use(
       config,
       response: { status },
     } = error;
-
+    
     const originalRequest = config;
 
     if (status === 403) {
@@ -34,7 +36,7 @@ axiosInstance.interceptors.response.use(
         // const newRefreshToken = data.data.refreshToken;
         originalRequest.headers = {
           'Content-Type': 'application/json',
-          'authorization': authHeader()
+          'Authorization': authHeader()
         };
         localStorage.setItem('ACCESS_TOKEN', newAccessToken);
         // localStorage.setItem('REFRESH_TOKEN', newRefreshToken);
