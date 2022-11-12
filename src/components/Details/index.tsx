@@ -3,7 +3,7 @@ import Navbar from "../Navbar";
 
 function ContentDetail() {
   return (
-    <body>
+    <>
       <Navbar />
       <h1>contents</h1>
       <h2>Vite + React + TS (Hamburger + Responsive + Router)</h2>
@@ -26,7 +26,7 @@ function ContentDetail() {
           ></a>
         </p>
       </footer>
-    </body>
+    </>
   );
 }
 

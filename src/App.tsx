@@ -1,5 +1,6 @@
 import "./App.css";
 import Navbar from "./components/Navbar";
+import Footer from "./common/Footer";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
@@ -29,7 +30,9 @@ function App() {
 export function WrappedApp() {
   return (
     <HashRouter>
+      <Navbar />
       <App />
+      <Footer/>
     </HashRouter>
   );
 }
