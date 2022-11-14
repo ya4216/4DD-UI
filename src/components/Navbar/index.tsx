@@ -58,8 +58,7 @@ const Navbar = () => {
   };
 
   const logout = () => {
-    console.log("%%%% logout in");
-    
+    console.log("%%%% logout in");    
     AuthService.logout()
     .then(
       response => {
