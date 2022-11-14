@@ -5,15 +5,19 @@ import { VscAccount } from "react-icons/vsc";
 import { Link, useNavigate } from "react-router-dom";
 import "./navbar.scss";
 import AuthService from "../../services/auth";
+import { useCookies } from 'react-cookie';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [successful, setSuccessful] = useState(false);
+  const [message, setMessage] = useState('');
   const [size, setSize] = useState({
     width: 0,
     height: 0,
   });
+  const [cookies, setCookie] = useCookies(['accessToken']);
 
   const getUserInfo = () => {
     AuthService.getUserInfo()
@@ -54,9 +58,41 @@ const Navbar = () => {
   };
 
   const logout = () => {
-    AuthService.logout();
-    navigate('/home');
-    setIsLogin(false);
+    console.log("%%%% logout in");
+    
+    AuthService.logout()
+    .then(
+      response => {
+        setSuccessful(true);
+        setMessage(response.data.message);
+        navigate('/home');
+        allDelCookies('localhost', '/');
+        setIsLogin(false);
+      },
+      error => {
+        const resMessage = error.response.data?.message;
+        setSuccessful(false);
+        setMessage(resMessage);
+      }
+    );
+  };
+
+  // 쿠키 전체 삭제하기
+  const allDelCookies = (domain: string, path: string) => {
+    domain = domain || document.domain;
+    path = path || '/';
+
+    const cookies = document.cookie.split('; '); // 배열로 반환
+    console.log(cookies);
+    const expiration = 'Sat, 01 Jan 1972 00:00:00 GMT';
+
+    // 반목문 순회하면서 쿠키 전체 삭제
+    if (!document.cookie) {
+    } else {
+      for (let i = 0; i < cookies.length; i++) {
+        document.cookie = cookies[i].split('=')[0] + '=; expires=' + expiration;
+      }
+    }
   };
 
   return (

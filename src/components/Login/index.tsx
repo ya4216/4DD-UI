@@ -10,11 +10,12 @@ const Login = () => {
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [registerError, setRegisterError] = useState('');
-  const [cookies, setCookie] = useCookies(['accessToken']);
+  const [cookies, setCookie] = useCookies(['accesstoken']);
   let navigate = useNavigate();  
 
+  
   // 로그인 핸들러
-  const handleLogin = (formValue: { email: string; password: string }) => {
+  const handleLogin = (formValue: { email: string; password: string }) => {         
     const { email, password } = formValue;
     if(!email || !password) {
       setMessage("계정 정보를 입력해 주세요.");
@@ -31,6 +32,8 @@ const Login = () => {
         navigate('/home');
       },
       error => {
+        console.log("### error : "+ error);
+        
         const resMessage = error.response.data?.message;
         setSuccessful(false);
         setMessage(resMessage);

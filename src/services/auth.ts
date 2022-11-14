@@ -9,15 +9,19 @@ class AuthService {
         password
       })
       .then(response => {        
-        if (response.data.data.accessToken) {                    
+        if (response.data.data?.accessToken) {                    
           localStorage.setItem("user", JSON.stringify(response.data.data));        
         }
         return response.data;
       });
   }
 
-  logout() {
-    localStorage.removeItem("user");
+  // logout() {
+  //   localStorage.removeItem("user");
+  // }
+
+  async logout() {
+    return await axios.post("/api/user/logout");
   }
 
   async register(name: string, email: string, password: string) {    
