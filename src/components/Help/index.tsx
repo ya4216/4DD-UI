@@ -3,11 +3,10 @@ import Navbar from "../Navbar";
 
 function index() {
   return (
-    <body>
-      <Navbar />
+    <>
       <h1>Help</h1>
       <h2>Vite + React + TS (Hamburger + Responsive + Router)</h2>
-      <footer className="footer">
+      {/* <footer className="footer">
         <p className="footer-by">
           A project by{" "}
           <a
@@ -25,8 +24,8 @@ function index() {
             aria-label="Follow me on Twitter"
           ></a>
         </p>
-      </footer>
-    </body>
+      </footer> */}
+    </>
   );
 }
 
