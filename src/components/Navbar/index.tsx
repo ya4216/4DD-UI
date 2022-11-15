@@ -19,20 +19,23 @@ const Navbar = () => {
   });
   const [cookies, setCookie] = useCookies(['accessToken']);
 
-  const getUserInfo = () => {
-    AuthService.getUserInfo()
-    .then(
-      response => {
+  // const getUserInfo = () => {
+  //   AuthService.getUserInfo()
+  //   .then(
+  //     response => {
         
-      },
-      error => {
+  //     },
+  //     error => {
         
-      }
-    );
+  //     }
+  //   );
+  // }
+  
+  const profile = () => {
+    navigate('/profile');
   }
   
-  
-  useEffect(() => {    
+  useEffect(() => {        
     if(localStorage.getItem('user') !== null) {
       setIsLogin(true);
     }
@@ -62,6 +65,7 @@ const Navbar = () => {
     AuthService.logout()
     .then(
       response => {
+        localStorage.removeItem("user");
         setSuccessful(true);
         setMessage(response.data.message);
         navigate('/home');
@@ -108,7 +112,7 @@ const Navbar = () => {
         >
           <ul>
             <li>
-              <Link to="/profile">회사검색</Link>
+              <Link to="/">회사검색</Link>
             </li>
             <li>
               <Link to="/Works">면접질문</Link>
@@ -129,11 +133,9 @@ const Navbar = () => {
               </Link>
               : 
               <div style={{display: "contents"}}>
-                <Link to="/logout">
-                  <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
-                </Link>
-                <Link to="/account">
-                  <VscAccount className="account" onClick={getUserInfo}></VscAccount>
+                <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
+                <Link to="/profile">
+                  <VscAccount className="account"></VscAccount>
                 </Link>
               </div>
             }
