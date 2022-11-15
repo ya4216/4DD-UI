@@ -4,10 +4,9 @@ import Navbar from "../Navbar";
 function ContentDetail() {
   return (
     <>
-      <Navbar />
       <h1>contents</h1>
       <h2>Vite + React + TS (Hamburger + Responsive + Router)</h2>
-      <footer className="footer">
+      {/* <footer className="footer">
         <p className="footer-by">
           A project by{" "}
           <a
@@ -25,7 +24,7 @@ function ContentDetail() {
             aria-label="Follow me on Twitter"
           ></a>
         </p>
-      </footer>
+      </footer> */}
     </>
   );
 }
