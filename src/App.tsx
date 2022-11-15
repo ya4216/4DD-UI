@@ -10,6 +10,7 @@ import Help from "./components/Help";
 import Works from "./components/Works";
 import Register from "./components/Register";
 import Contents from "./components/Details";
+import ReduxTest from "./containers/CounterContainer";
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
       <Route path="home" element={<Home />} />
       <Route path="/" element={<Home />} />
       <Route path="*" element={<NotFound />} />
+
+      <Route path="redux" element={<ReduxTest />} />
     </Routes>
   );
 }
@@ -32,7 +35,6 @@ export function WrappedApp() {
     <HashRouter>
       <Navbar />
       <App />
-      <Footer/>
     </HashRouter>
   );
 }
