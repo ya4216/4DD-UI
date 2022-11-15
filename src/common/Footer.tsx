@@ -62,16 +62,19 @@ const Footer = () => {
                     <Link to="/login">
                       <button className="btn btn__login">로그인</button>
                     </Link>
+                    <div className="home_search_bar_div_footer">
+                      <input className="home_search_bar" placeholder="검색" type="text"/>
+                    </div>
                   </ul>
                 ) : null
               }
             </nav>
             <div className="header__content__toggle">
-            {!menuOpen ? (
-                <BiMenuAltRight onClick={menuToggleHandler} />
-            ) : (
-                <AiOutlineClose onClick={menuToggleHandler} />
-            )}
+              {!menuOpen ? (
+                  <BiMenuAltRight onClick={menuToggleHandler} />
+              ) : (
+                  <AiOutlineClose onClick={menuToggleHandler} />
+              )}
             </div>
         </footer>
     </>

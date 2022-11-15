@@ -18,6 +18,7 @@ const Navbar = () => {
     height: 0,
   });
   const [cookies, setCookie] = useCookies(['accessToken']);
+  const [classNm, setClassNm] = useState('');
 
   const getUserInfo = () => {
     AuthService.getUserInfo()
@@ -95,15 +96,12 @@ const Navbar = () => {
     }
   };
 
-  return (
-    <header className="header">
-      <meta name="viewport" content="width=device-width,initial-scale=1" user-scalable="no"/>
-      <div className="header__content">
-        <Link to="/" className="header__content__logo">
-          FOR DREAM DEVELOPER
-        </Link>
+  //22.11.15 hwi 추가
+  const menuElement = (classNm : string) => {
+    return (
+      <>
         <nav
-          className={`${"header__content__nav"} 
+          className={`${classNm + "__content__nav"} 
           ${menuOpen && size.width < 768 ? `${"isMenu"}` : ""} 
           }`}
         >
@@ -140,15 +138,34 @@ const Navbar = () => {
             }
           </ul>
         </nav>
-        <div className="header__content__toggle">
+        <div className={`${classNm + "__content__toggle"}`}>
           {!menuOpen ? (
             <BiMenuAltRight onClick={menuToggleHandler} />
           ) : (
             <AiOutlineClose onClick={menuToggleHandler} />
           )}
         </div>
-      </div>
-    </header>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <header className="header">
+        <meta name="viewport" content="width=device-width,initial-scale=1" user-scalable="no"/>
+        <div className="header__content">
+          <Link to="/" className="header__content__logo">
+            FOR DREAM DEVELOPER
+          </Link>
+          {menuElement('header')}
+        </div>
+      </header>
+      <footer className="footer">
+        {/* <p className="footer-by"> */}
+          {menuElement('footer-by')}
+        {/* </p> */}
+      </footer>
+    </>
   );
 }
 

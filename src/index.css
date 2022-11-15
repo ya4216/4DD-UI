@@ -6,9 +6,15 @@ body {
 }
 .footer {
   position: fixed;     
-       text-align: center;    
-       bottom: 0px; 
-       width: 100%;
+  text-align: center;    
+  bottom: 0px; 
+  /* width: 100%; */
+  right: 0px;
+  margin: 20px;
+  z-index: 1;
+  /* border: 1px solid black;
+  border-radius: 30px;
+  background: white; */
 }
 .footer p {
   margin-bottom: 28px;
