@@ -1,6 +1,5 @@
 import axios from 'axios';
-import authHeader from './auth-header';
-import logout from '../components/Navbar/index'
+import AuthService from "./auth";
 
 const axiosInstance = axios.create({
   headers: {
@@ -11,28 +10,36 @@ const axiosInstance = axios.create({
 
 const token = localStorage.getItem('accessToken');
 
-axiosInstance.interceptors.response.use(
+axiosInstance.interceptors.response.use(  
   (response: any) => {
     console.log("$$$ intercptor");
     return response;
   },
   async (error: any) => {
     console.log("$$$ intercptor eerrer");
+    localStorage.removeItem("user");
     const {
       config,
       response: { status },
     } = error;
     
-    const originalRequest = config;
-    
+    const originalRequest = config;        
     if (status === 403) {
       // const accessToken = localStorage.getItem('accessToken');
       // const refreshToken = localStorage.getItem('refreshToken');
 
       try {
-
-        console.log("$$$ logout !!");
-        logout;
+        console.log("$$$ logout !!");        
+        AuthService.logout()
+        .then(
+          response => {
+            console.log("$$$ logout success !!");            
+            allDelCookies('localhost', '/');
+            window.location.reload();
+          },
+          error => {         
+          }
+        );
         // const { data } = await axios({
         //   method: 'post',
         //   url: `/members/reissue`,
@@ -54,5 +61,23 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// 쿠키 전체 삭제하기
+const allDelCookies = (domain: string, path: string) => {
+  domain = domain || document.domain;
+  path = path || '/';
+
+  const cookies = document.cookie.split('; '); // 배열로 반환
+  console.log(cookies);
+  const expiration = 'Sat, 01 Jan 1972 00:00:00 GMT';
+
+  // 반목문 순회하면서 쿠키 전체 삭제
+  if (!document.cookie) {
+  } else {
+    for (let i = 0; i < cookies.length; i++) {
+      document.cookie = cookies[i].split('=')[0] + '=; expires=' + expiration;
+    }
+  }
+};
 
 export default axiosInstance;

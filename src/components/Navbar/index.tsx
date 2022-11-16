@@ -18,22 +18,24 @@ const Navbar = () => {
     height: 0,
   });
   const [cookies, setCookie] = useCookies(['accessToken']);
-  const [classNm, setClassNm] = useState('');
 
-  const getUserInfo = () => {
-    AuthService.getUserInfo()
-    .then(
-      response => {
+  // const getUserInfo = () => {
+  //   AuthService.getUserInfo()
+  //   .then(
+  //     response => {
         
-      },
-      error => {
+  //     },
+  //     error => {
         
-      }
-    );
+  //     }
+  //   );
+  // }
+  
+  const profile = () => {
+    navigate('/profile');
   }
   
-  
-  useEffect(() => {    
+  useEffect(() => {        
     if(localStorage.getItem('user') !== null) {
       setIsLogin(true);
     }
@@ -98,7 +100,45 @@ const Navbar = () => {
 
   //22.11.15 hwi 추가
   const menuElement = (classNm : string) => {
-    return (
+    const logout = () => {
+    console.log("%%%% logout in");    
+    AuthService.logout()
+    .then(
+      response => {
+        localStorage.removeItem("user");
+        setSuccessful(true);
+        setMessage(response.data.message);
+        navigate('/home');
+        allDelCookies('localhost', '/');
+        setIsLogin(false);
+      },
+      error => {
+        const resMessage = error.response.data?.message;
+        setSuccessful(false);
+        setMessage(resMessage);
+      }
+    );
+  };
+
+  // 쿠키 전체 삭제하기
+  const allDelCookies = (domain: string, path: string) => {
+    domain = domain || document.domain;
+    path = path || '/';
+
+    const cookies = document.cookie.split('; '); // 배열로 반환
+    console.log(cookies);
+    const expiration = 'Sat, 01 Jan 1972 00:00:00 GMT';
+
+    // 반목문 순회하면서 쿠키 전체 삭제
+    if (!document.cookie) {
+    } else {
+      for (let i = 0; i < cookies.length; i++) {
+        document.cookie = cookies[i].split('=')[0] + '=; expires=' + expiration;
+      }
+    }
+  };
+
+  return (
       <>
         <nav
           className={`${classNm + "__content__nav"} 
@@ -107,7 +147,7 @@ const Navbar = () => {
         >
           <ul>
             <li>
-              <Link to="/profile">회사검색</Link>
+              <Link to="/">회사검색</Link>
             </li>
             <li>
               <Link to="/Works">면접질문</Link>
@@ -128,11 +168,9 @@ const Navbar = () => {
               </Link>
               : 
               <div style={{display: "contents"}}>
-                <Link to="/logout">
-                  <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
-                </Link>
-                <Link to="/account">
-                  <VscAccount className="account" onClick={getUserInfo}></VscAccount>
+                <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
+                <Link to="/profile">
+                  <VscAccount className="account"></VscAccount>
                 </Link>
               </div>
             }
@@ -191,7 +229,7 @@ const Navbar = () => {
                     <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
                   </Link>
                   <Link to="/account">
-                    <VscAccount className="account" onClick={getUserInfo}></VscAccount>
+                    <VscAccount className="account"></VscAccount>
                   </Link>
                 </div>
               }
