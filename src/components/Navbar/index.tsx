@@ -155,15 +155,78 @@ const Navbar = () => {
         <meta name="viewport" content="width=device-width,initial-scale=1" user-scalable="no"/>
         <div className="header__content">
           <Link to="/" className="header__content__logo">
-            FOR DREAM DEVELOPER
+            FOR DREAM<br/>
+            DEVELOPER
           </Link>
-          {menuElement('header')}
+          
+          <nav
+            className={`${"header__content__nav"} 
+            ${menuOpen && size.width < 768 ? `${"isMenu"}` : ""} 
+            `}
+          >
+            <ul>
+              <li>
+                <Link to="/profile">회사검색</Link>
+              </li>
+              <li>
+                <Link to="/Works">면접질문</Link>
+              </li>
+              <li>
+                <Link to="/help">자유게시판</Link>
+              </li>
+              <li>
+                <Link to="/mypage">마이페이지</Link>
+              </li>
+
+              {/* <Link to="/register">
+                <button className="btn">회원가입</button>
+              </Link> */}
+              {!isLogin ?
+                <Link to="/login">
+                  <button className="btn btn__login_out">로그인</button>
+                </Link>
+                : 
+                <div style={{display: "contents"}}>
+                  <Link to="/logout">
+                    <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
+                  </Link>
+                  <Link to="/account">
+                    <VscAccount className="account" onClick={getUserInfo}></VscAccount>
+                  </Link>
+                </div>
+              }
+            </ul>
+          </nav>
+          <div className={`${"header__content__toggle"}`}>
+            <div className="header__content__username">
+              {
+                !isLogin ? null : "Hello " + JSON.parse(localStorage.getItem('user') as string).name + "  님!!"
+              }
+            </div>
+            {!menuOpen ? (
+              !isLogin ? (
+                <BiMenuAltRight onClick={menuToggleHandler} />
+                ) : 
+                (
+                <VscAccount onClick={menuToggleHandler} />
+              )
+            ) : (
+              <AiOutlineClose onClick={menuToggleHandler} />
+            )}
+          </div>
+          
+          
+          {/* {menuElement('header')} */}
         </div>
       </header>
       <footer className="footer">
-        {/* <p className="footer-by"> */}
-          {menuElement('footer-by')}
-        {/* </p> */}
+        <div className={`${"footer-by__content__toggle"}`}>
+          {!menuOpen ? (
+            <BiMenuAltRight onClick={menuToggleHandler} />
+          ) : (
+            <AiOutlineClose onClick={menuToggleHandler} />
+          )}
+        </div>
       </footer>
     </>
   );
