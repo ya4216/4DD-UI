@@ -36,12 +36,10 @@ const Carousel = (props: IProps) => {
     //     setDragging(true);  
     // }, []); 
     const handleAfterChange = useCallback((i: number) => { 
-        console.log("11 : ");
         setDragging(false);  
     }, []);
     
     const handleBeforeChange = useCallback(() => {
-        console.log("22 : ");
         setDragging(true);
     }, []);
 

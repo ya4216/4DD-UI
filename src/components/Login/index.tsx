@@ -32,8 +32,6 @@ const Login = () => {
         navigate('/home');
       },
       error => {
-        console.log("### error : "+ error);
-        
         const resMessage = error.response.data?.message;
         setSuccessful(false);
         setMessage(resMessage);

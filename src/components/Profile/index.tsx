@@ -12,6 +12,7 @@ const Profile = () => {
   // const [name, setName] = useState(false);
   // const [email, setEmail] = useState('');
   const [userProfile, setUserProfile] = useState({
+    id: '',
     name: '',
     email: ''
   });
@@ -24,21 +25,21 @@ const Profile = () => {
 
   useEffect(() => {
     const userInfo:any = localStorage.getItem("user");
-    const userInfoObj = JSON.parse(userInfo);
+    const userInfoObj = JSON.parse(userInfo);    
     const { name, email } = userInfoObj;
     setUserProfile({
+      id: userInfoObj.id,
       name: userInfoObj.name,
       email: userInfoObj.email
-    });
-    console.log("### profile effect ! ");
+    });    
   }, []);
 
   // 비밀번호 변경 핸들러
-  const handleChange = (formValue: { email: string; password: string }) => {
-    
-    const { email, password } = formValue;    
+  const handleChange = (formValue: { email: string; password: string }) => {    
+    const { email, password } = formValue;   
+    const id =  userProfile.id;
     AuthService.changePassword(
-      email,
+      id,
       password
     ).then(
       response => {
@@ -75,7 +76,6 @@ const Profile = () => {
     path = path || '/';
 
     const cookies = document.cookie.split('; '); // 배열로 반환
-    console.log(cookies);
     const expiration = 'Sat, 01 Jan 1972 00:00:00 GMT';
 
     // 반목문 순회하면서 쿠키 전체 삭제

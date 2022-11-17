@@ -32,10 +32,10 @@ class AuthService {
     });
   }
 
-  async changePassword(email: string, password: string) {
+  async changePassword(_id: string, password: string) {
     return await axios
       .post("/api/user/changePassword", {
-        email,
+        _id,
         password
       })
       .then(response => {

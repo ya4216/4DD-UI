@@ -61,7 +61,6 @@ const Navbar = () => {
   };
 
   const logout = () => {
-    console.log("%%%% logout in");    
     AuthService.logout()
     .then(
       response => {
@@ -86,7 +85,6 @@ const Navbar = () => {
     path = path || '/';
 
     const cookies = document.cookie.split('; '); // 배열로 반환
-    console.log(cookies);
     const expiration = 'Sat, 01 Jan 1972 00:00:00 GMT';
 
     // 반목문 순회하면서 쿠키 전체 삭제

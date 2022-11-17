@@ -12,11 +12,9 @@ const token = localStorage.getItem('accessToken');
 
 axiosInstance.interceptors.response.use(  
   (response: any) => {
-    console.log("$$$ intercptor");
     return response;
   },
   async (error: any) => {
-    console.log("$$$ intercptor eerrer");
     localStorage.removeItem("user");
     const {
       config,
@@ -29,11 +27,9 @@ axiosInstance.interceptors.response.use(
       // const refreshToken = localStorage.getItem('refreshToken');
 
       try {
-        console.log("$$$ logout !!");        
         AuthService.logout()
         .then(
           response => {
-            console.log("$$$ logout success !!");            
             allDelCookies('localhost', '/');
             window.location.reload();
           },
@@ -68,7 +64,6 @@ const allDelCookies = (domain: string, path: string) => {
   path = path || '/';
 
   const cookies = document.cookie.split('; '); // 배열로 반환
-  console.log(cookies);
   const expiration = 'Sat, 01 Jan 1972 00:00:00 GMT';
 
   // 반목문 순회하면서 쿠키 전체 삭제
