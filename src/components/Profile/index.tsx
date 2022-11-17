@@ -8,28 +8,58 @@ import { VscAccount } from "react-icons/vsc";
 import Navbar from "../Navbar";
 import Axios from 'axios';
 
-const Profile = () => {
-  const [name, setName] = useState(false);
-  const [email, setEmail] = useState('');
+const Profile = () => {  
+  // const [name, setName] = useState(false);
+  // const [email, setEmail] = useState('');
+  const [userProfile, setUserProfile] = useState({
+    name: '',
+    email: ''
+  });
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [isChangePassword, setIsChangePassword] = useState(false);
-  let navigate = useNavigate();    
+  let navigate = useNavigate();      
 
-  // 회원가입 핸들러
-  const handleRegister = (formValue: { name: string; email: string; password: string }) => {
-    const { name, email, password } = formValue;    
-    AuthService.register(
-      name,
+  useEffect(() => {
+    const userInfo:any = localStorage.getItem("user");
+    const userInfoObj = JSON.parse(userInfo);
+    const { name, email } = userInfoObj;
+    setUserProfile({
+      name: userInfoObj.name,
+      email: userInfoObj.email
+    });
+    console.log("### profile effect ! ");
+  }, []);
+
+  // 비밀번호 변경 핸들러
+  const handleChange = (formValue: { email: string; password: string }) => {
+    
+    const { email, password } = formValue;    
+    AuthService.changePassword(
       email,
       password
     ).then(
       response => {
         setSuccessful(true);
         setMessage(response.data.message);
-        navigate('/login');
+        AuthService.logout()
+        .then(
+          response => {
+            localStorage.removeItem("user");
+            setSuccessful(true);
+            setMessage(response.data.message);
+            allDelCookies('localhost', '/');
+            // window.location.reload();
+            navigate('/login');
+          },
+          error => {
+            const resMessage = error.response.data?.message;
+            setSuccessful(false);
+            setMessage(resMessage);
+          }
+        );
       },
       error => {
         const resMessage = error.response.data?.message;
@@ -38,6 +68,24 @@ const Profile = () => {
       }
     );
   }
+
+  // 쿠키 전체 삭제하기
+  const allDelCookies = (domain: string, path: string) => {
+    domain = domain || document.domain;
+    path = path || '/';
+
+    const cookies = document.cookie.split('; '); // 배열로 반환
+    console.log(cookies);
+    const expiration = 'Sat, 01 Jan 1972 00:00:00 GMT';
+
+    // 반목문 순회하면서 쿠키 전체 삭제
+    if (!document.cookie) {
+    } else {
+      for (let i = 0; i < cookies.length; i++) {
+        document.cookie = cookies[i].split('=')[0] + '=; expires=' + expiration;
+      }
+    }
+  };
 
   // Yup을 이용한 Form 제한조건
   const validationSchema = () => {
@@ -50,7 +98,7 @@ const Profile = () => {
           "알파벳, 숫자, 공백을 제외한 특수문자를 모두 포함한 8자리 이상 입력해주세요"
         ), 
       password2: Yup.string()
-        .required("비밀번호를 입력해주세요.")
+        .required("비밀번호를 다시 입력해주세요.")
         .oneOf([Yup.ref('password'), null], '비밀번호가 일치하지 않습니다.'),   
     });
   }
@@ -71,20 +119,32 @@ const Profile = () => {
           <Formik
               initialValues={initialValues}
               validationSchema={validationSchema}
-              onSubmit={handleRegister}
+              onSubmit={handleChange}
             >
               <Form className="login__create">
               <VscAccount className="account"></VscAccount>
                <span className="sub-title">User Info</span>
                 {!successful && (
                   <div className="login__inputs">
-                    <div className="userinfo_inputs"></div>
-
-                    <div className="userinfo_inputs" style={{ marginBottom: '10px' }}></div>
-
-                    <div>
+                    <div className="userinfo_inputs">
+                      <div>
+                        닉네임 
+                      </div>
+                      <span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{userProfile.name}
+                      </span>
+                    </div>                         
+                    <div className="userinfo_inputs" style={{ marginBottom: '10px' }}>
+                      <div>
+                        이메일 
+                      </div>
+                      <span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{userProfile.email}
+                      </span>
+                    </div>
+                    <div style={{ lineHeight: 0 }} className={ isChangePassword ? 'mb-10' : ''}>
                       <button type="submit" className="login__button">
-                        <p className="button-text password" onClick={() => { setIsChangePassword((e) => !e) }}>비밀번호 변경</p>
+                        <p className= { isChangePassword ? 'button-text password_on' : 'button-text password_off' } onClick={() => { setIsChangePassword((e) => !e) }}>비밀번호 변경</p>
                       </button>
                     </div>
 
@@ -102,7 +162,6 @@ const Profile = () => {
                             className="alert alert-danger danger"
                           />
                         </div>
-
                         <div>
                           <Field
                             name="password2"
@@ -114,18 +173,17 @@ const Profile = () => {
                             component="div"
                             className="alert alert-danger danger"
                           />
+                        </div>                    
+                        <div>
+                          <button type="submit" className="btn btn-primary btn-block login__button" >
+                            <div className="arrow-wrapper">
+                              <span className="arrow"></span>
+                            </div>
+                            <p className="button-text">변경하기</p>
+                          </button>
                         </div>
                       </div>
                     }
-
-                    <div>
-                      <button type="submit" className="btn btn-primary btn-block login__button">
-                        <div className="arrow-wrapper">
-                          <span className="arrow"></span>
-                        </div>
-                        <p className="button-text">변경하기</p>
-                      </button>
-                    </div>
                   </div>
                 )}
 
