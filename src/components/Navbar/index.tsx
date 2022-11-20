@@ -9,7 +9,8 @@ import { useCookies } from 'react-cookie';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [headerMenuOpen, setHeaderMenuOpen] = useState(false);
+  const [footerMenuOpen, setFooterMenuOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
@@ -51,56 +52,24 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    if (size.width > 768 && menuOpen) {
-      setMenuOpen(false);
+    if (size.width > 768) {
+      if(headerMenuOpen){
+        setHeaderMenuOpen(false);
+      }else if(footerMenuOpen){
+        setFooterMenuOpen(false);
+      }
     }
-  }, [size.width, menuOpen]);
+  }, [size.width, headerMenuOpen, footerMenuOpen]);
 
-  const menuToggleHandler = () => {
-    setMenuOpen((p) => !p);
+  const headerMenuToggleHandler = () => {
+      setHeaderMenuOpen((p) => !p);
+  };
+
+  const footerMenuToggleHandler = () => {
+      setFooterMenuOpen((p) => !p);
   };
 
   const logout = () => {
-    console.log("%%%% logout in");
-    
-    AuthService.logout()
-    .then(
-      response => {
-        setSuccessful(true);
-        setMessage(response.data.message);
-        navigate('/home');
-        allDelCookies('localhost', '/');
-        setIsLogin(false);
-      },
-      error => {
-        const resMessage = error.response.data?.message;
-        setSuccessful(false);
-        setMessage(resMessage);
-      }
-    );
-  };
-
-  // 쿠키 전체 삭제하기
-  const allDelCookies = (domain: string, path: string) => {
-    domain = domain || document.domain;
-    path = path || '/';
-
-    const cookies = document.cookie.split('; '); // 배열로 반환
-    console.log(cookies);
-    const expiration = 'Sat, 01 Jan 1972 00:00:00 GMT';
-
-    // 반목문 순회하면서 쿠키 전체 삭제
-    if (!document.cookie) {
-    } else {
-      for (let i = 0; i < cookies.length; i++) {
-        document.cookie = cookies[i].split('=')[0] + '=; expires=' + expiration;
-      }
-    }
-  };
-
-  //22.11.15 hwi 추가
-  const menuElement = (classNm : string) => {
-    const logout = () => {
     console.log("%%%% logout in");    
     AuthService.logout()
     .then(
@@ -138,52 +107,38 @@ const Navbar = () => {
     }
   };
 
-  return (
-      <>
-        <nav
-          className={`${classNm + "__content__nav"} 
-          ${menuOpen && size.width < 768 ? `${"isMenu"}` : ""} 
-          }`}
-        >
-          <ul>
-            <li>
-              <Link to="/">회사검색</Link>
-            </li>
-            <li>
-              <Link to="/Works">면접질문</Link>
-            </li>
-            <li>
-              <Link to="/help">자유게시판</Link>
-            </li>
-            <li>
-              <Link to="/mypage">마이페이지</Link>
-            </li>
+  const navElement = (elType : string) => {
+    return (
+        <ul>
+          <li>
+            <Link to="/">회사검색</Link>
+          </li>
+          <li>
+            <Link to="/Works">면접질문</Link>
+          </li>
+          <li>
+            <Link to="/help">자유게시판</Link>
+          </li>
+          <li>
+            <Link to="/mypage">마이페이지</Link>
+          </li>
 
-            {/* <Link to="/register">
-              <button className="btn">회원가입</button>
-            </Link> */}
-            {!isLogin ?
-              <Link to="/login">
-                <button className="btn btn__login_out">로그인</button>
+          {/* <Link to="/register">
+            <button className="btn">회원가입</button>
+          </Link> */}
+          {!isLogin ?
+            <Link to="/login">
+              <button className="btn btn__login_out">로그인</button>
+            </Link>
+            : 
+            <div style={{display: "contents"}}>
+              <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
+              <Link to="/profile">
+                <VscAccount className="account"></VscAccount>
               </Link>
-              : 
-              <div style={{display: "contents"}}>
-                <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
-                <Link to="/profile">
-                  <VscAccount className="account"></VscAccount>
-                </Link>
-              </div>
-            }
-          </ul>
-        </nav>
-        <div className={`${classNm + "__content__toggle"}`}>
-          {!menuOpen ? (
-            <BiMenuAltRight onClick={menuToggleHandler} />
-          ) : (
-            <AiOutlineClose onClick={menuToggleHandler} />
-          )}
-        </div>
-      </>
+            </div>
+          }
+        </ul>
     )
   }
 
@@ -193,78 +148,43 @@ const Navbar = () => {
         <meta name="viewport" content="width=device-width,initial-scale=1" user-scalable="no"/>
         <div className="header__content">
           <Link to="/" className="header__content__logo">
-            FOR DREAM<br/>
-            DEVELOPER
+            FOR DREAM DEVELOPER
           </Link>
-          
           <nav
             className={`${"header__content__nav"} 
-            ${menuOpen && size.width < 768 ? `${"isMenu"}` : ""} 
-            `}
+            ${headerMenuOpen && size.width < 768 ? `${"isMenu"}` : ""} 
+            }`}
           >
-            <ul>
-              <li>
-                <Link to="/profile">회사검색</Link>
-              </li>
-              <li>
-                <Link to="/Works">면접질문</Link>
-              </li>
-              <li>
-                <Link to="/help">자유게시판</Link>
-              </li>
-              <li>
-                <Link to="/mypage">마이페이지</Link>
-              </li>
-
-              {/* <Link to="/register">
-                <button className="btn">회원가입</button>
-              </Link> */}
-              {!isLogin ?
-                <Link to="/login">
-                  <button className="btn btn__login_out">로그인</button>
-                </Link>
-                : 
-                <div style={{display: "contents"}}>
-                  <Link to="/logout">
-                    <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
-                  </Link>
-                  <Link to="/account">
-                    <VscAccount className="account"></VscAccount>
-                  </Link>
-                </div>
-              }
-            </ul>
+            {navElement("header")}
           </nav>
-          <div className={`${"header__content__toggle"}`}>
-            <div className="header__content__username">
-              {
-                !isLogin ? null : "Hello " + JSON.parse(localStorage.getItem('user') as string).name + "  님!!"
-              }
-            </div>
-            {!menuOpen ? (
+          <div className="header__content__toggle">
+            {!footerMenuOpen ? ( !headerMenuOpen ? (
               !isLogin ? (
-                <BiMenuAltRight onClick={menuToggleHandler} />
-                ) : 
-                (
-                <VscAccount onClick={menuToggleHandler} />
+                <BiMenuAltRight onClick={headerMenuToggleHandler} />
+                ) : (
+                <VscAccount onClick={headerMenuToggleHandler} />
               )
             ) : (
-              <AiOutlineClose onClick={menuToggleHandler} />
-            )}
+              <AiOutlineClose onClick={headerMenuToggleHandler} />
+            )) : null}
           </div>
-          
-          
-          {/* {menuElement('header')} */}
         </div>
       </header>
       <footer className="footer">
-        <div className={`${"footer-by__content__toggle"}`}>
-          {!menuOpen ? (
-            <BiMenuAltRight onClick={menuToggleHandler} />
-          ) : (
-            <AiOutlineClose onClick={menuToggleHandler} />
-          )}
-        </div>
+        <nav
+          className={`${"footer-by__content__nav"} 
+          ${footerMenuOpen && size.width < 768 ? `${"isMenu"}` : ""} 
+          }`}
+        >
+          {footerMenuOpen && size.width < 768 ? (navElement("footer")):null}
+        </nav>
+        <div className="footer-by__content__toggle">
+            {!headerMenuOpen ? (!footerMenuOpen ? (
+              <BiMenuAltRight onClick={footerMenuToggleHandler} />
+            ) : (
+              <AiOutlineClose onClick={footerMenuToggleHandler} />
+            )) : null}
+          </div>
       </footer>
     </>
   );
