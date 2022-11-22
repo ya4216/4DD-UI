@@ -1,0 +1,17 @@
+.grid {
+  &_container {
+    text-align: center;
+  }
+  &_component {
+    height: 300px;
+    width: 80%;
+    display: inline-block;
+  }
+  &_button {
+    margin-top: 30px;
+    width: 90%;
+    text-align: right;
+  }
+}
+
+

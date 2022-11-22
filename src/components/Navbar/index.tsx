@@ -116,7 +116,7 @@ const Navbar = () => {
               <Link to="/Works">면접질문</Link>
             </li>
             <li>
-              <Link to="/help">자유게시판</Link>
+              <Link to="/board">자유게시판</Link>
             </li>
             <li>
               <Link to="/mypage">마이페이지</Link>
