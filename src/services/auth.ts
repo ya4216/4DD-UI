@@ -31,16 +31,23 @@ class AuthService {
       password
     });
   }
-
+  
   async changePassword(_id: string, password: string) {
     return await axios
-      .post("/api/user/changePassword", {
-        _id,
-        password
-      })
-      .then(response => {
-        return response.data;
-      });
+    .post("/api/user/changePassword", {
+      _id,
+      password
+    })
+    .then(response => {
+      return response.data;
+    });
+  }
+  
+  async post(title: string, content: string) {
+    return await axios.post("/api/board/", {
+      title,
+      content
+    });
   }
 
   getCurrentUser() {
