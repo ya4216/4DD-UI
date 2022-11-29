@@ -43,10 +43,10 @@ class AuthService {
     });
   }
   
-  async post(title: string, content: string) {
+  async post(title: string, contents: string) {
     return await axios.post("/api/board/", {
       title,
-      content
+      contents
     });
   }
 

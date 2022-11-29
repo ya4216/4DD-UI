@@ -5,9 +5,14 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 
-const EditorComponent = () => {
+const EditorComponent = ({getContents}: any) => {
   const QuillRef = useRef<ReactQuill>();
   const [contents, setContents] = useState("");
+
+  const onChange = (contents: string) => {    
+    setContents(contents);
+    getContents(contents);
+  }
   
   // 이미지를 업로드 하기 위한 함수
   // const imageHandler = () => {
@@ -87,13 +92,13 @@ const modules = useMemo(
 return (
 	<>
       <ReactQuill
-               ref={(element) => {
+               ref={(element: any) => {
                   if (element !== null) {
                     QuillRef.current = element;
                   }
                 }}
                 value={contents}
-                onChange={setContents}
+                onChange={onChange}
                 modules={modules}
                 theme="snow"
                 placeholder="내용을 입력해주세요."

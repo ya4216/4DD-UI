@@ -13,53 +13,58 @@ function Post() {
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [registerError, setRegisterError] = useState('');
+  const [title, setTitle] = useState('');
+  const [contents, setContents] = useState('');
+  const [pureContents, setPureContents] = useState('');
+  
+  const getContents = (contents: string) => {
+    setPureContents(contents.replace(/<[^>]*>?/g, ''));
+    setContents(contents);
+  }
   let navigate = useNavigate();  
 
   // Submit 핸들러
-  const handleSubmit = (formValue: { title: string; content: string }) => {         
-    const { title, content } = formValue;
+  const handleSubmit = (formValue: { title: string }) => {         
+    const { title } = formValue;
     console.log("##### title : "+ title);
-    console.log("##### content : "+ content);
+    console.log("##### contents : "+ contents);
     
-    if(!title || !content) {
+    if(!title) {
       setMessage("계정 정보를 입력해 주세요.");
       return;
     } 
-    // AuthService.post(      
-    //   title,
-    //   content
-    // ).then(
-    //   response => {
-    //     console.log("##### response : "+ response);        
-    //     setSuccessful(true);
-    //     setMessage(response.data);
-    //     navigate('/board');
-    //   },
-    //   error => {
-    //     const resMessage = error.response.data?.message;
-    //     setSuccessful(false);
-    //     setMessage(resMessage);
-    //   }
-    // );
+    AuthService.post(      
+      title,
+      contents
+    ).then(
+      response => {
+        console.log("##### response : "+ response);        
+        setSuccessful(true);
+        setMessage(response.data);
+        navigate('/board');
+      },
+      error => {
+        const resMessage = error.response.data?.message;
+        setSuccessful(false);
+        setMessage(resMessage);
+      }
+    );
   }
 
   // Yup을 이용한 Form 제한조건
-  const validationSchema = () => {
-    console.log("### validate ");
-    
+  const validationSchema = () => {      
     return Yup.object().shape({
       title: Yup.string()
         .required("제목을 입력해주세요.")
         .test(
           "len",
           "제목은 1 ~ 30 글자로 입력해주세요.",
-          (val: any) =>
+          (val: any) => (         
             val &&
             val.toString().length >= 1 &&
-            val.toString().length <= 30
-        ),
-      content: Yup.string()
-        .required("내용을 입력해주세요.") 
+            val.toString().length <= 30            
+          )
+        )
     });
   }
 
@@ -75,32 +80,45 @@ function Post() {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
-      >
-        <Form>
-          <div className="title_container">
-            <Field 
-              name="title" 
-              type="title"
-              placeholder="제목을 입력해주세요."
-            />
-          </div>
-          <div className="editor_container">
-            <EditorComponent/>
-          </div>
-          <div className="grid_button">
-            <Button 
-              type="submit" 
-              variant="contained" 
-              color="primary" 
-              style={{ width: '150px'}}
-              disabled={
-                Object.keys(Error).length > 0
-              }
-            >
-              작성하기
-            </Button>
-          </div>
-        </Form>
+      >        
+        {(props) => {
+          const {
+            values,		// form에서 공유되는 상태 값
+            touched, 	// 사용자의 필드 방문/터치 여부 (boolean)
+            errors, 		// form validation 에러
+            isSubmitting,	// form 제출 상태 (boolean)
+            handleChange,	// input change event handler. values[key] 를 업데이트
+            handleBlur,	// onBlur event handler
+            handleSubmit	// submit handler
+          } = props;
+          return (
+            <Form>
+              <div className="title_container">
+                <Field 
+                  name="title" 
+                  type="title"
+                  placeholder="제목을 30글자 이내로 입력해주세요."
+                />
+              </div>
+              <div className="editor_container">
+                <EditorComponent
+                  getContents={getContents}
+                />
+              </div>
+              <div className="grid_button">
+                <Button 
+                  type="submit" 
+                  variant="contained" 
+                  color="primary" 
+                  style={{ width: '150px'}}
+                  disabled={!(pureContents && values.title) || values.title.length > 30}
+                >
+                  작성하기
+                </Button>
+              </div>
+            </Form>
+          )
+        }}
       </Formik>
       <footer className="footer">
         <p className="footer-by">
