@@ -1,37 +1,117 @@
-input::placeholder {
-  color: rgba(0,0,0,0.6);;
-  font-style: italic;
-}
+#post {
+  input::placeholder {
+    color: rgba(0,0,0,0.6);;
+    font-style: italic;
+  }
 
-.editor {
-  &_container {
-    height: 350px;
-  }
-}
-.quill {
-  height: 100%;
-  width: 50%;
-  margin: auto;
-}
-.grid {
-  &_button {
-    margin-top: 80px;
-  }
-}
-.title {
-  &_container{    
-    width: 100%;
-    height: 35px;
-    text-align: center;
-    margin-bottom: 10px;
-    input {
-      width: 50%;
-      height: 100%;
-      padding: 0 15px 0 15px;
-      color: #23004d;
+  .editor {
+    &_container {
+      height: 350px;
     }
   }
-}
-.footer {
-  z-index: -2;
+  .quill {
+    height: 100%;
+    width: 50%;
+    margin: auto;
+  }
+  .grid {
+    &_button {
+      margin-top: 80px;
+      width: 75%;
+      text-align: right;
+    }
+  }
+  .edit {
+    margin-top: 20px;
+    button {
+      width: 100px;
+    }
+    .btn {
+      &_delete {
+        color: #fff;
+        background-color: #FF3636;
+        margin-left: 20px;        
+      }     
+      
+    }
+  }
+  .title {
+    &_container {    
+      width: 100%;
+      height: 35px;
+      text-align: center;
+      margin-bottom: 10px;
+      input {
+        width: 50%;
+        height: 100%;
+        padding: 0 15px 0 15px;
+        color: #23004d;
+      }
+    }
+  }
+  .post {
+    &_container {
+      width: 100%;
+      height: 600px;
+      text-align: center;
+    }
+    &_component {
+      width: 50%;
+      height: 93%;
+      margin: auto;
+      border: 1px solid lightgray;
+      hr {
+        width: 96%;
+        margin: auto;
+        background: lightgrey;
+        height: 1px;
+        border: 0;
+      }
+    }
+    &_title_box {
+      display: flex;
+    }
+    &_title {
+      width: 94%;
+      min-height: 23px;
+      text-align: left;
+      margin: 20px 17px 20px 17px;
+      font: normal bold 2em/1em Georgia, serif;
+      color: darkslateblue;
+    }
+    &_switch_box {
+      display: flex;
+      margin: auto;
+      width: 50%;
+    }
+    &_switch {
+      text-align: right;      
+      width: 100%;
+    }
+    &_edit {
+      font-weight: bold;
+      color: dimgrey;
+      line-height: 2.5;
+    }
+    &_content {
+      width: 94%;
+      text-align: left;
+      margin: 20px 17px 20px 17px;
+      font: normal bold 1.2em/1em Georgia, serif;
+      color: #000000;
+    }
+    &_quill {
+      width: 100%;
+      .ql-toolbar {
+        display: none;
+      }
+      .ql-container {
+        border: 0;
+        font-size: 20px;
+      }
+    }
+  }
+  .footer {
+    z-index: -2;
+  }
 }

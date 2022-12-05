@@ -2,11 +2,18 @@ import React, { useState } from 'react';
 import Navbar from "../Navbar";
 import "./post.scss";
 import Button from '@material-ui/core/Button';
-import { Link, useNavigate } from "react-router-dom";
+import Dialog from '@mui/material/Dialog';
+import Switch from '@mui/material/Switch';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import EditorComponent from "../Utils/index"
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import AuthService from "../../services/auth";
+import BoardService from "../../services/board";
 import * as Yup from "yup";
+import ReactQuill, { Quill } from 'react-quill';
 
 
 function Post() {
@@ -14,31 +21,69 @@ function Post() {
   const [message, setMessage] = useState('');
   const [registerError, setRegisterError] = useState('');
   const [title, setTitle] = useState('');
-  const [contents, setContents] = useState('');
-  const [pureContents, setPureContents] = useState('');
-  
-  const getContents = (contents: string) => {
-    setPureContents(contents.replace(/<[^>]*>?/g, ''));
-    setContents(contents);
+  const [content, setContent] = useState('');
+  const [pureContent, setPureContent] = useState('');
+  const [isSwitch, setIsSwitch] = useState(false);
+  const getContent = (content: string) => {
+    setPureContent(content.replace(/<[^>]*>?/g, ''));
+    setContent(content);
   }
-  let navigate = useNavigate();  
+  const [open, setOpen] = useState(false);
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
+  const userInfo:any = localStorage.getItem('user');
+  const userInfoObj = JSON.parse(userInfo);
+  
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
 
+  const editChange = (event: React.ChangeEvent<HTMLInputElement>) => {        
+    setIsSwitch(event.target.checked);
+  };
+  
+  let navigate = useNavigate();  
+  
+  const { state } = useLocation();
+  
   // Submit 핸들러
-  const handleSubmit = (formValue: { title: string }) => {         
-    const { title } = formValue;
-    console.log("##### title : "+ title);
-    console.log("##### contents : "+ contents);
+  const handleSubmit = (formValue: { title: string }) => {  
+    const { title } = formValue;     
+    const userName = userInfoObj.name;
     
     if(!title) {
       setMessage("계정 정보를 입력해 주세요.");
       return;
     } 
-    AuthService.post(      
+    BoardService.register(      
+      userName,
       title,
-      contents
+      content
     ).then(
       response => {
-        console.log("##### response : "+ response);        
+        setSuccessful(true);
+        setMessage(response.data);
+        navigate('/board');
+      },
+      error => {
+        const resMessage = error.response.data?.message;
+        setSuccessful(false);
+        setMessage(resMessage);
+      }
+    );
+  }
+
+  // 포스트 삭제
+  const deletePost = () => {      
+    setOpen(true);
+    const _id = state._id;    
+    BoardService.delete(      
+      _id
+    ).then(
+      response => {     
         setSuccessful(true);
         setMessage(response.data);
         navigate('/board');
@@ -73,9 +118,9 @@ function Post() {
     content: "",
   };
   return (
-    <body>
+    <body id="post">
       <Navbar />
-      <h1>Post</h1>
+      <h1>Post</h1>      
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -93,29 +138,115 @@ function Post() {
           } = props;
           return (
             <Form>
-              <div className="title_container">
-                <Field 
-                  name="title" 
-                  type="title"
-                  placeholder="제목을 30글자 이내로 입력해주세요."
-                />
+              {(!state || isSwitch) ? (
+              <div>                
+                {(userInfoObj.name === state.userName) && (
+                  <div className='post_switch_box'>
+                    <div className='post_switch'>
+                      <Switch
+                        onChange={editChange}
+                        {...label}
+                      />
+                    </div>
+                    <div className='post_edit'>EDIT</div>
+                  </div>
+                )}                
+                <div className="title_container">
+                  <Field 
+                    name="title" 
+                    type="title"
+                    placeholder="제목을 30글자 이내로 입력해주세요."
+                  />
+                </div>
+                <div className="editor_container">
+                  <EditorComponent
+                    getContent={getContent}
+                    contents = {state.content}
+                  />
+                </div>
+                <div className="grid_button">
+                  <Button 
+                    type="submit" 
+                    variant="contained" 
+                    color="primary" 
+                    style={{ width: '150px'}}
+                    disabled={!(pureContent && values.title) || values.title.length > 30}
+                  >
+                    작성하기
+                  </Button>
+                </div>
               </div>
-              <div className="editor_container">
-                <EditorComponent
-                  getContents={getContents}
-                />
+              ) 
+              :
+              (
+                <div className='post_container'>
+                {(userInfoObj.name === state.userName) && (
+                  <div className='post_switch_box'>                    
+                    <div className='post_switch'>
+                      <Switch
+                        onChange={editChange}
+                        {...label}
+                      />
+                    </div>
+                    <div className='post_edit'>EDIT</div>
+                  </div>
+                )}
+                <div className='post_component'>
+                  <div>
+                    <div className='post_title_box'>
+                      <div className='post_title'>
+                        {state.title}
+                      </div>
+                    </div>
+                    <hr/>
+                    <div>
+                      <ReactQuill readOnly className='post_quill' value={state.content}></ReactQuill> 
+                    </div>
+                  </div>
+                </div>
+                {(userInfoObj.name === state.userName) && (
+                  <div className="grid_button edit">
+                    <Button 
+                      type="submit" 
+                      variant="contained" 
+                      color="primary" 
+                      disabled={!(pureContent && values.title) || values.title.length > 30}
+                    >
+                      수정
+                    </Button>
+                    <Button 
+                      className="btn_delete"             
+                      variant="contained"   
+                      onClick={handleClickOpen}                
+                    >
+                      삭제
+                    </Button>
+                    <Dialog
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                    >
+                      <DialogTitle id="alert-dialog-title">
+                        {state.title}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          해당 게시물을 삭제하시겠습니까?
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button style={{fontWeight: 'bold', color: '#ffffff', background: '#FF3636'}} onClick={handleClose}>취소</Button>
+                        <Button style={{fontWeight: 'bold', color: '#ffffff', background: 'seagreen'}} onClick={deletePost} autoFocus>
+                          확인
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </div>
+                )}
               </div>
-              <div className="grid_button">
-                <Button 
-                  type="submit" 
-                  variant="contained" 
-                  color="primary" 
-                  style={{ width: '150px'}}
-                  disabled={!(pureContents && values.title) || values.title.length > 30}
-                >
-                  작성하기
-                </Button>
-              </div>
+              )
+            }
             </Form>
           )
         }}

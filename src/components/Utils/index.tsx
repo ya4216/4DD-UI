@@ -1,19 +1,24 @@
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 
 //이렇게 라이브러리를 불러와서 사용하면 됩니다
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 
-const EditorComponent = ({getContents}: any) => {
+const EditorComponent = ({getContent, contents}:any) => {
   const QuillRef = useRef<ReactQuill>();
-  const [contents, setContents] = useState("");
+  const [content, setContent] = useState("");
 
-  const onChange = (contents: string) => {    
-    setContents(contents);
-    getContents(contents);
+  const onChange = (content: string) => {    
+    setContent(content);
+    getContent(content);
   }
   
+  useEffect(() =>{    
+    if(contents){
+      setContent(contents);
+    }
+  })
   // 이미지를 업로드 하기 위한 함수
   // const imageHandler = () => {
   // 	// 파일을 업로드 하기 위한 input 태그 생성
@@ -97,7 +102,7 @@ return (
                     QuillRef.current = element;
                   }
                 }}
-                value={contents}
+                value={content}
                 onChange={onChange}
                 modules={modules}
                 theme="snow"

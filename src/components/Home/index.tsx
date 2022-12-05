@@ -77,10 +77,6 @@ function Home() {
       
       <Carousel {...propFunc(2, '프레임워크')}/>
 
-
-
-      <h2>Vite + React + TS (Hamburger + Responsive + Router)</h2>
-
       <footer className="footer">
         <p className="footer-by">
           A project by{" "}
