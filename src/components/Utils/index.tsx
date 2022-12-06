@@ -14,11 +14,11 @@ const EditorComponent = ({getContent, contents}:any) => {
     getContent(content);
   }
   
-  useEffect(() =>{    
+  useEffect(() =>{        
     if(contents){
       setContent(contents);
     }
-  })
+  },[])
   // 이미지를 업로드 하기 위한 함수
   // const imageHandler = () => {
   // 	// 파일을 업로드 하기 위한 input 태그 생성

@@ -14,6 +14,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import BoardService from "../../services/board";
 import * as Yup from "yup";
 import ReactQuill, { Quill } from 'react-quill';
+import e from 'express';
 
 
 function Post() {
@@ -40,10 +41,6 @@ function Post() {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const editChange = (event: React.ChangeEvent<HTMLInputElement>) => {        
-    setIsSwitch(event.target.checked);
-  };
   
   let navigate = useNavigate();  
   
@@ -58,7 +55,10 @@ function Post() {
       setMessage("계정 정보를 입력해 주세요.");
       return;
     } 
-    BoardService.register(      
+    let _id = ''; 
+    state && (_id = state._id); 
+    BoardService.register(
+      _id,      
       userName,
       title,
       content
@@ -95,9 +95,10 @@ function Post() {
       }
     );
   }
-
+ 
   // Yup을 이용한 Form 제한조건
-  const validationSchema = () => {      
+  const validationSchema = () => {  
+       
     return Yup.object().shape({
       title: Yup.string()
         .required("제목을 입력해주세요.")
@@ -134,18 +135,20 @@ function Post() {
             isSubmitting,	// form 제출 상태 (boolean)
             handleChange,	// input change event handler. values[key] 를 업데이트
             handleBlur,	// onBlur event handler
-            handleSubmit	// submit handler
+            handleSubmit,	// submit handler
+            setFieldValue
           } = props;
           return (
             <Form>
-              {(!state || isSwitch) ? (
-              <div>                
-                {(userInfoObj.name === state.userName) && (
+              {(!state || isSwitch) ? (                
+              <div>         
+                {(state && (userInfoObj.name === state.userName)) && (
                   <div className='post_switch_box'>
                     <div className='post_switch'>
                       <Switch
-                        onChange={editChange}
-                        {...label}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>)=>{
+                          setIsSwitch(event.target.checked);
+                        }}
                       />
                     </div>
                     <div className='post_edit'>EDIT</div>
@@ -155,13 +158,13 @@ function Post() {
                   <Field 
                     name="title" 
                     type="title"
-                    placeholder="제목을 30글자 이내로 입력해주세요."
+                    placeholder="제목을 30글자 이내로 입력해주세요."                                        
                   />
                 </div>
                 <div className="editor_container">
                   <EditorComponent
                     getContent={getContent}
-                    contents = {state.content}
+                    contents = {isSwitch && state.content}
                   />
                 </div>
                 <div className="grid_button">
@@ -172,7 +175,7 @@ function Post() {
                     style={{ width: '150px'}}
                     disabled={!(pureContent && values.title) || values.title.length > 30}
                   >
-                    작성하기
+                    {isSwitch ? "수정하기" : "작성하기"}
                   </Button>
                 </div>
               </div>
@@ -184,8 +187,10 @@ function Post() {
                   <div className='post_switch_box'>                    
                     <div className='post_switch'>
                       <Switch
-                        onChange={editChange}
-                        {...label}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>)=>{
+                          setIsSwitch(event.target.checked);
+                          setFieldValue('title', state.title);
+                        }}
                       />
                     </div>
                     <div className='post_edit'>EDIT</div>
@@ -205,15 +210,7 @@ function Post() {
                   </div>
                 </div>
                 {(userInfoObj.name === state.userName) && (
-                  <div className="grid_button edit">
-                    <Button 
-                      type="submit" 
-                      variant="contained" 
-                      color="primary" 
-                      disabled={!(pureContent && values.title) || values.title.length > 30}
-                    >
-                      수정
-                    </Button>
+                  <div className="grid_button edit">                    
                     <Button 
                       className="btn_delete"             
                       variant="contained"   

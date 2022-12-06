@@ -1,8 +1,8 @@
 import axios from "axios";
 
 class BoardService {  
-  async register(userName:string, title: string, content: string) {
-    return await axios.post("/api/board/post/register", {
+  async register(_id: string, userName:string, title: string, content: string) {
+    return await axios[_id ? 'put' : 'post']("/api/board/post/"+ (_id ? `update?postId=${_id}` : "register"), {
       userName,
       title,
       content
