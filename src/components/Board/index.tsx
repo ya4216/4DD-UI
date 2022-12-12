@@ -3,7 +3,7 @@ import Navbar from "../Navbar";
 import "./board.scss";
 import Button from '@material-ui/core/Button';
 import { Link, useNavigate } from "react-router-dom";
-import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import BoardService from "../../services/board";
 
 // const rows: GridRowsProp = [
@@ -53,10 +53,25 @@ function Board() {
   return (
     <body id="board">
       <Navbar />
-      <h1>자유게시판</h1>
+      <div style={{marginTop: '70px'}}></div>
       <div className="grid_container">
         <div className="grid_component">
-          <DataGrid getRowId={(row) => row._id} onRowClick={getPost} rows={rows} columns={columns} />
+          <DataGrid
+            getRowId={(row) => row._id} 
+            onRowClick={getPost} 
+            rows={rows} 
+            columns={columns} 
+            components={{ Toolbar: GridToolbar }}
+            componentsProps={{
+              toolbar: {
+                showQuickFilter: true,
+                quickFilterProps: { debounceMs: 500 },
+              },
+            }}            
+            disableColumnFilter
+            disableColumnSelector
+            disableDensitySelector
+          />
         </div>
       </div>
       <div className="grid_button">
