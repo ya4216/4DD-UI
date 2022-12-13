@@ -1,3 +1,22 @@
 #mypage {
+    .title {
+        &_container {
+            text-align: center;
+            display: grid;
+            margin-bottom: 70px;
+            font-size: 20px;  
+            .account {
+                display: block;
+                font-size: 50px;
+                color: #4C4C4C;
+                margin-bottom: 15px;
+                width: 100%;
+            }
+            .sub-title{
+                color: steelblue;
+                font-weight:bold;
+            }
+        }
+    } 
 }
 

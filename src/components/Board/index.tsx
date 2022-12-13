@@ -14,7 +14,7 @@ import BoardService from "../../services/board";
 const columns: GridColDef[] = [
   { field: 'index', headerName: '#', width: 80, headerAlign: "center", align: "center", },
   { field: '_id', headerName: '아이디', hide: true},
-  { field: 'title', headerName: '제목', width: 1000, headerAlign: "center"},
+  { field: 'title', headerName: '제목', width: 700, headerAlign: "center"},
   { field: 'userName', headerName: '닉네임', width: 200, headerAlign: "center", align: "center"},
   { field: 'dateTimeOfPosting', headerName: '작성일', width: 200, headerAlign: "center" }
 ];
