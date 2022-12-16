@@ -82,7 +82,10 @@ function MyPage() {
       <Carousel {...propFunc('관심 회사')}/>
       <Carousel {...propFunc('모의면접 진행')}/>
       <Carousel {...propFunc('스터디 진행률')}/>
-      <BarChart />
+      <div className="barchart_container">
+        <BarChart isFirst= {true}/>
+        <BarChart isFirst= {false}/>
+      </div>
       {/* <div>
         <div>
           공지사항
