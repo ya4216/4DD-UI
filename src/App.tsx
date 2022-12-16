@@ -10,7 +10,6 @@ import Post from "./components/Post";
 import Works from "./components/Works";
 import Register from "./components/Register";
 import Contents from "./components/Details";
-import MyPage from "./components/MyPage";
 
 function App() {
   return (
@@ -22,7 +21,6 @@ function App() {
       <Route path="board/post" element={<Post />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
-      <Route path="mypage" element={<MyPage />} />
       <Route path="/" element={<Home />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
