@@ -33,6 +33,7 @@ function Post() {
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const userInfo:any = localStorage.getItem('user');
   const userInfoObj = JSON.parse(userInfo);
+  console.log("#### userInfoObj.name : "+ userInfoObj);
   
   const handleClickOpen = () => {
     setOpen(true);
