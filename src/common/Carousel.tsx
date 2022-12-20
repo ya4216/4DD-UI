@@ -3,11 +3,12 @@ import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { initUnitState, selectUnitTitle } from "../modules/unit";
 
-const Carousel = (props : any[]) => {
-
+const Carousel = ({props}:any) => {
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
     let [dragging, setDragging] = useState<boolean>(false);
  
     const handleBeforeChange = useCallback(() => {
@@ -83,14 +84,16 @@ const Carousel = (props : any[]) => {
     const parentsList = () => {
         let parentsHtml = [];
         for(let i in props){
-            parentsHtml.push(
-                <div key={props[i][0]._id + i}>
-                    {props[i][0].additional.category === "banner" ? null : <div className="contens_title">{props[i][0].additional.category}</div>}
-                    <Slider {...settings(props[i][0].additional.category)}>
-                        {childList(i as unknown as number)}
-                    </Slider>
-                </div>
-            );
+            if(props[i]){
+                parentsHtml.push(
+                    <div key={props[i][0]._id + i}>
+                        {props[i][0].category === "banner" ? null : <div className="contens_title">{props[i][0].category}</div>}
+                        <Slider {...settings(props[i][0].category)}>
+                            {childList(i as unknown as number)}
+                        </Slider>
+                    </div>
+                );
+            }
         }
         return parentsHtml;
     }
@@ -99,21 +102,25 @@ const Carousel = (props : any[]) => {
     const childList = (idx : number) => {
         let childHtml = [];
         for(let j in props[idx]){
-            childHtml.push(
-                <div key={props[idx][j]._id}>
-                    {/* <Link to="/contents"> */}
-                        <button className={idx == 0 ? "banners" : "list"} onClick={
-                            (e) => {
-                                if(!dragging){
-                                    navigate("/contents");
+            if(props[idx][j].menu_level == 1){
+                childHtml.push(
+                    <div key={props[idx][j]._id}>
+                        {/* <Link to="/contents"> */}
+                            <button className={idx == 0 ? "banners" : "list"} onClick={
+                                (e) => {
+                                    if(!dragging){
+                                        // dispatch(initUnitState());
+                                        dispatch(selectUnitTitle(props[idx][j]._id));
+                                        navigate("/contents");
+                                    }
                                 }
-                            }
-                        }>
-                            {props[idx][j].title}
-                        </button>
-                    {/* </Link> */}
-                </div>
-            )
+                            }>
+                                {props[idx][j].title}
+                            </button>
+                        {/* </Link> */}
+                    </div>
+                )
+            }
         }
         return childHtml;
     }

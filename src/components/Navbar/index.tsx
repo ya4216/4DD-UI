@@ -6,6 +6,9 @@ import { Link, useNavigate } from "react-router-dom";
 import "./navbar.scss";
 import AuthService from "../../services/auth";
 import { useCookies } from 'react-cookie';
+import SwipeableTemporaryDrawer from "./drawerNav";
+
+import testLogo from '../../image/test.png';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -148,7 +151,9 @@ const Navbar = () => {
         <meta name="viewport" content="width=device-width,initial-scale=1" user-scalable="no"/>
         <div className="header__content">
           <Link to="/" className="header__content__logo">
-            FOR DREAM DEVELOPER
+            <span className="header__content__logo__name">FOR</span> &#40;var&nbsp;
+            <span className="header__content__logo__name">DREAM</span> of&nbsp;
+            <span className="header__content__logo__name">DEVELOPER</span>&#41; &#123;
           </Link>
           <nav
             className={`${"header__content__nav"} 
@@ -168,6 +173,7 @@ const Navbar = () => {
               <AiOutlineClose onClick={headerMenuToggleHandler} />
             )) : null}
           </div>
+          &#125;
         </div>
       </header>
       <footer className="footer">
@@ -179,6 +185,7 @@ const Navbar = () => {
           {footerMenuOpen && size.width < 768 ? (navElement("footer")):null}
         </nav>
         <div className="footer-by__content__toggle">
+          
             {!headerMenuOpen ? (!footerMenuOpen ? (
               <BiMenuAltRight onClick={footerMenuToggleHandler} />
             ) : (

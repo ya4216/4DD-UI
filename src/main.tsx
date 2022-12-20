@@ -2,23 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { WrappedApp } from "./App";
 import "./index.css";
-
-
-
-
-
-import './index.css';
-// import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, compose } from 'redux';
 import rootReducer from './modules';
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
-const store = createStore(rootReducer);
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION__?: typeof compose;
+  }
+}
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
 
-
-
-
+const store = createStore(rootReducer, composeEnhancers);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 
@@ -29,6 +27,8 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 // create-react-app으로 리액트 앱을 생성시 기본적으로 생성되는 태그
 
   <Provider store={store}>
-    <WrappedApp />
+    <PersistGate persistor={persistStore(store)}>
+      <WrappedApp />
+    </PersistGate>
   </Provider>
 );
