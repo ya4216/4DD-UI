@@ -31,6 +31,25 @@ class AuthService {
       password
     });
   }
+  
+  async changePassword(_id: string, password: string) {
+    return await axios
+    .post("/api/user/changePassword", {
+      _id,
+      password
+    })
+    .then(response => {
+      return response.data;
+    });
+  }
+  
+  async postRegister(userName:string, title: string, content: string) {
+    return await axios.post("/api/board/post/register", {
+      userName,
+      title,
+      content
+    });
+  }
 
   getCurrentUser() {
     const userStr = localStorage.getItem("user");

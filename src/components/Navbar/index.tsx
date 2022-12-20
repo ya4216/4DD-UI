@@ -73,7 +73,6 @@ const Navbar = () => {
   };
 
   const logout = () => {
-    console.log("%%%% logout in");    
     AuthService.logout()
     .then(
       response => {
@@ -98,7 +97,6 @@ const Navbar = () => {
     path = path || '/';
 
     const cookies = document.cookie.split('; '); // 배열로 반환
-    console.log(cookies);
     const expiration = 'Sat, 01 Jan 1972 00:00:00 GMT';
 
     // 반목문 순회하면서 쿠키 전체 삭제
@@ -120,7 +118,7 @@ const Navbar = () => {
             <Link to="/Works">면접질문</Link>
           </li>
           <li>
-            <Link to="/help">자유게시판</Link>
+            <Link to="/board">자유게시판</Link>
           </li>
           <li>
             <Link to="/mypage">마이페이지</Link>
@@ -130,16 +128,16 @@ const Navbar = () => {
             <button className="btn">회원가입</button>
           </Link> */}
           {!isLogin ?
-            <Link to="/login">
+            (<Link to="/login">
               <button className="btn btn__login_out">로그인</button>
-            </Link>
+            </Link>)
             : 
-            <div style={{display: "contents"}}>
+            (<div style={{display: "contents"}}>
               <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
               <Link to="/profile">
                 <VscAccount className="account"></VscAccount>
               </Link>
-            </div>
+            </div>)
           }
         </ul>
     )

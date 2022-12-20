@@ -1,0 +1,23 @@
+#board {
+  .grid {
+    &_container {
+      text-align: center;
+    }
+    &_component {
+      height: 550px;
+      width: 80%;
+      display: inline-block;
+      .MuiDataGrid-root {
+        >div {
+          margin: 8px;
+        }
+      }
+    }
+    &_button {
+      margin-top: 38px;
+      width: 90%;
+      text-align: right;
+    }
+  }
+}
+

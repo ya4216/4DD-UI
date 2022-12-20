@@ -25,7 +25,7 @@ import { useRef } from 'react';
 import * as Buttons from "../Common/buttons"
 
 
-console.log("운영자냐? : ", JSON.parse(localStorage.user).id == "6371e3df99561093efe09cfd");
+// console.log("운영자냐? : ", JSON.parse(localStorage.user).id == "6371e3df99561093efe09cfd");
     
 const drawerWidth = 300;
     

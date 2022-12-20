@@ -13,6 +13,7 @@ type ButtonProps = {
     remove ? : () => void;
     onOff ? : () => void;
     on ? : boolean;
+    buttonType ? : string;
 }
 
 export const createButton = ({create}: ButtonProps) => {

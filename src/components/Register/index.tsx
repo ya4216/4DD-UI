@@ -79,7 +79,7 @@ const Register = () => {
           "알파벳, 숫자, 공백을 제외한 특수문자를 모두 포함한 8자리 이상 입력해주세요"
         ), 
       password2: Yup.string()
-        .required("비밀번호를 입력해주세요.")
+        .required("비밀번호를 다시 입력해주세요.")
         .oneOf([Yup.ref('password'), null], '비밀번호가 일치하지 않습니다.'),   
     });
   }
@@ -102,8 +102,10 @@ const Register = () => {
               onSubmit={handleRegister}
             >
               <Form className="login__create">
-               <h1 className="login__title">4 D D</h1>
-               <span className="sub-title">Create Account</span>
+                <Link to="/home">
+                  <h1 className="login__title">4 D D</h1>
+                </Link>
+                <span className="sub-title">Create Account</span>
                 {!successful && (
                   <div className="login__inputs">
                     <div className="form-group">                      
