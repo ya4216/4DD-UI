@@ -6,54 +6,75 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Stack from '@mui/material/Stack';
+import { ResponsiveStyleValue } from '@mui/system';
+
+type SelectProps = {
+  type: string;
+  text: string;
+  startIcon: string;
+  direction:
+    | ResponsiveStyleValue<'column' | 'column-reverse' | 'row' | 'row-reverse'>
+    | undefined;
+  spacing: ResponsiveStyleValue<string | number> | undefined;
+  variant: 'text' | 'outlined' | 'contained' | undefined;
+};
 
 type ButtonProps = {
-    create ? : () => void;
-    update ? : () => void;
-    remove ? : () => void;
-    onOff ? : () => void;
-    on ? : boolean;
-    buttonType ? : string;
-}
+  onSetButtonType: (type: string) => void;
+  selectType: string | SelectProps;
+};
 
-export const createButton = ({create}: ButtonProps) => {
-    return (
-        <>
-            <IconButton color="primary" aria-label="button create" component="label" onClick={create}>
-                <NoteAddIcon />
-            </IconButton>
-        </>
-    );
-}
+const getIcon = (selectType: string) => {
+  switch (selectType) {
+    case 'create':
+      return <NoteAddIcon />;
+    case 'update':
+      return <EditIcon />;
+    case 'remove':
+      return <DeleteForeverIcon />;
+    case 'onoff':
+      return true ? <ToggleOnIcon /> : <ToggleOffIcon />;
+    default:
+      return <></>;
+  }
+};
 
-export const updateButton = ({update}:ButtonProps) => {
-    return (
-        <>
-            <IconButton color="primary" aria-label="button update" component="label" onClick={update}>
-                <EditIcon />
-            </IconButton>
-        </>
-    );
-}
+const getCustomIcon = (selectObject: SelectProps) => {
+  return (
+    <Stack
+      direction={selectObject.direction ? selectObject.direction : 'row'}
+      spacing={selectObject.spacing ? selectObject.spacing : 2}
+    >
+      <Button
+        variant={selectObject.variant ? selectObject.variant : 'outlined'}
+        startIcon={getIcon(selectObject.startIcon)}
+      >
+        {selectObject.text}
+      </Button>
+    </Stack>
+  );
+};
 
-export const removeButton = ({remove}:ButtonProps) => {
-    return (
-        <>
-            <IconButton color="primary" aria-label="button remove" component="label" onClick={remove}>
-                <DeleteForeverIcon />
-            </IconButton>
-        </>
-    );
-}
+export const getButton = ({ onSetButtonType, selectType }: ButtonProps) => {
+  const setType =
+    typeof selectType == 'string'
+      ? (selectType as string)
+      : (selectType.type as string);
 
-export const onOffButton = ({onOff, on}:ButtonProps) => {
-    return (
-        <>
-            <IconButton color="primary" aria-label="button onOff" component="label" onClick={onOff}>
-                {
-                    on ? (<ToggleOnIcon />):(<ToggleOffIcon />)
-                }
-            </IconButton>
-        </>
-    );
-}
+  return (
+    <>
+      <IconButton
+        color="primary"
+        aria-label="button create"
+        component="label"
+        onClick={() => onSetButtonType(setType)}
+      >
+        {typeof selectType == 'string'
+          ? getIcon(selectType)
+          : getCustomIcon(selectType)}
+      </IconButton>
+    </>
+  );
+};

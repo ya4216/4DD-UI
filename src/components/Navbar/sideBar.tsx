@@ -8,27 +8,27 @@ import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import PendingIcon from '@mui/icons-material/Pending';
 import { SvgIconProps } from '@mui/material/SvgIcon';
 import { selectUnit } from '../../modules/unit';
 import { setOpenSave } from '../../modules/navBar';
 import { useDispatch } from 'react-redux';
-import TreeItem, { treeItemClasses, TreeItemProps } from '@mui/lab/TreeItem';
+import TreeItem, {
+  treeItemClasses,
+  TreeItemProps,
+  useTreeItem,
+  TreeItemContentProps,
+} from '@mui/lab/TreeItem';
 import { Button, Typography } from '@mui/material';
 import TreeView from '@mui/lab/TreeView';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useRef } from 'react';
+import Buttons from '../../containers/ButtonContainer';
+import clsx from 'clsx';
 
-// import * as Buttons from "../../containers/ButtonContainer";
+import { selectMenuInfo } from '../../modules/buttonModule';
 
-import * as Buttons from "../Common/buttons"
+let drawerWidth = 300;
 
-
-// console.log("운영자냐? : ", JSON.parse(localStorage.user).id == "6371e3df99561093efe09cfd");
-    
-const drawerWidth = 300;
-    
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -37,11 +37,82 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@CustomContent@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+const CustomContent = React.forwardRef(function CustomContent(
+  props: TreeItemContentProps,
+  ref,
+) {
+  const {
+    classes,
+    className,
+    label,
+    nodeId,
+    icon: iconProp,
+    expansionIcon,
+    displayIcon,
+  } = props;
 
+  const {
+    disabled,
+    expanded,
+    selected,
+    focused,
+    handleExpansion,
+    handleSelection,
+    preventSelection,
+  } = useTreeItem(nodeId);
 
+  const icon = iconProp || expansionIcon || displayIcon;
 
+  const handleMouseDown = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    preventSelection(event);
+  };
 
+  const handleExpansionClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    handleExpansion(event);
+  };
+
+  const handleSelectionClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    handleSelection(event);
+  };
+
+  return (
+    <div
+      className={clsx(className, classes.root, {
+        [classes.expanded]: expanded,
+        [classes.selected]: selected,
+        [classes.focused]: focused,
+        [classes.disabled]: disabled,
+      })}
+      onMouseDown={handleMouseDown}
+      ref={ref as React.Ref<HTMLDivElement>}
+    >
+      <div onClick={handleExpansionClick} className={classes.iconContainer}>
+        {icon}
+      </div>
+      <Typography
+        onClick={handleSelectionClick}
+        component="div"
+        className={classes.label}
+      >
+        {label}
+      </Typography>
+    </div>
+  );
+});
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@CustomContent@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@StyledTreeItem nodeId={String(cnt)} labelText={v.title} labelIcon={PendingIcon}@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -102,13 +173,16 @@ function StyledTreeItem(props: StyledTreeItemProps) {
     labelText,
     ...other
   } = props;
-  
+
   return (
     <StyledTreeItemRoot
-    label={
-      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+      label={
+        <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
           <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
-          <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+          <Typography
+            variant="body2"
+            sx={{ fontWeight: 'inherit', flexGrow: 1 }}
+          >
             {labelText}
           </Typography>
           <Typography variant="caption" color="inherit">
@@ -121,41 +195,34 @@ function StyledTreeItem(props: StyledTreeItemProps) {
         '--tree-view-bg-color': bgColor,
       }}
       {...other}
-      />
+    />
   );
 }
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@StyledTreeItem nodeId={String(cnt)} labelText={v.title} labelIcon={PendingIcon}@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    
 
+// import { useDispatch, useSelector } from 'react-redux';
+// import { RootState } from '../../modules';
+// import { initNavState, setOpenSave } from '../../modules/navBar';
 
+// const sideBarOpen = useSelector((state: RootState) => state.navBar.open);
 
-
-
-
-
-
-
-
-
-
-
-
-
-const PersistentDrawerLeft = (menuList : {[key:string]:any}) => {
+const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  
+
   const handleDrawerOpen = () => {
     setOpen(true);
     dispatch(setOpenSave(true));
+    drawerWidth = 300;
   };
-  
+
   const handleDrawerClose = () => {
     setOpen(false);
     dispatch(setOpenSave(false));
+    drawerWidth = 0;
   };
 
   const [expanded, setExpanded] = React.useState<string[]>([]);
@@ -170,110 +237,133 @@ const PersistentDrawerLeft = (menuList : {[key:string]:any}) => {
   };
 
   const handleExpandClick = () => {
-    setExpanded((oldExpanded) =>
-      oldExpanded.length === 0 ? expandedArr : [],
-    );
+    setExpanded((oldExpanded) => (oldExpanded.length === 0 ? expandedArr : []));
   };
 
   let cnt = 0;
 
-  let expandedArr : any[] = [];
+  let expandedArr: any[] = [];
 
-  const selectMenu = (id : string) => {
+  const selectMenu = (id: string) => {
     dispatch(selectUnit(id));
-  }
+  };
 
   React.useEffect(() => {
+    drawerWidth = 300;
     setExpanded(expandedArr);
+    return () => {
+      dispatch(setOpenSave(true));
+    };
   }, []);
-
-
-
-
-
-
-
-
-
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@ 아래 childTree 함수 안에 실험중 >>> ... 버튼 누르면 선택 요소 밑에 버튼 메뉴 나와야함 @@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
   const [menuOpen, setMenuOpen] = React.useState<boolean>(false);
 
-  const refTest = (cnt : number) => {
-    console.log("ffffff : ", inputRef.current);
-  }
-
   const inputRef = useRef<any[]>([]);
 
-  const labelAndIcon = (value : any, cnt : number) => {
+  const labelAndIcon = (value: any, cnt: number) => {
+    // console.log("운영자냐? : ", JSON.parse(localStorage.user).id == "6371e3df99561093efe09cfd");
     return (
-      <Typography>{value.title}<MoreHorizIcon sx={{position: "absolute", right: 0}} onClick={() => {setMenuOpen(!menuOpen)}}/></Typography>
-    )
-  }
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+          {value.title}
+        </Typography>
+        <Typography component="div">
+          <TreeView
+            color="inherit"
+            aria-label="controlled"
+            defaultCollapseIcon={<MoreHorizIcon />}
+            defaultExpandIcon={<MoreHorizIcon />}
+            selected={[]}
+          >
+            <TreeItem nodeId="1-1">
+              <TreeItem
+                nodeId="1-2"
+                label={
+                  <Buttons
+                    getTypeArr={['create', 'update', 'remove', 'onoff']}
+                  />
+                }
+                onClick={() => dispatch(selectMenuInfo(value))}
+              />
+            </TreeItem>
+          </TreeView>
+        </Typography>
+      </Box>
+    );
+  };
 
-
-//--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
-//--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
+  //--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
+  //--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
 
   // <StyledTreeItem nodeId={String(cnt)} labelText={v.title} labelIcon={PendingIcon}>
   //   {childTree(v.childMenu)}
   // </StyledTreeItem>
 
   // <StyledTreeItem nodeId={String(cnt)} labelText={v.title} labelIcon={PendingIcon} onClick={() => selectMenu(v._id)}/>
-  
-//--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
-//--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@ 아래 childTree 함수 안에 실험중 >>> ... 버튼 누르면 선택 요소 밑에 버튼 메뉴 나와야함 @@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  //--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
+  //--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
 
+  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  //@@@@@@@@@@@@@@ 아래 childTree 함수 안에 실험중 >>> ... 버튼 누르면 선택 요소 밑에 버튼 메뉴 나와야함 @@@@@@@@@@@@@@@@@@@@@@@@@
+  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-  const create = () => {
-    return console.log("되냐??????");
-  }
-
-  const childTree = (list : {[key:string]:any}) => {
+  const childTree = (list: { [key: string]: any }) => {
     let innerHtml: JSX.Element[] = [];
+    let userId = localStorage.user ? JSON.parse(localStorage.user).id : '';
 
-    list.map((v : {[key:string]:any}, i : number) => {
+    list.map((v: { [key: string]: any }, i: number) => {
       cnt++;
-      if(v.childMenu.length > 0){
+
+      // if (v.useYN == 'Y') {
+      if (v.childMenu.length > 0) {
+        if (v.useYN == 'N' && userId != '6371e3df99561093efe09cfd') {
+          return false;
+        }
         expandedArr.push(String(cnt));
         innerHtml.push(
           <div key={cnt}>
-            <TreeItem ref={el => inputRef.current[cnt] = el} nodeId={String(cnt)} label={labelAndIcon(v, cnt)}>
-              <div><Buttons.createButton create={create}/> <Buttons.updateButton update={create}/> <Buttons.removeButton remove={create}/> <Buttons.onOffButton onOff={create}/></div>
-              {
-                menuOpen && (
-                  <div><Buttons.createButton create={create}/> <Buttons.updateButton update={create}/> <Buttons.removeButton remove={create}/> <Buttons.onOffButton onOff={create}/></div>
-                )
-              }
+            <TreeItem
+              ContentComponent={CustomContent}
+              ref={(el) => (inputRef.current[cnt] = el)}
+              nodeId={String(cnt)}
+              label={labelAndIcon(v, cnt)}
+              disabled={v.useYN == 'Y' ? false : true}
+            >
               {childTree(v.childMenu)}
             </TreeItem>
-          </div>
+          </div>,
         );
-      }else{
+      } else {
+        if (v.useYN == 'N' && userId != '6371e3df99561093efe09cfd') {
+          return false;
+        }
         innerHtml.push(
           <div key={cnt}>
-            <TreeItem nodeId={String(cnt)} label={labelAndIcon(v, cnt)} onClick={() => selectMenu(v._id)}/>
-          </div>
+            <TreeItem
+              ContentComponent={CustomContent}
+              nodeId={String(cnt)}
+              label={labelAndIcon(v, cnt)}
+              disabled={v.useYN == 'Y' ? false : true}
+              onClick={() => selectMenu(v._id)}
+            />
+          </div>,
         );
       }
+      // }
     });
     return innerHtml;
-  }
+  };
 
   const list = () => {
     return (
-      <Box sx={{flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}>
+      <Box sx={{ flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}>
         <Box sx={{ textAlign: 'right' }}>
-          <input type="text"/>
+          <input type="text" />
           <Button onClick={handleExpandClick}>
             {expanded.length === 0 ? '펼치기' : '접기'}
           </Button>
+          <Buttons getTypeArr={['create']} />
         </Box>
         <TreeView
           aria-label="controlled"
@@ -289,18 +379,18 @@ const PersistentDrawerLeft = (menuList : {[key:string]:any}) => {
         </TreeView>
       </Box>
     );
-  }
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
       <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-          sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-          <ChevronRightIcon />
+        color="inherit"
+        aria-label="open drawer"
+        onClick={handleDrawerOpen}
+        edge="start"
+        sx={{ mr: 2, ...(open && { display: 'none' }) }}
+      >
+        <ChevronRightIcon />
       </IconButton>
       <Drawer
         sx={{
@@ -309,29 +399,42 @@ const PersistentDrawerLeft = (menuList : {[key:string]:any}) => {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
+            boxShadow: '0px 0 25px 0px rgb(0 0 0 / 15%)',
           },
-          zIndex: 99
+          zIndex: 99,
         }}
         variant="persistent"
         anchor="left"
         open={open}
       >
-        <Toolbar sx={{height: '80px'}}/>
+        <Toolbar sx={{ height: '80px' }} />
         <Box sx={{ overflow: 'auto' }}>
           <DrawerHeader>
-            <Typography sx={{ p: 2, fontWeight: 'bold', position: 'fixed', left: 0 }}>{menuList.category} &gt; {menuList.title}</Typography>
-              <IconButton onClick={handleDrawerClose}>
-                  {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-              </IconButton>
+            <Typography
+              sx={{ p: 2, fontWeight: 'bold', position: 'fixed', left: 0 }}
+            >
+              {menuList.category} &gt; {menuList.title}
+            </Typography>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'ltr' ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
           </DrawerHeader>
           <Divider />
           <>
-            { menuList.childMenu.length > 0 ? list() : (<div>과정이 없습니다.</div>) }
+            {menuList.childMenu.length > 0 ? (
+              list()
+            ) : (
+              <div>과정이 없습니다.</div>
+            )}
           </>
         </Box>
       </Drawer>
     </Box>
   );
-}
+};
 
 export default PersistentDrawerLeft;

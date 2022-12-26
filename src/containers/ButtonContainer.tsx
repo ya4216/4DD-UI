@@ -1,73 +1,52 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../modules';
-import { create, update, remove, onOff } from '../modules/buttonModule';
+import { useDispatch } from 'react-redux';
+import { buttonType, selectMenuInfo } from '../modules/buttonModule';
 import * as Button from '../components/Common/buttons';
 
-type functionType = {
-    func : () => void
-}
+//index는 common 디렉토리 모든 컴포넌트를 export함
+import { customType } from '../common/index';
 
+import { ResponsiveStyleValue } from '@mui/system';
 
+type SelectProps = [
+  {
+    type: string;
+    text: string;
+    startIcon: string;
+    direction:
+      | ResponsiveStyleValue<
+          'column' | 'column-reverse' | 'row' | 'row-reverse'
+        >
+      | undefined;
+    spacing: ResponsiveStyleValue<string | number> | undefined;
+    variant: 'text' | 'outlined' | 'contained' | undefined;
+  },
+];
 
+type propType = {
+  getTypeArr: string[] | SelectProps;
+};
 
+const setButtonType = ({ getTypeArr }: propType) => {
+  let innerHtml: JSX.Element[] = [];
+  const dispatch = useDispatch();
 
-
-// 버튼들 누르면 콜백 실행되게 하려고했는데
-// 콜백말고 state에 어떤 버튼을 눌렀는지 체크해서 Detail에 useEffect로 동적 컴포넌트 변경할것
-
-
-
-
-
-
-export const getCreate = () => {
-    const dispatch = useDispatch();
-
-    const onCreate = () => {
-        dispatch(create());
+  getTypeArr.map((v, i) => {
+    const onSetButtonType = () => {
+      if (typeof getTypeArr[i] == 'string') {
+        dispatch(buttonType(getTypeArr[i] as string));
+      }
     };
 
-    return (
-        <Button.createButton create={onCreate} />
+    innerHtml.push(
+      <Button.getButton
+        onSetButtonType={onSetButtonType}
+        selectType={getTypeArr[i]}
+        key={i}
+      />,
     );
-}
+  });
 
-export const getUpdate = ({func} : functionType) => {
+  return <>{innerHtml}</>;
+};
 
-    const dispatch = useDispatch();
-
-    const onUpdate = () => {
-        dispatch(update(func));
-    };
-
-    return (
-        <Button.updateButton update={onUpdate} />
-    );
-}
-
-export const getRemove = ({func} : functionType) => {
-
-    const dispatch = useDispatch();
-
-    const onRemove = () => {
-        dispatch(remove(func));
-    };
-
-    return (
-        <Button.removeButton remove={onRemove} />
-    );
-}
-
-export const getOnOff = ({func} : functionType) => {
-
-    const dispatch = useDispatch();
-
-    const onOnOff = () => {
-        dispatch(onOff(func));
-    };
-
-    return (
-        <Button.onOffButton onOff={onOnOff} />
-    );
-}
+export default setButtonType;

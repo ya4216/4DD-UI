@@ -1,9 +1,5 @@
-import {
-    createAction,
-    ActionType,
-    createReducer
-  } from 'typesafe-actions';
-  
+import { createAction, ActionType, createReducer } from 'typesafe-actions';
+
 // 액션 type 선언
 const GETSAVE = 'unitTitle/GETSAVE';
 const SELECTUNITTITLE = 'unitTitle/SELECTUNITTITLE';
@@ -28,14 +24,21 @@ type UnitState = {
 const initialState: UnitState = {
   list: [],
   selectedUnitId: '',
-  selectedMenuId: ''
+  selectedMenuId: '',
 };
 
 const unitTitle = createReducer<UnitState, UnitTitleAction>(initialState, {
-    [GETSAVE]: (state, action) => ({ list: action.payload }),
-    [SELECTUNITTITLE]: (state, action) => ({selectedUnitId : action.payload}),
-    [SELECTUNIT]: (state, action) => ({list : state.list, selectedUnitId : state.selectedUnitId, selectedMenuId : action.payload}),
-    [INITUNITSTATE]: () => (initialState)
+  [GETSAVE]: (state, action) => ({ list: action.payload }),
+  [SELECTUNITTITLE]: (state, action) => ({ selectedUnitId: action.payload }),
+  [SELECTUNIT]: (state, action) => ({
+    list: state.list,
+    selectedUnitId: state.selectedUnitId,
+    selectedMenuId: action.payload,
+  }),
+  [INITUNITSTATE]: (state, action) => ({
+    ...initialState,
+    selectedUnitId: state.selectedUnitId,
+  }),
 });
 
 export default unitTitle;

@@ -1,43 +1,41 @@
 import Axios from 'axios';
-import { useAsync } from "react-async";
-import {useCookies} from 'react-cookie'
-
+import { useAsync } from 'react-async';
+import { useCookies } from 'react-cookie';
 
 // const [cookies] = useCookies();
 
-const custom = async (props : any) => {
-    try{
-        const res = await Axios({
-            method: props.props.method || "get",
-            url: props.props.url
-        })
-        
-        return res.data.data;
-    }catch(err){
-        console.log("error!!! : ", err);
-        return err;
-    }
-};
-
-const customAxios = (props : any) => {
-    const {
-        data: list,
-        error,
-        isLoading
-    } = useAsync({
-        promiseFn: custom,
-        props
+const custom = async (props: any) => {
+  try {
+    const res = await Axios({
+      method: props.props.method || 'get',
+      url: props.props.url,
     });
 
-    if (isLoading) return null;
-    if (error) return null;
-    if (!list) return null;
+    return res.data.data;
+  } catch (err) {
+    console.log('error!!! : ', err);
+    return err;
+  }
+};
 
-    return list;
-}
+const customAxios = (props: any) => {
+  const {
+    data: list,
+    error,
+    isLoading,
+  } = useAsync({
+    promiseFn: custom,
+    props,
+  });
+
+  if (isLoading) return null;
+  if (error) return null;
+  if (!list) return null;
+
+  return list;
+};
 
 export default customAxios;
-
 
 // JSON.parse(localStorage.getItem('user')).accessToken
 
@@ -47,10 +45,10 @@ export default customAxios;
 // export const customAxios = axios.create({
 //   baseURL: '/api', // 기본 서버 주소 입력
 //   headers: {
+//localStorage.user 바꿔야함.
 //     access_token: JSON.parse(localStorage.user).accessToken,
 //   },
 // });
-
 
 // import axios from 'axios';
 
