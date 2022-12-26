@@ -6,15 +6,17 @@ import { Link, useNavigate } from "react-router-dom";
 import "./navbar.scss";
 import AuthService from "../../services/auth";
 import { useCookies } from 'react-cookie';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "../../modules";
 import SwipeableTemporaryDrawer from "./drawerNav";
 
 import testLogo from '../../image/test.png';
+import { initUserState } from "../../modules/user";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false);
-  const [footerMenuOpen, setFooterMenuOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
+  const [footerMenuOpen, setFooterMenuOpen] = useState(false);  
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [size, setSize] = useState({
@@ -22,7 +24,9 @@ const Navbar = () => {
     height: 0,
   });
   const [cookies, setCookie] = useCookies(['accessToken']);
-
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state: RootState) => state.user.info);
+  
   // const getUserInfo = () => {
   //   AuthService.getUserInfo()
   //   .then(
@@ -39,10 +43,7 @@ const Navbar = () => {
     navigate('/profile');
   }
   
-  useEffect(() => {        
-    if(localStorage.getItem('user') !== null) {
-      setIsLogin(true);
-    }
+  useEffect(() => {       
     const handleResize = () => {
       setSize({
         width: window.innerWidth,
@@ -76,12 +77,12 @@ const Navbar = () => {
     AuthService.logout()
     .then(
       response => {
-        localStorage.removeItem("user");
+        // localStorage.removeItem("user");
+        dispatch(initUserState());
         setSuccessful(true);
         setMessage(response.data.message);
         navigate('/home');
         allDelCookies('localhost', '/');
-        setIsLogin(false);
       },
       error => {
         const resMessage = error.response.data?.message;
@@ -112,9 +113,6 @@ const Navbar = () => {
     return (
         <ul>
           <li>
-            <Link to="/">회사검색</Link>
-          </li>
-          <li>
             <Link to="/Works">면접질문</Link>
           </li>
           <li>
@@ -127,7 +125,7 @@ const Navbar = () => {
           {/* <Link to="/register">
             <button className="btn">회원가입</button>
           </Link> */}
-          {!isLogin ?
+          {!userInfo.id ?
             (<Link to="/login">
               <button className="btn btn__login_out">로그인</button>
             </Link>)
@@ -162,7 +160,7 @@ const Navbar = () => {
           </nav>
           <div className="header__content__toggle">
             {!footerMenuOpen ? ( !headerMenuOpen ? (
-              !isLogin ? (
+              !userInfo.id ? (
                 <BiMenuAltRight onClick={headerMenuToggleHandler} />
                 ) : (
                 <VscAccount onClick={headerMenuToggleHandler} />

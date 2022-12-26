@@ -5,12 +5,15 @@ import { Link, useNavigate } from "react-router-dom";
 import Carousel from "../../common/Carousel";
 import { VscAccount } from "react-icons/vsc";
 import BarChart from "../../charts/BarChart";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "../../modules";
 import e from "express";
+import { ButtonBase } from "@mui/material";
 
-function MyPage() {
-  const userInfo:any = localStorage.getItem("user");
-  const userInfoObj = JSON.parse(userInfo);    
-  const { name, email } = userInfoObj;
+function MyPage() {  
+  const userInfo = useSelector((state: RootState) => state.user.info);
+  const { name, email } = userInfo;
+  
   let navigate = useNavigate();  
   const [studyData, setStudyData] = useState([{}]);
 
@@ -26,13 +29,10 @@ function MyPage() {
 
     //TODO : DB에서 가져오는걸로 바꿔야함
     let contents: string[] = ["네트워크", "운영체제", "알고리즘"];
-    let companies: string[] = ["삼성전자", "넥슨", "네이버", "넷마블", "엔씨소프트", "카카오"];
     let interviews: string[] = ["배달의민족", "네이버", "SK하이닉스", "GS칼텍스"];
     let study: string[] = [];
     if(title == '내 컨텐츠'){
-      arr = contents;
-    }else if(title == '관심 회사'){
-      arr = companies;
+      arr = contents;    
     }else if(title == '모의면접 진행'){
       arr = interviews;
     }else if(title == '스터디 진행률'){
@@ -78,7 +78,6 @@ function MyPage() {
         <span className="sub-title">{email}</span>
       </div>
       <Carousel {...propFunc('내 컨텐츠')}/>      
-      <Carousel {...propFunc('관심 회사')}/>
       <Carousel {...propFunc('모의면접 진행')}/>
       <Carousel {...propFunc('스터디 진행률')}/>
       <div className="barchart_container">

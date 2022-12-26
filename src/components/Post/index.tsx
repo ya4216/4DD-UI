@@ -15,6 +15,8 @@ import BoardService from "../../services/board";
 import * as Yup from "yup";
 import ReactQuill, { Quill } from 'react-quill';
 import e from 'express';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "../../modules";
 
 
 function Post() {
@@ -31,9 +33,8 @@ function Post() {
   }
   const [open, setOpen] = useState(false);
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
-  const userInfo:any = localStorage.getItem('user');
-  const userInfoObj = JSON.parse(userInfo);
-  console.log("#### userInfoObj.name : "+ userInfoObj);
+  const userInfo = useSelector((state: RootState) => state.user.info);
+  const { name, email } = userInfo;
   
   const handleClickOpen = () => {
     setOpen(true);
@@ -50,7 +51,7 @@ function Post() {
   // Submit 핸들러
   const handleSubmit = (formValue: { title: string }) => {  
     const { title } = formValue;     
-    const userName = userInfoObj.name;
+    const userName = userInfo.name;
     
     if(!title) {
       setMessage("계정 정보를 입력해 주세요.");
@@ -142,7 +143,7 @@ function Post() {
             <Form>
               {(!state || isSwitch) ? (                
               <div>         
-                {(state && (userInfoObj.name === state.userName)) && (
+                {(state && (userInfo.name === state.userName)) && (
                   <div className='post_switch_box'>
                     <div className='post_switch'>
                       <Switch
@@ -183,7 +184,7 @@ function Post() {
               :
               (
                 <div className='post_container'>
-                {(userInfoObj.name === state.userName) && (
+                {(userInfo.name === state.userName) && (
                   <div className='post_switch_box'>                    
                     <div className='post_switch'>
                       <Switch
@@ -209,7 +210,7 @@ function Post() {
                     </div>
                   </div>
                 </div>
-                {(userInfoObj.name === state.userName) && (
+                {(userInfo.name === state.userName) && (
                   <div className="grid_button edit">                    
                     <Button 
                       className="btn_delete"             

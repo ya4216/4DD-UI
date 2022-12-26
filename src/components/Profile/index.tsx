@@ -5,12 +5,16 @@ import AuthService from "../../services/auth";
 import * as Yup from "yup";
 import './profile.scss';
 import { VscAccount } from "react-icons/vsc";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "../../modules";
+import { initUserState } from "../../modules/user";
 import Navbar from "../Navbar";
 import Axios from 'axios';
 
 const Profile = () => {  
   // const [name, setName] = useState(false);
   // const [email, setEmail] = useState('');
+  const dispatch = useDispatch();
   const [userProfile, setUserProfile] = useState({
     id: '',
     name: '',
@@ -24,13 +28,12 @@ const Profile = () => {
   let navigate = useNavigate();      
 
   useEffect(() => {
-    const userInfo:any = localStorage.getItem("user");
-    const userInfoObj = JSON.parse(userInfo);    
-    const { name, email } = userInfoObj;
+    const userInfo = useSelector((state: RootState) => state.user.info);
+    const { id, name, email } = userInfo;
     setUserProfile({
-      id: userInfoObj.id,
-      name: userInfoObj.name,
-      email: userInfoObj.email
+      id: userInfo.id,
+      name: userInfo.name,
+      email: userInfo.email
     });    
   }, []);
 
@@ -47,8 +50,9 @@ const Profile = () => {
         setMessage(response.data.message);
         AuthService.logout()
         .then(
-          response => {
-            localStorage.removeItem("user");
+          response => {            
+            // localStorage.removeItem("user");
+            dispatch(initUserState());
             setSuccessful(true);
             setMessage(response.data.message);
             allDelCookies('localhost', '/');

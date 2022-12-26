@@ -5,27 +5,28 @@ import {
   } from 'typesafe-actions';
   
 // 액션 type 선언
-const SETOPENSAVE = 'navbar/SETOPENSAVE';
-const INITNAVSTATE = 'navbar/INITNAVSTATE'; //상태 초기화 액션
+const SETUSERINFO = 'user/SETUSERINFO'; //상태 초기화 액션
+const INITUSERSTATE = 'user/INITUSERSTATE'; //상태 초기화 액션
 
 //액션 생성함수 선언
-export const setOpenSave = createAction(SETOPENSAVE)<boolean>();
-export const initNavState = createAction(INITNAVSTATE)();
+export const setUserInfo = createAction(SETUSERINFO)<any>();
+export const initUserState = createAction(INITUSERSTATE)<any>();
 
 // 액션 객체 타입 준비
-const actions = { setOpenSave, initNavState };
-type navBarAction = ActionType<typeof actions>;
+const actions = { setUserInfo, initUserState };
+type userAction = ActionType<typeof actions>;
 
-type navBarState = {
-    open?: boolean;
+type userState = {
+    info?: any;
 };
-const initialState: navBarState = {
-    open: true
+const initialState: userState = {
+    info: {}
 };
 
-const navbar = createReducer<navBarState, navBarAction>(initialState, {
-    [SETOPENSAVE]: (state, action) => ({ open: action.payload }),
-    [INITNAVSTATE]: () => (initialState)
+const user = createReducer<userState, userAction>(initialState, {    
+    [SETUSERINFO]: (state, action) => ({ info: action.payload }),
+    [INITUSERSTATE]: () => (initialState)
 });
 
-export default navbar;
+
+export default user;

@@ -44,9 +44,6 @@ const Footer = () => {
                 menuOpen && size.width < 768 ? (
                   <ul>
                     <li>
-                      <Link to="/profile">회사검색</Link>
-                    </li>
-                    <li>
                       <Link to="/Works">면접질문</Link>
                     </li>
                     <li>
