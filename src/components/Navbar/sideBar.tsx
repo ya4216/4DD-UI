@@ -261,11 +261,12 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
   const inputRef = useRef<any[]>([]);
 
   const labelAndIcon = (value: any, cnt: number) => {
-    // console.log("운영자냐? : ", JSON.parse(localStorage.user).id == "6371e3df99561093efe09cfd");
     return (
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
         <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
-          {value.title}
+          <Button onClick={() => dispatch(selectMenuInfo(value))}>
+            {value.title}
+          </Button>
         </Typography>
         <Typography component="div">
           <TreeView
@@ -273,7 +274,7 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
             aria-label="controlled"
             defaultCollapseIcon={<MoreHorizIcon />}
             defaultExpandIcon={<MoreHorizIcon />}
-            selected={[]}
+            onClick={() => dispatch(selectMenuInfo(value))}
           >
             <TreeItem nodeId="1-1">
               <TreeItem
@@ -283,7 +284,6 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
                     getTypeArr={['create', 'update', 'remove', 'onoff']}
                   />
                 }
-                onClick={() => dispatch(selectMenuInfo(value))}
               />
             </TreeItem>
           </TreeView>
@@ -339,13 +339,12 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
           return false;
         }
         innerHtml.push(
-          <div key={cnt}>
+          <div key={cnt} onClick={() => selectMenu(v._id)}>
             <TreeItem
               ContentComponent={CustomContent}
               nodeId={String(cnt)}
               label={labelAndIcon(v, cnt)}
               disabled={v.useYN == 'Y' ? false : true}
-              onClick={() => selectMenu(v._id)}
             />
           </div>,
         );

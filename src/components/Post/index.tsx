@@ -45,7 +45,7 @@ function Post() {
   let navigate = useNavigate();
 
   const { state } = useLocation();
-  console.log('stateeeee : ', state);
+
   // Submit 핸들러
   const handleSubmit = (formValue: { title: string }) => {
     const { title } = formValue;
@@ -57,6 +57,7 @@ function Post() {
     }
     let _id = '';
     state && (_id = state._id);
+
     BoardService.register(_id, userName, title, content).then(
       (response) => {
         setSuccessful(true);

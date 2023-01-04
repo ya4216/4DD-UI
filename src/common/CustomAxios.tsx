@@ -1,8 +1,5 @@
 import Axios from 'axios';
 import { useAsync } from 'react-async';
-import { useCookies } from 'react-cookie';
-
-// const [cookies] = useCookies();
 
 const custom = async (props: any) => {
   try {

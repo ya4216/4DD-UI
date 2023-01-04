@@ -2,65 +2,32 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import './common.scss';
 import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import {
-  styled,
-  useTheme,
-  ThemeProvider,
-  createTheme,
-} from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Input from '@mui/material/Input';
 import {
   initFloatingState,
   setFloatingButton,
 } from '../../modules/floatingButtonModule';
-import { useDispatch } from 'react-redux';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { useDispatch, useSelector } from 'react-redux';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Button from '@mui/material/Button';
 import EditorComponent from '../Utils/index';
-
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 import Zoom from '@mui/material/Zoom';
 import Fab from '@mui/material/Fab';
-import { green } from '@mui/material/colors';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import UpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { SxProps } from '@mui/system';
-
-import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import Buttons from '../../containers/ButtonContainer';
-import FloatingButtons from '../../containers/FloatingButtonContainer';
 import { TextField } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { RootState } from '../../modules';
+import Axios from 'axios';
+import { initButtonState } from '../../modules/buttonModule';
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  //   marginTop: theme.spacing(5),
-  //   marginLeft: '3%',
-  //   marginRight: '3%',
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  boxShadow:
-    '0px 2px 15px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
-  width: '98%',
-}));
-
-// 버튼종류
-// 임시저장 (useYN이 N으로 저장됩니다.)
-// 취소
-// 작성
-// item 삭제 or 추가
 const fabStyle = {
   position: 'absolute',
   backgroundColor: 'white',
@@ -78,16 +45,23 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.primary,
 }));
 
-const createAndUpdate = () => {
-  const [isSwitch, setIsSwitch] = React.useState(false);
-  const [pureContent, setPureContent] = React.useState('');
+const createAndUpdate = ({ props }: any) => {
   const [content, setContent] = React.useState('');
-  const { state } = useLocation();
+
   const getContent = (content: string) => {
-    setPureContent(content.replace(/<[^>]*>?/g, ''));
     setContent(content);
   };
-  console.log('state : ', state);
+
+  const flotingButtonType = useSelector(
+    (state: RootState) => state.floatingButtonModule.clickState,
+  );
+
+  const selectedMenu = useSelector(
+    (state: RootState) => state.buttonModule.selectedList,
+  );
+
+  const editorType = useSelector((state: RootState) => state.buttonModule.type);
+
   const theme = useTheme();
   const [mouseEnter, setMouseEnter] = React.useState<number>(0);
 
@@ -95,48 +69,104 @@ const createAndUpdate = () => {
 
   const dispatch = useDispatch();
 
+  const [title, setTitle] = React.useState('');
+
+  //input에 입력될 때마다 account state값 변경되게 하는 함수
+  const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
   //TODO HWI 브라우저 이동 감지해서 화면 벗어나면 false로 바꿔줘야함
   React.useEffect(() => {
-    dispatch(setFloatingButton(true));
+    dispatch(
+      setFloatingButton({
+        on: true,
+        props: [
+          {
+            type: 'cancel',
+            icon: 'cancel',
+            confirmType: 'tooltip',
+            tooltipButtonType: 'type1',
+            confirmMessage: '취소하시겠습니까?',
+          },
+          {
+            type: 'create',
+            icon: 'moreTime',
+            confirmType: 'tooltip',
+            tooltipButtonType: 'type1',
+            confirmMessage: '작성 중인 문서를 임시저장하시겠습니까?',
+          },
+          {
+            type: 'save',
+            icon: 'save',
+            confirmType: 'tooltip',
+            tooltipButtonType: 'type1',
+            confirmMessage: '저장하시겠습니까?',
+          },
+        ],
+      }),
+    );
 
-    // FloatingButtons([
-    //   {
-    //     type: 'cancel',
-    //     icon: '<CancelIcon />',
-    //   },
-    // ]);
-
-    // dispatch(
-    //   setFloatingButtonList([
-    //     {
-    //       type: 'cancel',
-    //       icon: '<CancelIcon />',
-    //     },
-    //   ]),
-    // );
-
-    // <Buttons
-    //   getTypeArr={[
-    //     {
-    //       type: 'create',
-    //       text: '텍스트 에디터 만들기',
-    //       startIcon: 'create',
-    //       direction: 'row',
-    //       spacing: 2,
-    //       variant: 'contained',
-    //     },
-    //   ]}
-    // />
-
+    //화면 초기 에디터 설정
     handleAddTextEditor();
 
     return () => {
-      dispatch(setFloatingButton(false));
-      initFloatingState();
+      dispatch(initFloatingState());
+      dispatch(initButtonState());
     };
   }, []);
 
-  //가운데 버튼들에 각각 마우스올리면 스켈레톤처럼 해당 컴포넌트의 사진(고민)이 자기가 들어갈 위치에 투명하게 깜빡깜빡하면서 대충 보여줌
+  React.useEffect(() => {
+    if (flotingButtonType && editorType === 'create') {
+      let SaveProp = {
+        title: title,
+        detail_content: content,
+        useYN: 'Y',
+        category: selectedMenu.category,
+        category_number: selectedMenu.category_number,
+        menu_level: selectedMenu.level,
+        menu_id: selectedMenu.parents_menu_id,
+        parents_menu_id:
+          selectedMenu.parents_menu_id.replace(/[0-9]/g, '') +
+          String(++selectedMenu.parents_menu_id.match(/\d+/g)[0]).padStart(
+            3,
+            '0',
+          ),
+      };
+
+      if (flotingButtonType == 'create') {
+        SaveProp.useYN = 'N';
+      }
+
+      Axios.post(`/api/unit/detail/`, SaveProp)
+        .then((res) => {
+          console.log('저장 성공..! ::: ', res);
+        })
+        .catch((err) => {
+          console.log('저장 실패..! ::: ', err);
+        });
+    } else if (flotingButtonType && editorType === 'update') {
+      let SaveProp = {
+        title: title || props.title,
+        detail_content: content,
+        useYN: 'Y',
+        parent_id: selectedMenu._id,
+      };
+
+      if (flotingButtonType == 'create') {
+        SaveProp.useYN = 'N';
+      }
+
+      Axios.put(`/api/unit/detail/${selectedMenu.content}`, SaveProp)
+        .then((res) => {
+          console.log('수정 성공..! ::: ', res);
+        })
+        .catch((err) => {
+          console.log('수정 실패..! ::: ', err);
+        });
+    }
+  }, [flotingButtonType]);
+
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMouseEnter(1);
   };
@@ -173,6 +203,7 @@ const createAndUpdate = () => {
             sx={{
               position: 'relative',
               minHeight: 400,
+              maxHeight: 500,
               // display: 'flex',
               '& .MuiButtonBase-root': {
                 display: 'block',
@@ -187,11 +218,11 @@ const createAndUpdate = () => {
             <Box component="div" className="editor_container">
               <EditorComponent
                 getContent={getContent}
-                contents={isSwitch && state.content}
+                contents={editorType === 'update' ? props.content : ''}
               />
             </Box>
 
-            <Box component="div">
+            {/* <Box component="div">
               <Accordion>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
@@ -210,7 +241,7 @@ const createAndUpdate = () => {
                   </Typography>
                 </AccordionDetails>
               </Accordion>
-            </Box>
+            </Box> */}
           </Grid>
         </Grid>
       </StyledPaper>,
@@ -254,10 +285,8 @@ const createAndUpdate = () => {
               <div>
                 <TextField
                   id="outlined-multiline-static"
-                  // label="텍스트 블록"
                   multiline
                   rows={5}
-                  // defaultValue="내용을 입력하세요."
                   placeholder="내용을 입력하세요."
                 />
               </div>
@@ -282,7 +311,6 @@ const createAndUpdate = () => {
     },
     {
       sx: fabStyle as SxProps,
-      // Stack direction="row" spacing={5}
       icon: (
         <>
           <Button
@@ -358,6 +386,9 @@ const createAndUpdate = () => {
     <Box
       component="form"
       sx={{
+        overflow: 'auto',
+        height: '857px',
+
         bgcolor: '#fbfbfb66',
         flexGrow: 1,
         px: 3,
@@ -386,6 +417,7 @@ const createAndUpdate = () => {
                 placeholder="컨텐츠 제목을 입력하세요."
                 aria-label="title"
                 id="standard-adornment-weight"
+                onChange={onChangeTitle}
                 startAdornment={
                   <InputAdornment
                     sx={{ fontSize: '25px', color: 'rgb(171 171 171)' }}
@@ -398,6 +430,7 @@ const createAndUpdate = () => {
                 inputProps={{
                   'aria-label': 'weight',
                 }}
+                defaultValue={editorType === 'update' ? props.title : null}
               />
             </Box>
             {/* noWrap */}
@@ -433,7 +466,6 @@ const createAndUpdate = () => {
               <Zoom
                 key={index}
                 in={mouseEnter === index}
-                // in={mouseEnter === 1 && (index == 1 || index == 2)}
                 timeout={transitionDuration}
                 style={{
                   transitionDelay: `${
@@ -450,211 +482,6 @@ const createAndUpdate = () => {
         </Grid>
       </StyledPaper>
     </Box>
-
-    // <Box
-    //   component="form"
-    //   sx={{
-    //     // '& .MuiTextField-root': { m: 5, width: '90%', height: '2rem' },
-    //     // width: '100%',
-    //     textAlign: 'center',
-    //     display: 'flex',
-    //     alignItems: 'center',
-    //     width: 'fit-content',
-    //   }}
-    //   // container
-    //   justifyContent="flex-start"
-    //   alignItems="center"
-    // >
-    // <Box
-    //   component="div"
-    //   sx={{
-    //     '& > :not(style)': { m: 5, width: '90%', fontSize: '30px' },
-    //     width: '100%',
-    //     textAlign: 'center',
-    //   }}
-    //   // noValidate
-    // >
-    //   <Input
-    //     placeholder="컨텐츠 제목을 입력해주세요."
-    //     inputProps={ariaLabel}
-    //   />
-    // </Box>
-    //   <Divider
-    //     sx={{
-    //       width: '92%',
-    //     }}
-    //     textAlign="center"
-    //     variant="middle"
-    //     flexItem
-    //   >
-    //     {/* ADD EDITOR */}
-    //   </Divider>
-    //   <Stack
-    //     direction="column"
-    //     justifyContent="flex-start"
-    //     alignItems="center"
-    //     spacing={5}
-    //     sx={{
-    //       p: 3,
-    //       width: '90%',
-    //     }}
-    //   >
-    //     <EditorComponent />
-    //   </Stack>
-
-    //   {/* <TextField
-    //     id="standard-multiline-static"
-    //     sx={{}}
-    //     label="컨텐츠의 제목을 입력해주세요."
-    //     multiline
-    //     rows={2}
-    //     defaultValue=""
-    //     variant="standard"
-    //   /> */}
-
-    //   {/* <Divider
-    //     sx={{ alignItems: 'center', textAlign: 'center', width: '92%' }}
-    //   /> */}
-    //   <Divider
-    //     sx={{
-    //       width: '92%',
-    //     }}
-    //     textAlign="center"
-    //     variant="inset"
-    //   >
-    //     ADD EDITOR
-    //   </Divider>
-    //   <Stack
-    //     direction="column"
-    //     justifyContent="flex-start"
-    //     alignItems="center"
-    //     spacing={5}
-    //     sx={{
-    //       // bgcolor: '#f9f9f9',
-
-    //       p: 2,
-    //       minWidth: 300,
-    //     }}
-    //   >
-    //     <Item
-    //       onMouseEnter={handlePopoverOpen}
-    //       onMouseLeave={handlePopoverClose}
-    //       variant="outlined"
-    //       sx={{
-    //         width: '92%',
-    //         height: '100px',
-    //         borderRadius: 5,
-    //         p: 3,
-    //         m: 5,
-    //       }}
-    //     >
-    //       <AddShoppingCartIcon sx={{ fontSize: '50px', color: '#00000052' }} />
-    //       {
-    //         <Zoom
-    //           key={'primary'}
-    //           in={value === 0}
-    //           timeout={transitionDuration}
-    //           style={{
-    //             transitionDelay: `${
-    //               value === 0 ? transitionDuration.exit : 0
-    //             }ms`,
-    //           }}
-    //           unmountOnExit
-    //         >
-    //           <Fab
-    //             sx={fabStyle as SxProps}
-    //             aria-label={'buttons'}
-    //             color={'primary'}
-    //           >
-    //             <Buttons getTypeArr={['create', 'update', 'remove', 'onoff']} />
-    //           </Fab>
-    //         </Zoom>
-    //       }
-    //     </Item>
-
-    //     {/* <Button
-    //       onClick={handleClick}
-    //       onMouseEnter={handlePopoverOpen}
-    //       onMouseLeave={handlePopoverClose}
-    //       variant="contained"
-    //       sx={{
-    //         // TODO HWI hover css 바꿔야함
-
-    //         '& .MuiButtonBase-root:hover': {
-    //           textDecoration: 'none',
-    //           bgcolor: 'black',
-    //           boxShadow:
-    //             '0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%)',
-    //         },
-    //         width: '98%',
-    //         height: '75px',
-    //         bgcolor: '#fff',
-    //       }}
-    //     >
-    //       <AddShoppingCartIcon sx={{ fontSize: '50px', color: '#00000052' }} />
-    //       {
-    //         <Zoom
-    //           key={'primary'}
-    //           in={value === 0}
-    //           timeout={transitionDuration}
-    //           style={{
-    //             transitionDelay: `${
-    //               value === 0 ? transitionDuration.exit : 0
-    //             }ms`,
-    //           }}
-    //           unmountOnExit
-    //         >
-    //           <Fab
-    //             sx={fabStyle as SxProps}
-    //             aria-label={'buttons'}
-    //             color={'primary'}
-    //           >
-    //             <Buttons getTypeArr={['create', 'update', 'remove', 'onoff']} />
-    //           </Fab>
-    //         </Zoom>
-    //       }
-    //       {fabs.map((fab, index) => (
-    //         <Zoom
-    //           key={fab.color}
-    //           in={value === 0}
-    //           timeout={transitionDuration}
-    //           style={{
-    //             transitionDelay: `${
-    //               value === 0 ? transitionDuration.exit : 0
-    //             }ms`,
-    //           }}
-    //           unmountOnExit
-    //         >
-    //           <Fab sx={fab.sx} aria-label={fab.label} color={fab.color}>
-    //             {fab.icon}
-    //           </Fab>
-    //         </Zoom>
-    //       ))}
-    //     </Button> */}
-    //   </Stack>
-    //   {/* <Accordion
-    //     sx={{ alignItems: 'center', textAlign: 'center', width: '98%' }}
-    //   >
-    //     <AccordionSummary
-    //       sx={{ width: '98%' }}
-    //       expandIcon={<ExpandMoreIcon />}
-    //       aria-controls="panel1a-content"
-    //       id="panel1a-header"
-    //     >
-    //       <Typography>
-    //         <AddShoppingCartIcon
-    //           sx={{ fontSize: '50px', color: '#00000052' }}
-    //         />
-    //       </Typography>
-    //     </AccordionSummary>
-    //     <AccordionDetails sx={{ width: '98%' }}>
-    //       <Typography>
-    //         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-    //         malesuada lacus ex, sit amet blandit leo lobortis eget.
-    //       </Typography>
-    //     </AccordionDetails>
-    //   </Accordion> */}
-    // </Box>
   );
 };
 

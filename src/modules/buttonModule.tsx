@@ -12,7 +12,11 @@ const actions = { buttonType, selectMenuInfo, initButtonState };
 type ButtonAction = ActionType<typeof actions>;
 
 type ButtonState = {
-  [name: string]: string | boolean | [];
+  // [name: string]: string | boolean | [];
+
+  selectedList: { [key: string]: any };
+  type: string;
+  on: boolean;
 };
 
 const initialState: ButtonState = {

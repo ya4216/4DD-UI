@@ -1,38 +1,20 @@
 import { useDispatch } from 'react-redux';
-import { buttonType, selectMenuInfo } from '../modules/buttonModule';
-import {
-  setFloatingButtonJsx,
-  setFloatingType,
-} from '../modules/floatingButtonModule';
+import { setFloatingType } from '../modules/floatingButtonModule';
 import FloatingButtons from '../components/Common/floatingButtons';
-
-import { ResponsiveStyleValue } from '@mui/system';
-
-// type SelectProps = [
-//   {
-//     type: string;
-//     text: string;
-//     startIcon: string;
-//     direction:
-//       | ResponsiveStyleValue<
-//           'column' | 'column-reverse' | 'row' | 'row-reverse'
-//         >
-//       | undefined;
-//     spacing: ResponsiveStyleValue<string | number> | undefined;
-//     variant: 'text' | 'outlined' | 'contained' | undefined;
-//   },
-// ];
 
 type floatProps = {
   type: string;
   icon: string;
+  confirmType: string;
+  tooltipButtonType: string;
+  confirmMessage: string;
 };
 
-// const saveJsx = (innerHtml : JSX.Element[]) => {
-//     dispatch(setFloatingButtonJsx(innerHtml));
-// }
+type TProps = {
+  props: floatProps[];
+};
 
-const setButtonType = (props: floatProps[]) => {
+const setButtonType = ({ props }: TProps) => {
   let innerHtml: JSX.Element[] = [];
   const dispatch = useDispatch();
 
@@ -40,18 +22,20 @@ const setButtonType = (props: floatProps[]) => {
     const onSetButtonType = () => {
       dispatch(setFloatingType(v.type));
     };
+
     innerHtml.push(
       <FloatingButtons
         onSetFlotingType={onSetButtonType}
         type={v.type}
         icon={v.icon}
+        confirmType={v.confirmType}
+        tooltipButtonType={v.tooltipButtonType}
+        confirmMessage={v.confirmMessage}
       />,
     );
   });
 
-  //   dispatch(setFloatingButtonJsx(innerHtml));
-
-  return innerHtml;
+  return <>{innerHtml}</>;
 };
 
 export default setButtonType;

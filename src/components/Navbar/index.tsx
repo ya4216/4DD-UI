@@ -9,6 +9,7 @@ import { useCookies } from 'react-cookie';
 import FloatingButtons from '../../containers/FloatingButtonContainer';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../modules';
+import { Box } from '@mui/material';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -24,11 +25,8 @@ const Navbar = () => {
   const [cookies, setCookie] = useCookies(['accessToken']);
 
   const flotingButton = useSelector(
-    (state: RootState) => state.floatingButtonModule.on,
+    (state: RootState) => state.floatingButtonModule,
   );
-  // const flotingButtonJsx = useSelector(
-  //   (state: RootState) => state.floatingButtonModule.list,
-  // );
 
   // const getUserInfo = () => {
   //   AuthService.getUserInfo()
@@ -162,10 +160,11 @@ const Navbar = () => {
         <div className="header__content">
           <Link to="/" className="header__content__logo">
             <span className="header__content__logo__name">FOR</span>{' '}
-            &#40;var&nbsp;
+            {/* &#40;var&nbsp; */} var&nbsp;
             <span className="header__content__logo__name">DREAM</span> of&nbsp;
-            <span className="header__content__logo__name">DEVELOPER</span>&#41;
-            &#123;
+            <span className="header__content__logo__name">DEVELOPER</span>
+            {/* &#41; */}
+            {/* &#123; */}
           </Link>
           <nav
             className={`${'header__content__nav'} 
@@ -187,7 +186,7 @@ const Navbar = () => {
               )
             ) : null}
           </div>
-          &#125;
+          {/* &#125; */}
         </div>
       </header>
       <footer className="footer">
@@ -207,27 +206,15 @@ const Navbar = () => {
             )
           ) : null}
         </div>
-        {/* {flotingButton && {}} */}
-        {FloatingButtons([{ type: 'cancel', icon: 'cancel' }])}
-        {/* <FloatingButtons {...[{ type: 'cancel', icon: 'cancel' }]} /> */}
+
+        {flotingButton.on && (
+          <Box sx={{ '& > :not(style)': { m: 1 } }}>
+            <FloatingButtons props={flotingButton.list} />
+          </Box>
+        )}
       </footer>
     </>
   );
 };
 
 export default Navbar;
-
-{
-  /* <Buttons
-  getTypeArr={[
-    {
-      type: 'create',
-      text: '텍스트 에디터 만들기',
-      startIcon: 'create',
-      direction: 'row',
-      spacing: 2,
-      variant: 'contained',
-    },
-  ]}
-/> */
-}
