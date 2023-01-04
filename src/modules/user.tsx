@@ -10,7 +10,7 @@ const INITUSERSTATE = 'user/INITUSERSTATE'; //상태 초기화 액션
 
 //액션 생성함수 선언
 export const setUserInfo = createAction(SETUSERINFO)<any>();
-export const initUserState = createAction(INITUSERSTATE)<any>();
+export const initUserState = createAction(INITUSERSTATE)();
 
 // 액션 객체 타입 준비
 const actions = { setUserInfo, initUserState };

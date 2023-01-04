@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from "../Navbar";
 import "./post.scss";
 import Button from '@material-ui/core/Button';
@@ -17,7 +17,8 @@ import ReactQuill, { Quill } from 'react-quill';
 import e from 'express';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../../modules";
-
+import CommentList from "../Comment/commentList";
+import { string } from 'prop-types';
 
 function Post() {
   const [successful, setSuccessful] = useState(false);
@@ -34,7 +35,7 @@ function Post() {
   const [open, setOpen] = useState(false);
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const userInfo = useSelector((state: RootState) => state.user.info);
-  const { name, email } = userInfo;
+  const { name, email, id }: any = userInfo;
   
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,10 +48,11 @@ function Post() {
   let navigate = useNavigate();  
   
   const { state } = useLocation();
-  
+
+
   // Submit 핸들러
   const handleSubmit = (formValue: { title: string }) => {  
-    const { title } = formValue;     
+    const { title } = formValue;
     const userName = userInfo.name;
     
     if(!title) {
@@ -140,7 +142,7 @@ function Post() {
             setFieldValue
           } = props;
           return (
-            <Form>
+            <Form style={{height: '683px'}}>
               {(!state || isSwitch) ? (                
               <div>         
                 {(state && (userInfo.name === state.userName)) && (
@@ -248,7 +250,8 @@ function Post() {
             </Form>
           )
         }}
-      </Formik>
+      </Formik>            
+      <CommentList comInfo={state._id}></CommentList>
     </body>
   );
 }

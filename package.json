@@ -68,7 +68,8 @@
     "sass": "^1.55.0",
     "slick-carousel": "^1.8.1",
     "typesafe-actions": "^5.1.0",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "antd": "^4.15.3"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",

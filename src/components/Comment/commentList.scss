@@ -1,0 +1,55 @@
+#commentList {
+  .comment {
+    &_container {
+      width: 60%;
+      margin: auto;
+      margin-bottom: 15px;
+    }
+    &_title {
+      display: flex;
+      p {
+        text-align: left;
+        color: gray;
+        margin: 0 0 0 15px;
+      }
+      &_name {
+        width: 70%;
+        display: flex;
+      }
+      &_btn {
+        cursor: pointer;
+        width: 30%;
+        text-align: end;
+        color: grey;
+        >svg {
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+  .textfield {
+    &_container {
+      margin: auto;
+      width: 60%;
+      &_edit {        
+      }
+    }
+    &_field {
+      width: 100%;
+      display: grid;
+    }
+    &_button {
+      width: 60%;
+      text-align: right;
+      margin: auto;
+      margin-top: 10px;
+      &_edit {      
+        text-align: right;
+        margin-top: 10px;
+        button {
+          background: coral;
+        }
+      }
+    }
+  }
+}
