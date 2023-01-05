@@ -8,7 +8,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from "../../modules";
 import Button from '@mui/material/Button';
 import BoardService from "../../services/board";
+import NestedModal from "../Common/modal";
+import { Modal, CreateAndUpdate } from '../Common/index';
 import { number, string } from 'yup/lib/locale';
+import { functions } from 'lodash';
 
 interface CommentForm {
   post_id: string;
@@ -19,6 +22,12 @@ interface CommentForm {
   parents_comment_id? : string;
 }
 
+interface modalForm {
+  title: string;
+  content: string;
+  callback: any;
+}
+
 const CommentList = ({comInfo}:any) => {  
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -26,6 +35,11 @@ const CommentList = ({comInfo}:any) => {
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [updateCmt, setUpdateCmt] = useState('');
+  const [modalForm, setModalForm] = useState<{[key:string]:any}>({
+    title: '',
+    content: '',
+    callback: null
+  });
   const [commentInfo, setCommentInfo] = useState([{
     id: '',
     comment_level: 0,
@@ -34,7 +48,7 @@ const CommentList = ({comInfo}:any) => {
     post_id: '',
     userName: ''
   }]);  
-  const [isDelete, setIsDelete] = useState(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const userInfo = useSelector((state: RootState) => state.user.info);  
   const { name, email, id }: any = userInfo;
 
@@ -60,7 +74,7 @@ const CommentList = ({comInfo}:any) => {
       );
     }
     // setCommentInfo(state.commentInfo);
-  },[isDelete]);
+  },[openModal]);
 
 
   const commentSubmit = (type: string, _id: string) => {     
@@ -69,21 +83,37 @@ const CommentList = ({comInfo}:any) => {
       case('edit'): setUpdateCmt(_id); break;
       case('reply'): setUpdateCmt(_id); break;
       case('delete'): {
-        BoardService.deleteComment(_id).then(
-          response => {
-            setSuccessful(true);
-            setMessage(response.data);
-            setIsDelete(true);
-          },
-          error => {
-            const resMessage = error.response.data?.message;
-            setSuccessful(false);
-            setMessage(resMessage);
-          }
-        );
+        setModalForm({
+          title: '삭제',
+          content: '해당 댓글을 삭제하시겠습니까?',
+          callback: {callbackfunc}
+        });
+        setOpenModal(true);
+        // BoardService.deleteComment(_id).then(
+        //   response => {
+        //     setSuccessful(true);
+        //     setMessage(response.data);
+        //     setModalForm({
+        //       title: '삭제',
+        //       content: '해당 댓글을 삭제하시겠습니까?',
+        //       callback: deleteFunc()
+        //     });
+        //     setIsDelete(true);
+        //   },
+        //   error => {
+        //     const resMessage = error.response.data?.message;
+        //     setSuccessful(false);
+        //     setMessage(resMessage);
+        //   }
+        // );
         break;
       } 
     }         
+  }
+
+  const callbackfunc = (prop: string) =>{
+    setOpenModal(false);
+    console.log("### delete !", prop);
   }
 
   const like = (id: number) => {
@@ -150,6 +180,7 @@ const CommentList = ({comInfo}:any) => {
                           <Reply fontSize='small' style={{ color: 'cadetblue'}} onClick={() => commentSubmit('reply', com.id)}/>                          
                           <Edit fontSize='small' style={{ color: 'mediumseagreen'}} onClick={() => commentSubmit('edit', com.id)}/>
                           <Delete fontSize='small' style={{ color: 'tomato'}} onClick={() => commentSubmit('delete', com.id)}/>
+                          {openModal && <NestedModal props={modalForm}/>}
                         </div>
                       ) : (
                         <div className='comment_title_btn'>
