@@ -5,18 +5,21 @@ import buttonModule from './buttonModule';
 import counter from './counter';
 import navBar from './navBar';
 import unit from './unit';
+import user from './user';
 import floatingButtonModule from './floatingButtonModule';
 
 const persistConfig = {
   key: 'root', // localStorage key
   storage, // localStorage
-  whitelist: ['unit'], // target (reducer name)
+  whitelist: ["unit", "user"], // target (reducer name)
 };
 
 const rootReducer = combineReducers({
   unit,
   navBar,
   buttonModule,
+  counter,
+  user,
   floatingButtonModule,
 });
 

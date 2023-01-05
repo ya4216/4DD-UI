@@ -6,19 +6,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import './navbar.scss';
 import AuthService from '../../services/auth';
 import { useCookies } from 'react-cookie';
-<<<<<<< HEAD
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../../modules";
 import SwipeableTemporaryDrawer from "./drawerNav";
 
 import testLogo from '../../image/test.png';
 import { initUserState } from "../../modules/user";
-=======
 import FloatingButtons from '../../containers/FloatingButtonContainer';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../modules';
 import { Box } from '@mui/material';
->>>>>>> 6a03a517c37b264ef620839a8380dc6f038d2ecd
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -31,17 +26,13 @@ const Navbar = () => {
     height: 0,
   });
   const [cookies, setCookie] = useCookies(['accessToken']);
-<<<<<<< HEAD
   const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.user.info);
-  
-=======
 
   const flotingButton = useSelector(
     (state: RootState) => state.floatingButtonModule,
   );
 
->>>>>>> 6a03a517c37b264ef620839a8380dc6f038d2ecd
   // const getUserInfo = () => {
   //   AuthService.getUserInfo()
   //   .then(
@@ -56,18 +47,9 @@ const Navbar = () => {
 
   const profile = () => {
     navigate('/profile');
-<<<<<<< HEAD
   }
-  
-  useEffect(() => {       
-=======
-  };
 
   useEffect(() => {
-    if (localStorage.getItem('user') !== null) {
-      setIsLogin(true);
-    }
->>>>>>> 6a03a517c37b264ef620839a8380dc6f038d2ecd
     const handleResize = () => {
       setSize({
         width: window.innerWidth,
@@ -98,17 +80,11 @@ const Navbar = () => {
   };
 
   const logout = () => {
-<<<<<<< HEAD
     AuthService.logout()
     .then(
       response => {
         // localStorage.removeItem("user");
         dispatch(initUserState());
-=======
-    AuthService.logout().then(
-      (response) => {
-        localStorage.removeItem('user');
->>>>>>> 6a03a517c37b264ef620839a8380dc6f038d2ecd
         setSuccessful(true);
         setMessage(response.data.message);
         navigate('/home');
@@ -141,22 +117,7 @@ const Navbar = () => {
 
   const navElement = (elType: string) => {
     return (
-<<<<<<< HEAD
-        <ul>
-          <li>
-            <Link to="/Works">면접질문</Link>
-          </li>
-          <li>
-            <Link to="/board">자유게시판</Link>
-          </li>
-          <li>
-            <Link to="/mypage">마이페이지</Link>
-          </li>
-=======
       <ul>
-        <li>
-          <Link to="/">회사검색</Link>
-        </li>
         <li>
           <Link to="/Works">면접질문</Link>
         </li>
@@ -166,46 +127,25 @@ const Navbar = () => {
         <li>
           <Link to="/mypage">마이페이지</Link>
         </li>
->>>>>>> 6a03a517c37b264ef620839a8380dc6f038d2ecd
 
         {/* <Link to="/register">
             <button className="btn">회원가입</button>
           </Link> */}
-<<<<<<< HEAD
-          {!userInfo.id ?
-            (<Link to="/login">
-              <button className="btn btn__login_out">로그인</button>
-            </Link>)
-            : 
-            (<div style={{display: "contents"}}>
-              <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
-              <Link to="/profile">
-                <VscAccount className="account"></VscAccount>
-              </Link>
-            </div>)
-          }
-        </ul>
-    )
-  }
-=======
-        {!isLogin ? (
-          <Link to="/login">
+        {!userInfo.id ?
+          (<Link to="/login">
             <button className="btn btn__login_out">로그인</button>
-          </Link>
-        ) : (
-          <div style={{ display: 'contents' }}>
-            <button className="btn btn__login_out" onClick={logout}>
-              로그아웃
-            </button>
+          </Link>)
+          : 
+          (<div style={{display: "contents"}}>
+            <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
             <Link to="/profile">
               <VscAccount className="account"></VscAccount>
             </Link>
-          </div>
-        )}
+          </div>)
+        }
       </ul>
-    );
-  };
->>>>>>> 6a03a517c37b264ef620839a8380dc6f038d2ecd
+    )
+  }
 
   return (
     <>
@@ -232,16 +172,9 @@ const Navbar = () => {
             {navElement('header')}
           </nav>
           <div className="header__content__toggle">
-<<<<<<< HEAD
             {!footerMenuOpen ? ( !headerMenuOpen ? (
               !userInfo.id ? (
                 <BiMenuAltRight onClick={headerMenuToggleHandler} />
-=======
-            {!footerMenuOpen ? (
-              !headerMenuOpen ? (
-                !isLogin ? (
-                  <BiMenuAltRight onClick={headerMenuToggleHandler} />
->>>>>>> 6a03a517c37b264ef620839a8380dc6f038d2ecd
                 ) : (
                   <VscAccount onClick={headerMenuToggleHandler} />
                 )
