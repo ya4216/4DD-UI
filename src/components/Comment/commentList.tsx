@@ -34,6 +34,7 @@ const CommentList = ({comInfo}:any) => {
     post_id: '',
     userName: ''
   }]);  
+  const [isDelete, setIsDelete] = useState(false);
   const userInfo = useSelector((state: RootState) => state.user.info);  
   const { name, email, id }: any = userInfo;
 
@@ -59,7 +60,7 @@ const CommentList = ({comInfo}:any) => {
       );
     }
     // setCommentInfo(state.commentInfo);
-  },[]);
+  },[isDelete]);
 
 
   const commentSubmit = (type: string, _id: string) => {     
@@ -71,7 +72,8 @@ const CommentList = ({comInfo}:any) => {
         BoardService.deleteComment(_id).then(
           response => {
             setSuccessful(true);
-            setMessage(response.data);                                   
+            setMessage(response.data);
+            setIsDelete(true);
           },
           error => {
             const resMessage = error.response.data?.message;
