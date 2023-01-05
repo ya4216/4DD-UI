@@ -1,25 +1,23 @@
 import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'
+import storage from 'redux-persist/lib/storage';
 import buttonModule from './buttonModule';
 import counter from './counter';
 import navBar from './navBar';
 import unit from './unit';
-import user from './user';
-import storageSession from "redux-persist/lib/storage/session";  // sessionStorage
+import floatingButtonModule from './floatingButtonModule';
 
 const persistConfig = {
-  key: "root", // localStorage key 
+  key: 'root', // localStorage key
   storage, // localStorage
-  whitelist: ["unit", "user"], // target (reducer name)
-}
+  whitelist: ['unit'], // target (reducer name)
+};
 
 const rootReducer = combineReducers({
   unit,
   navBar,
   buttonModule,
-  counter,
-  user
+  floatingButtonModule,
 });
 
 // 루트 리듀서를 내보내주세요.
