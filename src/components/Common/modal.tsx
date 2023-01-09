@@ -22,7 +22,7 @@ const style = {
 
 /**
  *
- * @param {title? : string, content? : JSX.Element[], callback : callbackfunc}
+ * @param {title? : string, content? : JSX.Element[], _id? : string, type? : string, callback : callbackfunc}
  * @returns element, callback
  * props에 title, content가 필수 파라미터가 아니지만, 없을경우 state에 뭐라도 있어야 사용 가능 현재 buttonModule state만 체크하지만
  * 추후 모든 state 가져와서 특정 조건에 따라 사용가능하도록 수정 예정 TODO HWI
@@ -34,7 +34,7 @@ const NestedModal = ({ props }: customType.defaultIProps) => {
 
   const okHandleClose = () => {
     setOpen(false);
-    props.callback.callbackfunc('ok');
+    props.callback.callbackfunc(props._id ? props : 'ok');
   };
 
   const cancelHandleClose = () => {

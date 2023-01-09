@@ -6,7 +6,7 @@ interface CommentForm {
   content: string;
   comment_level : number;
   comment_id?: string;
-  parents_comment_id?: string;
+  parentsComment?: string;
 }
 
 class BoardService {  
@@ -29,6 +29,16 @@ class BoardService {
 
   async getComments(post_id: string) {
     return await axios.get(`/api/board/comment/${post_id}`);
+  }
+
+  async getCommentAll() {
+    return await axios.get("/api/board/comment");
+  }
+
+  async getCommentTree(commentId?: string) {
+    console.log("### commentId : ", commentId);
+    
+    return await axios.get(`/api/board/comment/list/${commentId}`);
   }
   
   async delete(_id:string) {

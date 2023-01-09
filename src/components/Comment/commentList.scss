@@ -50,6 +50,13 @@
           background: coral;
         }
       }
+      &_reply {      
+        text-align: right;
+        margin-top: 10px;
+        button {
+          background: skyblue;
+        }
+      }
     }
   }
 }

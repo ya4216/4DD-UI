@@ -19,25 +19,29 @@ interface CommentForm {
   content: string;
   comment_level: number;
   comment_id?: string;
-  parents_comment_id? : string;
+  parentsComment? : string;
 }
 
 interface modalForm {
   title: string;
   content: string;
+  _id: string;
+  type: string;
   callback: any;
 }
 
 const CommentList = ({comInfo}:any) => {  
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [myLike, setMyLike] = useState(0);
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [updateCmt, setUpdateCmt] = useState('');
-  const [modalForm, setModalForm] = useState<{[key:string]:any}>({
+  const [replyCmt, setReplyCmt] = useState('');
+  const [modalForm, setModalForm] = useState<modalForm>({
     title: '',
     content: '',
+    _id: '',
+    type: '',
     callback: null
   });
   const [commentInfo, setCommentInfo] = useState([{
@@ -54,96 +58,143 @@ const CommentList = ({comInfo}:any) => {
 
   useEffect(() => {
     console.log("### userInfo : ", userInfo);
-    
-    if(comInfo){
-      BoardService.getComments(
-        comInfo
-      ).then(
-        response => {
-          setSuccessful(true);
-          setMessage(response.data);      
-          setCommentInfo(response.data.data);
-          console.log("### commentInfo : ", commentInfo);
-                               
-        },
-        error => {
-          const resMessage = error.response.data?.message;
-          setSuccessful(false);
-          setMessage(resMessage);
-        }
-      );
-    }
+    comInfo && getComments();
     // setCommentInfo(state.commentInfo);
+    console.log("### comInfo : ", comInfo);
+    
   },[openModal]);
 
+  // 댓글 데이터 가져오기
+  const getComments = () => {    
+    // BoardService.getCommentAll().then(
+    //   response => {
+    //     setSuccessful(true);
+    //     setMessage(response.data);      
+    //     console.log("### response.data : ", response.data);                             
+    //   },
+    //   error => {
+    //     const resMessage = error.response.data?.message;
+    //     setSuccessful(false);
+    //     setMessage(resMessage);
+    //   }
+    // );
+    
+    BoardService.getComments(
+      comInfo
+    ).then(
+      response => {
+        setSuccessful(true);
+        setMessage(response.data);      
+        setCommentInfo(response.data.data);
+        console.log("### commentInfo : ", commentInfo);
+                             
+      },
+      error => {
+        const resMessage = error.response.data?.message;
+        setSuccessful(false);
+        setMessage(resMessage);
+      }
+    );
+  }
 
-  const commentSubmit = (type: string, _id: string) => {     
+  // 댓글 수정 Editor Open
+  const openEditor = (type: string, _id: string) => {
+    if(type === 'edit'){
+      updateCmt === _id ? setUpdateCmt('') : setUpdateCmt(_id);
+    }else{
+      replyCmt === _id ? setReplyCmt('') : setReplyCmt(_id);
+    }
+  }
+
+  // modal callback 함수
+  const callbackfunc = (prop: any) =>{
+    setOpenModal(false);
+    if(prop.type === 'delete'){
+      deleteComment(prop._id);      
+    }else if(prop.type === 'edit') {
+      addComment(prop._id);
+    }
+  }      
+
+  // 댓글 버튼 controller
+  const commentSubmit = (type: string, _id: string) => {
+    
     switch (type) {
       // case('reply'): tmp = BoardService.replyComment(comInfo); break;
-      case('edit'): setUpdateCmt(_id); break;
-      case('reply'): setUpdateCmt(_id); break;
-      case('delete'): {
+      case('edit'): {        
+        setOpenModal(true);
         setModalForm({
-          title: '삭제',
-          content: '해당 댓글을 삭제하시겠습니까?',
+          title: '댓글 수정',
+          content: '해당 댓글을 수정하시겠습니까?',
+          _id: _id,
+          type: 'edit',
           callback: {callbackfunc}
         });
+        break;
+      }
+      case('delete'): {
         setOpenModal(true);
-        // BoardService.deleteComment(_id).then(
-        //   response => {
-        //     setSuccessful(true);
-        //     setMessage(response.data);
-        //     setModalForm({
-        //       title: '삭제',
-        //       content: '해당 댓글을 삭제하시겠습니까?',
-        //       callback: deleteFunc()
-        //     });
-        //     setIsDelete(true);
-        //   },
-        //   error => {
-        //     const resMessage = error.response.data?.message;
-        //     setSuccessful(false);
-        //     setMessage(resMessage);
-        //   }
-        // );
+        setModalForm({
+          title: '댓글 삭제',
+          content: '해당 댓글을 삭제하시겠습니까?',
+          _id: _id,
+          type: 'delete',
+          callback: {callbackfunc}
+        });                
         break;
       } 
-    }         
-  }
+    }             
+  } 
 
-  const callbackfunc = (prop: string) =>{
-    setOpenModal(false);
-    console.log("### delete !", prop);
-  }
-
-  const like = (id: number) => {
-    // 서버에 좋아요 추가/수정 후 전체 카운트 갱신
-    setMyLike(1);
-  }
-
-  const dislike = (id: number) => {
-    // 서버에 싫어요 추가/수정 후 전체 카운트 갱신
-    setMyLike(-1);
-  }
-
+  // 댓글 입력내용
   const fieldContent = (e: any) => {
     setComment(e.target.value);
   }
 
   // Submit 핸들러
-  const addComment = () => {  
+  const addComment = (_id?: string, parentId?: string) => { 
     const commentForm = {
-      post_id: commentInfo[0].post_id,
+      post_id: comInfo,
       userName: userInfo.name,
       content: comment,
       comment_level : 0,
-      // comment_id: '',
-      // parents_comment_id : ''
+      comment_id: _id,
+      parentsComment : parentId
     } 
-    
-    BoardService.addComment(
-      commentForm
-    ).then(
+    console.log("### commentForm : ", commentForm);
+
+    BoardService.getCommentTree(parentId).then(
+      response => {
+        setSuccessful(true);
+        setMessage(response.data);      
+        console.log("### response.data : ", response.data);                             
+      },
+      error => {
+        const resMessage = error.response.data?.message;
+        setSuccessful(false);
+        setMessage(resMessage);
+      }
+    );
+    // BoardService.addComment(
+    //   commentForm
+    // ).then(
+    //   response => {
+    //     setSuccessful(true);
+    //     setMessage(response.data);
+    //     setUpdateCmt('');
+    //     getComments();
+    //   },
+    //   error => {
+    //     const resMessage = error.response.data?.message;
+    //     setSuccessful(false);
+    //     setMessage(resMessage);
+    //   }
+    // );
+  }
+
+  // 댓글 삭제
+  const deleteComment = (_id: string) => {
+    BoardService.deleteComment(_id).then(
       response => {
         setSuccessful(true);
         setMessage(response.data);
@@ -177,14 +228,14 @@ const CommentList = ({comInfo}:any) => {
                       </div>
                       {(com.userName === name) ? (
                         <div className='comment_title_btn'>
-                          <Reply fontSize='small' style={{ color: 'cadetblue'}} onClick={() => commentSubmit('reply', com.id)}/>                          
-                          <Edit fontSize='small' style={{ color: 'mediumseagreen'}} onClick={() => commentSubmit('edit', com.id)}/>
+                          {/* <Reply fontSize='small' style={{ color: 'cadetblue'}} onClick={() => openEditor('reply', com.id)}/>                           */}
+                          <Edit fontSize='small' style={{ color: 'mediumseagreen'}} onClick={() => openEditor('edit', com.id)}/>
                           <Delete fontSize='small' style={{ color: 'tomato'}} onClick={() => commentSubmit('delete', com.id)}/>
                           {openModal && <NestedModal props={modalForm}/>}
                         </div>
                       ) : (
                         <div className='comment_title_btn'>
-                          <Reply fontSize='small' style={{ color: 'cadetblue'}} onClick={() => commentSubmit('reply', com.id)}/>
+                          <Reply fontSize='small' style={{ color: 'cadetblue'}} onClick={() => openEditor('reply', com.id)}/>
                         </div>
                       )}
                     </div>                           
@@ -201,7 +252,7 @@ const CommentList = ({comInfo}:any) => {
                           />
                         </div>
                         <div className='textfield_button_edit'>
-                          <Button variant="contained" onClick={addComment}>수정</Button>          
+                          <Button variant="contained" onClick={() => commentSubmit('edit', com.id)}>수정</Button>          
                         </div>  
                       </div>
                     ) : 
@@ -209,6 +260,22 @@ const CommentList = ({comInfo}:any) => {
                       {com.content}
                     </p>
                     }
+                    {replyCmt === com.id && (
+                    <div>
+                      <div className='textfield_container_edit'>
+                        <TextField
+                          className='textfield_field'
+                          variant="outlined"
+                          multiline
+                          minRows={3}
+                          onChange={fieldContent}
+                        />
+                      </div>
+                      <div className='textfield_button_reply'>
+                        <Button variant="contained" onClick={() => addComment('',com.id)}>댓글 +</Button>          
+                      </div>  
+                    </div>
+                  )}
                   </Grid>
                 </Grid>
                 {/* <Divider variant="fullWidth" style={{ margin: "30px 0" }} /> */}
@@ -226,7 +293,7 @@ const CommentList = ({comInfo}:any) => {
           />
         </div>
         <div className='textfield_button'>
-          <Button variant="contained" onClick={addComment}>댓글 +</Button>          
+          <Button variant="contained" onClick={() => addComment()}>댓글 +</Button>          
         </div>        
       </div>
     </>
