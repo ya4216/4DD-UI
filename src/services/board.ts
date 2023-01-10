@@ -35,10 +35,8 @@ class BoardService {
     return await axios.get("/api/board/comment");
   }
 
-  async getCommentTree(commentId?: string) {
-    console.log("### commentId : ", commentId);
-    
-    return await axios.get(`/api/board/comment/list/${commentId}`);
+  async getCommentTree(postId?: string) {    
+    return await axios.get(`/api/board/comment/list/${postId}`);
   }
   
   async delete(_id:string) {

@@ -14,15 +14,16 @@ import { number, string } from 'yup/lib/locale';
 import { functions } from 'lodash';
 
 interface CommentForm {
+  childComment: any;
+  content: string;
+  dateTimeOfComment: string;
+  parentsComment: any;
   post_id: string;
   userName: string;
-  content: string;
-  comment_level: number;
-  comment_id?: string;
-  parentsComment? : string;
+  _id: string;
 }
 
-interface modalForm {
+interface ModalForm {
   title: string;
   content: string;
   _id: string;
@@ -37,21 +38,23 @@ const CommentList = ({comInfo}:any) => {
   const [message, setMessage] = useState('');
   const [updateCmt, setUpdateCmt] = useState('');
   const [replyCmt, setReplyCmt] = useState('');
-  const [modalForm, setModalForm] = useState<modalForm>({
+  const [modalForm, setModalForm] = useState<ModalForm>({
     title: '',
     content: '',
     _id: '',
     type: '',
     callback: null
   });
-  const [commentInfo, setCommentInfo] = useState([{
-    id: '',
-    comment_level: 0,
+  const [commentForm, setCommentForm] = useState<CommentForm[]>([{
+    childComment: null,
     content: '',
     dateTimeOfComment: '',
+    parentsComment: null,
     post_id: '',
-    userName: ''
+    userName: '',
+    _id: ''
   }]);  
+
   const [openModal, setOpenModal] = useState<boolean>(false);
   const userInfo = useSelector((state: RootState) => state.user.info);  
   const { name, email, id }: any = userInfo;
@@ -59,13 +62,27 @@ const CommentList = ({comInfo}:any) => {
   useEffect(() => {
     console.log("### userInfo : ", userInfo);
     comInfo && getComments();
-    // setCommentInfo(state.commentInfo);
+    // setCommentForm(state.commentForm);
     console.log("### comInfo : ", comInfo);
     
   },[openModal]);
 
   // 댓글 데이터 가져오기
-  const getComments = () => {    
+  const getComments = () => {   
+
+    // postId 관련 모든 댓글 가져오기    
+    BoardService.getCommentTree(comInfo).then(
+      response => {
+        setSuccessful(true);
+        setMessage(response.data);    
+        setCommentForm(response.data.data);                             
+      },
+      error => {
+        const resMessage = error.response.data?.message;
+        setSuccessful(false);
+        setMessage(resMessage);
+      }
+    );
     // BoardService.getCommentAll().then(
     //   response => {
     //     setSuccessful(true);
@@ -79,22 +96,22 @@ const CommentList = ({comInfo}:any) => {
     //   }
     // );
     
-    BoardService.getComments(
-      comInfo
-    ).then(
-      response => {
-        setSuccessful(true);
-        setMessage(response.data);      
-        setCommentInfo(response.data.data);
-        console.log("### commentInfo : ", commentInfo);
+    // BoardService.getComments(
+    //   comInfo
+    // ).then(
+    //   response => {
+    //     setSuccessful(true);
+    //     setMessage(response.data);      
+    //     setCommentForm(response.data.data);
+    //     console.log("### commentForm : ", commentForm);
                              
-      },
-      error => {
-        const resMessage = error.response.data?.message;
-        setSuccessful(false);
-        setMessage(resMessage);
-      }
-    );
+    //   },
+    //   error => {
+    //     const resMessage = error.response.data?.message;
+    //     setSuccessful(false);
+    //     setMessage(resMessage);
+    //   }
+    // );
   }
 
   // 댓글 수정 Editor Open
@@ -161,13 +178,15 @@ const CommentList = ({comInfo}:any) => {
       comment_id: _id,
       parentsComment : parentId
     } 
-    console.log("### commentForm : ", commentForm);
-
-    BoardService.getCommentTree(parentId).then(
+    
+    BoardService.addComment(
+      commentForm
+    ).then(
       response => {
         setSuccessful(true);
-        setMessage(response.data);      
-        console.log("### response.data : ", response.data);                             
+        setMessage(response.data);
+        setUpdateCmt('');
+        getComments();
       },
       error => {
         const resMessage = error.response.data?.message;
@@ -175,21 +194,6 @@ const CommentList = ({comInfo}:any) => {
         setMessage(resMessage);
       }
     );
-    // BoardService.addComment(
-    //   commentForm
-    // ).then(
-    //   response => {
-    //     setSuccessful(true);
-    //     setMessage(response.data);
-    //     setUpdateCmt('');
-    //     getComments();
-    //   },
-    //   error => {
-    //     const resMessage = error.response.data?.message;
-    //     setSuccessful(false);
-    //     setMessage(resMessage);
-    //   }
-    // );
   }
 
   // 댓글 삭제
@@ -211,9 +215,9 @@ const CommentList = ({comInfo}:any) => {
     <>
       <div id="commentList">
         <Paper className="comment_container">
-          {commentInfo.map( (com) => {
+          {commentForm.map( (com) => {
             return(
-              <div style={{padding: '10px'}} key={com.id}>
+              <div style={{padding: '10px'}} key={com._id}>
                 <Grid container wrap="nowrap" spacing={2}>
                   <Grid item>
                     {/* <Avatar alt="Remy Sharp" /> */}
@@ -229,17 +233,17 @@ const CommentList = ({comInfo}:any) => {
                       {(com.userName === name) ? (
                         <div className='comment_title_btn'>
                           {/* <Reply fontSize='small' style={{ color: 'cadetblue'}} onClick={() => openEditor('reply', com.id)}/>                           */}
-                          <Edit fontSize='small' style={{ color: 'mediumseagreen'}} onClick={() => openEditor('edit', com.id)}/>
-                          <Delete fontSize='small' style={{ color: 'tomato'}} onClick={() => commentSubmit('delete', com.id)}/>
+                          <Edit fontSize='small' style={{ color: 'mediumseagreen'}} onClick={() => openEditor('edit', com._id)}/>
+                          <Delete fontSize='small' style={{ color: 'tomato'}} onClick={() => commentSubmit('delete', com._id)}/>
                           {openModal && <NestedModal props={modalForm}/>}
                         </div>
                       ) : (
                         <div className='comment_title_btn'>
-                          <Reply fontSize='small' style={{ color: 'cadetblue'}} onClick={() => openEditor('reply', com.id)}/>
+                          <Reply fontSize='small' style={{ color: 'cadetblue'}} onClick={() => openEditor('reply', com._id)}/>
                         </div>
                       )}
                     </div>                           
-                    {updateCmt === com.id ? (
+                    {updateCmt === com._id ? (
                       <div>
                         <div className='textfield_container_edit'>
                           <TextField
@@ -252,7 +256,7 @@ const CommentList = ({comInfo}:any) => {
                           />
                         </div>
                         <div className='textfield_button_edit'>
-                          <Button variant="contained" onClick={() => commentSubmit('edit', com.id)}>수정</Button>          
+                          <Button variant="contained" onClick={() => commentSubmit('edit', com._id)}>수정</Button>          
                         </div>  
                       </div>
                     ) : 
@@ -260,7 +264,7 @@ const CommentList = ({comInfo}:any) => {
                       {com.content}
                     </p>
                     }
-                    {replyCmt === com.id && (
+                    {replyCmt === com._id && (
                     <div>
                       <div className='textfield_container_edit'>
                         <TextField
@@ -272,7 +276,7 @@ const CommentList = ({comInfo}:any) => {
                         />
                       </div>
                       <div className='textfield_button_reply'>
-                        <Button variant="contained" onClick={() => addComment('',com.id)}>댓글 +</Button>          
+                        <Button variant="contained" onClick={() => addComment('',com._id)}>댓글 +</Button>          
                       </div>  
                     </div>
                   )}
