@@ -51,7 +51,7 @@ function Board() {
     
   }
   return (
-    <body id="board">
+    <div id="board">
       <div style={{marginTop: '70px'}}></div>
       <div className="grid_container">
         <div className="grid_component">
@@ -80,7 +80,7 @@ function Board() {
         </Button>
       </Link>
       </div>
-    </body>
+    </div>
   );
 }
 

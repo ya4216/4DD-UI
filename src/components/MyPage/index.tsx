@@ -70,7 +70,7 @@ function MyPage() {
   // }, []);
 
   return (
-    <body id="mypage">
+    <div id="mypage">
       <div style={{marginTop: '70px'}}></div>
       <div className="title_container">
         <VscAccount className="account"></VscAccount>
@@ -92,7 +92,7 @@ function MyPage() {
           Q & A
         </div>
       </div> */}
-    </body>
+    </div>
   );
 }
 

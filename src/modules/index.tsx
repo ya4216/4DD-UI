@@ -7,6 +7,7 @@ import navBar from './navBar';
 import unit from './unit';
 import user from './user';
 import floatingButtonModule from './floatingButtonModule';
+import commentModule from './commentModule';
 
 const persistConfig = {
   key: 'root', // localStorage key
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   counter,
   user,
   floatingButtonModule,
+  commentModule
 });
 
 // 루트 리듀서를 내보내주세요.

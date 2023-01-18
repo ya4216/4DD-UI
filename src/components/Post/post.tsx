@@ -123,7 +123,7 @@ function Post() {
     content: "",
   };
   return (
-    <body id="post">
+    <div id="post">
       <h1>Post</h1>      
       <Formik
         initialValues={initialValues}
@@ -251,8 +251,8 @@ function Post() {
           )
         }}
       </Formik>            
-      <CommentList comInfo={state._id}></CommentList>
-    </body>
+      <CommentList postId={state._id}></CommentList>
+    </div>
   );
 }
 
