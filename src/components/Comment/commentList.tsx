@@ -42,7 +42,6 @@ const CommentList = ({postId}:any) => {
   },[]);  
 
   useEffect(() => {        
-    console.log("### redux change ! ", commentInfo);
     if(!commentInfo.type) return;
     if(commentInfo.type === 'add'){
       addComment('', commentInfo.selectedId);
@@ -63,7 +62,6 @@ const CommentList = ({postId}:any) => {
         setSuccessful(true);
         setMessage(response.data);    
         setCommentForm(response.data.data);
-        console.log("### data : ", response.data.data);
         commentTree(response.data.data);                                   
       },
       error => {
@@ -125,7 +123,7 @@ const CommentList = ({postId}:any) => {
   // 댓글 트리구조 만들기
   let innerHtml: JSX.Element[] = [];
   let tmp:string[] = [];
-  const commentTree = (data:CommentForm[], isChild: boolean = false) => {
+  const commentTree = (data:CommentForm[], isChild: boolean = false) => {    
     data.map((com, idx)=>{
       if(tmp.includes(com._id)) return;
       tmp.push(com._id);
@@ -136,7 +134,7 @@ const CommentList = ({postId}:any) => {
     });
     setTreeComment(innerHtml);
     
-    // 대댓글 tab 한번으로 제한, 댓글 글자수 제한, (max높이,너비,자세히보기), 삭제 시 삭제된 댓글입니다. 
+    // isDelete 뒷단 수정, 삭제 시 삭제된 댓글입니다. 
     
   }
 

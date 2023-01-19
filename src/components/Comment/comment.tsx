@@ -7,6 +7,9 @@ import { RootState } from "../../modules";
 import Button from '@mui/material/Button';
 import { setButtonType } from '../../modules/commentModule';
 import NestedModal from "../Common/modal";
+import { dark } from '@mui/material/styles/createPalette';
+import { color } from '@mui/system';
+import { colors } from '@mui/material';
 
 type ModalForm = {
   title: string;
@@ -70,8 +73,10 @@ const Comment = ({comInfo, isChild}:any) => {
   } 
 
   // 댓글 입력내용
-  const fieldContent = (e: any) => {
-    setComment(e.target.value);
+  const fieldContent = (e: any, userName: string) => {
+    let tmp = '';
+    userName && (tmp = '@'+userName+' ');
+    setComment(tmp+e.target.value);
   }
 
   // modal callback 함수
@@ -82,8 +87,6 @@ const Comment = ({comInfo, isChild}:any) => {
     setUpdateCmt('');
     setReplyCmt('');
   } 
-
-  console.log("#### isChild: ", isChild);
   
   return (
     <>
@@ -122,7 +125,7 @@ const Comment = ({comInfo, isChild}:any) => {
                       variant="outlined"
                       multiline
                       minRows={3}
-                      onChange={fieldContent}
+                      onChange={(e) => fieldContent(e, '')}
                       defaultValue={comInfo.content}
                     />
                   </div>
@@ -139,11 +142,12 @@ const Comment = ({comInfo, isChild}:any) => {
               <div>
                 <div className='textfield_container_edit'>
                   <TextField
-                    className='textfield_field'
+                    className={'textfield_field'}
                     variant="outlined"
                     multiline
                     minRows={3}
-                    onChange={fieldContent}
+                    onChange={(e) => fieldContent(e, comInfo.userName)}
+                    // defaultValue={'@'+comInfo.userName+' '}
                   />
                 </div>
                 <div className='textfield_button_reply'>
