@@ -6,6 +6,7 @@ import { RootState } from "../../modules";
 import Button from '@mui/material/Button';
 import Comment from "./comment";
 import BoardService from "../../services/board";
+import { initButtonState } from '../../modules/commentModule';
 
 // 리덕스 버튼 type, content, selectedId 추가해서 관리
 
@@ -16,6 +17,7 @@ type CommentForm = {
   parentsComment: any;
   post_id: string;
   userName: string;
+  isDeleted: boolean;
   _id: string;
 }
 
@@ -30,6 +32,7 @@ const CommentList = ({postId}:any) => {
     parentsComment: null,
     post_id: '',
     userName: '',
+    isDeleted: false,
     _id: ''
   }]); 
   const [treeComment, setTreeComment] = useState<JSX.Element[]>([]);
@@ -38,7 +41,10 @@ const CommentList = ({postId}:any) => {
   const dispatch = useDispatch();
 
   useEffect(() => {    
-    getComments();    
+    getComments(); 
+    return () => {
+      dispatch(initButtonState());
+    };   
   },[]);  
 
   useEffect(() => {        
@@ -55,7 +61,6 @@ const CommentList = ({postId}:any) => {
 
   // 댓글 데이터 가져오기
   const getComments = () => {   
-
     // postId 관련 모든 댓글 가져오기    
     BoardService.getCommentTree(postId).then(
       response => {
@@ -133,9 +138,6 @@ const CommentList = ({postId}:any) => {
       com.childComment[0]?._id && commentTree(com.childComment, true);
     });
     setTreeComment(innerHtml);
-    
-    // isDelete 뒷단 수정, 삭제 시 삭제된 댓글입니다. 
-    
   }
 
   return (

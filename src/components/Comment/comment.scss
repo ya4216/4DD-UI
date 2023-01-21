@@ -45,18 +45,28 @@
       margin-top: 10px;
       &_edit {      
         text-align: right;
-        margin-top: 10px;
+        margin: 10px 0 10px 0;
         button {
           background: coral;
+        }
+        .disabled {
+          background: #EAEAEA;
         }
       }
       &_reply {      
         text-align: right;
-        margin-top: 10px;
+        margin: 10px 0 10px 0;
         button {
           background: skyblue;
         }
       }
+    }
+    &_line {
+      background-color: #EAEAEA;
+      height: 0.5px;
+      border: 0;
+      width: 96%;
+      margin: auto;
     }
   }
 }
