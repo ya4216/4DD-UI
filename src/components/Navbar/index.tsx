@@ -84,7 +84,10 @@ const Navbar = () => {
         setSuccessful(true);
         setMessage(response.data.message);
         navigate('/home');
-        allDelCookies('localhost', '/');
+        //로컬
+        // allDelCookies('localhost', '/');
+        //운영
+        allDelCookies('fordd.fly.dev', '/');
         setIsLogin(false);
       },
       (error) => {

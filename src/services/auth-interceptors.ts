@@ -1,5 +1,5 @@
 import axios from 'axios';
-import AuthService from "./auth";
+import AuthService from './auth';
 
 const axiosInstance = axios.create({
   headers: {
@@ -10,31 +10,32 @@ const axiosInstance = axios.create({
 
 // const token = localStorage.getItem('accessToken');
 
-axiosInstance.interceptors.response.use(  
+axiosInstance.interceptors.response.use(
   (response: any) => {
     return response;
   },
   async (error: any) => {
-    localStorage.removeItem("user");
+    localStorage.removeItem('user');
     const {
       config,
       response: { status },
     } = error;
-    
-    const originalRequest = config;        
+
+    const originalRequest = config;
     if (status === 403) {
       // const accessToken = localStorage.getItem('accessToken');
       // const refreshToken = localStorage.getItem('refreshToken');
 
       try {
-        AuthService.logout()
-        .then(
-          response => {
-            allDelCookies('localhost', '/');
+        AuthService.logout().then(
+          (response) => {
+            //로컬
+            // allDelCookies('localhost', '/');
+            //운영
+            allDelCookies('fordd.fly.dev', '/');
             window.location.reload();
           },
-          error => {         
-          }
+          (error) => {},
         );
         // const { data } = await axios({
         //   method: 'post',
@@ -44,8 +45,8 @@ axiosInstance.interceptors.response.use(
         // const newAccessToken = data.data.accessToken;
         // const newRefreshToken = data.data.refreshToken;
         // originalRequest.headers = {
-          // 'Content-Type': 'application/json',
-          // 'Authorization': authHeader()
+        // 'Content-Type': 'application/json',
+        // 'Authorization': authHeader()
         // };
         // localStorage.setItem('ACCESS_TOKEN', newAccessToken);
         // localStorage.setItem('REFRESH_TOKEN', newRefreshToken);
@@ -55,7 +56,7 @@ axiosInstance.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 // 쿠키 전체 삭제하기
