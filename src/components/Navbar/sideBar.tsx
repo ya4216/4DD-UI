@@ -362,7 +362,8 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
           <Button onClick={handleExpandClick}>
             {expanded.length === 0 ? '펼치기' : '접기'}
           </Button>
-          <Buttons getTypeArr={['create']} />
+          <br />
+          <Buttons getTypeArr={['create', 'update', 'remove', 'onoff']} />
         </Box>
         <TreeView
           aria-label="controlled"

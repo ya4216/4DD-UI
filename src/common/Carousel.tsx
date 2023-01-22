@@ -10,6 +10,14 @@ import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Buttons from '../containers/ButtonContainer';
 
+import Checkbox from '@mui/material/Checkbox';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Favorite from '@mui/icons-material/Favorite';
+import zIndex from '@mui/material/styles/zIndex';
+import Axios, { AxiosRequestConfig } from 'axios';
+
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
 const Carousel = ({ props }: any) => {
   console.log('home props :: ', props);
 
@@ -31,7 +39,7 @@ const Carousel = ({ props }: any) => {
       dots: type === 'banner' ? true : false,
       infinite: type === 'banner' ? true : false,
       speed: type === 'banner' ? 600 : 300,
-      autoplay: type === 'banner' ? true : false,
+      // autoplay: type === 'banner' ? true : false,
       autoplaySpeed: 4000,
       arrows: type === 'banner' ? false : true,
       slidesToShow: type === 'banner' ? 1 : 5,
@@ -108,6 +116,22 @@ const Carousel = ({ props }: any) => {
     return parentsHtml;
   };
 
+  const likeUpdate = (id: string, checked: boolean) => {
+    if (checked) {
+    } else {
+    }
+    Axios.post(`/api/user/subinfo/${'63cbe99f9d23e7598cbc7cd5'}`, {
+      id: id,
+      like: checked,
+    })
+      .then((res) => {
+        console.log('성공 :: ', res);
+      })
+      .catch((err) => {
+        console.log('실패 :: ', err);
+      });
+  };
+
   //슬라이더 컴포넌트 하위의 목록들 동적 생성
   const childList = (idx: number) => {
     let childHtml = [];
@@ -120,13 +144,23 @@ const Carousel = ({ props }: any) => {
             className={idx == 0 ? 'banners' : 'list'}
             onClick={(e) => {
               if (!dragging) {
-                dispatch(selectUnitTitle(props[idx][j]._id));
-                navigate('/contents');
+                if (Object(e.target).type == 'checkbox') {
+                  likeUpdate(
+                    props[idx][j]._id,
+                    Object(e.target).parentElement.className.indexOf(
+                      'Mui-checked',
+                    ) === -1,
+                  );
+                } else {
+                  dispatch(selectUnitTitle(props[idx][j]._id));
+                  navigate('/contents');
+                }
               }
             }}
           >
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '99%', position: 'relative' }}>
               <img
+                style={{ width: 'inherit' }}
                 src={`${
                   props[idx][j].title_image_path
                     ? props[idx][j].title_image_path
@@ -140,15 +174,24 @@ const Carousel = ({ props }: any) => {
                 alt={props[idx][j].title}
                 loading="lazy"
               />
+              <div style={{ position: 'absolute', top: 0, right: 0 }}>
+                <Checkbox
+                  {...label}
+                  icon={<FavoriteBorder />}
+                  checkedIcon={<Favorite />}
+                />
+              </div>
             </div>
             <ImageListItemBar
               title={
                 <span>
-                  <Buttons
-                    getTypeArr={['create', 'update', 'remove', 'onoff']}
-                  />
-                  <br />
-                  {idx == 0 ? '' : props[idx][j].title}
+                  {idx == 0 ? (
+                    <Buttons
+                      getTypeArr={['create', 'update', 'remove', 'onoff']}
+                    />
+                  ) : (
+                    props[idx][j].title
+                  )}
                 </span>
               }
               subtitle={<span>{idx == 0 ? '' : props[idx][j].content}</span>}
