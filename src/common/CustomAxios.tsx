@@ -7,7 +7,7 @@ const custom = async (props: any) => {
   try {
     const res = await Axios({
       method: props.props.method || 'get',
-      url: `${PROXY}props.props.url`,
+      url: `${PROXY}` + props.props.url,
     });
 
     return res.data.data;
