@@ -6,8 +6,10 @@ import Carousel from '../../common/Carousel';
 import customAxios from '../../common/CustomAxios';
 
 const Home = () => {
-  console.log('개발서버 첫번째 관문');
-  const list = customAxios({ url: '/api/unit/title' });
+  console.log('개발서버 첫번째 관문..');
+  const list = customAxios({
+    url: 'https://fordd.fly.dev/api/unit/title',
+  });
 
   return (
     <>
