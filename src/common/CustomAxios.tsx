@@ -3,6 +3,7 @@ import { useAsync } from 'react-async';
 
 const custom = async (props: any) => {
   const PROXY = window.location.hostname === 'localhost' ? '' : '/proxy';
+  console.log('deploy 됐을까');
   try {
     const res = await Axios({
       method: props.props.method || 'get',
