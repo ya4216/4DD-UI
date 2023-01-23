@@ -32,8 +32,6 @@ const Login = () => {
         navigate('/home');
       },
       error => {
-        console.log("### error : "+ error);
-        
         const resMessage = error.response.data?.message;
         setSuccessful(false);
         setMessage(resMessage);
@@ -56,8 +54,10 @@ const Login = () => {
               onSubmit={handleLogin}
             >
               <Form className="login__create">
-               <h1 className="login__title">4 D D</h1>
-               <span className="sub-title">Sign In</span>
+                <Link to="/home">
+                 <h1 className="login__title">4 D D</h1>
+                </Link>
+                <span className="sub-title">Sign In</span>
                 {!successful && (
                   <div className="login__inputs">
                     <div className="form-group">
