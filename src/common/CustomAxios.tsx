@@ -2,10 +2,11 @@ import Axios from 'axios';
 import { useAsync } from 'react-async';
 
 const custom = async (props: any) => {
+  const PROXY = window.location.hostname === 'localhost' ? '' : '/proxy';
   try {
     const res = await Axios({
       method: props.props.method || 'get',
-      url: props.props.url,
+      url: `${PROXY}` + props.props.url,
     });
 
     return res.data.data;
