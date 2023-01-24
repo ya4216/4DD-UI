@@ -3,19 +3,21 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { initUnitState, selectUnitTitle } from '../modules/unit';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Buttons from '../containers/ButtonContainer';
 
-import './Common.scss';
+import './common.scss';
 
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import Axios from 'axios';
+import { RootState } from '../modules';
+import { setUserInfo } from '../modules/user';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -23,6 +25,8 @@ const Carousel = ({ props }: any) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let [dragging, setDragging] = useState<boolean>(false);
+
+  const userInfo = useSelector((state: RootState) => state.user.info);
 
   const handleBeforeChange = useCallback(() => {
     setDragging(true);
@@ -116,15 +120,22 @@ const Carousel = ({ props }: any) => {
   };
 
   const likeUpdate = (id: string, checked: boolean) => {
-    if (checked) {
-    } else {
-    }
     Axios.post(`/api/user/subinfo/${'63cbe99f9d23e7598cbc7cd5'}`, {
       id: id,
       like: checked,
     })
       .then((res) => {
-        console.log('성공 :: ', res);
+        if (userInfo.user_sub_info) {
+          if (userInfo.user_sub_info.likes.indexOf(id) == -1) {
+            userInfo.user_sub_info.likes.push(id);
+          } else {
+            userInfo.user_sub_info.likes.splice(
+              userInfo.user_sub_info.likes.indexOf(id),
+              1,
+            );
+          }
+        }
+        dispatch(setUserInfo(userInfo));
       })
       .catch((err) => {
         console.log('실패 :: ', err);
@@ -157,37 +168,53 @@ const Carousel = ({ props }: any) => {
               }
             }}
           >
-            <div style={{ width: '99%', position: 'relative' }}>
+            <div
+              className={
+                idx == 0 ? 'carousel__img__banners' : 'carousel__img__list'
+              }
+            >
               <img
-                style={{ width: 'inherit' }}
                 src={`${
                   props[idx][j].title_image_path
                     ? props[idx][j].title_image_path
-                    : 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+                    : '../src/image/noimage1.jpg'
                 }`}
                 srcSet={`${
                   props[idx][j].title_image_path
                     ? props[idx][j].title_image_path
-                    : 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+                    : '../src/image/noimage1.jpg'
                 }`}
                 alt={props[idx][j].title}
                 loading="lazy"
               />
-              <div style={{ position: 'absolute', top: 0, right: 0 }}>
-                <Checkbox
-                  {...label}
-                  icon={<FavoriteBorder />}
-                  checkedIcon={<Favorite />}
-                />
-              </div>
+              {idx == 0 ? null : (
+                <div className="carousel__img__list__like">
+                  <Checkbox
+                    {...label}
+                    icon={<FavoriteBorder />}
+                    checkedIcon={<Favorite />}
+                    checked={
+                      userInfo.user_sub_info
+                        ? userInfo.user_sub_info.likes.indexOf(
+                            props[idx][j]._id,
+                          ) != -1
+                          ? true
+                          : false
+                        : false
+                    }
+                  />
+                </div>
+              )}
             </div>
             <ImageListItemBar
               title={
                 <span>
                   {idx == 0 ? (
-                    <Buttons
-                      getTypeArr={['create', 'update', 'remove', 'onoff']}
-                    />
+                    userInfo.id == '6371e3df99561093efe09cfd' ? (
+                      <Buttons
+                        getTypeArr={['create', 'update', 'remove', 'onoff']}
+                      />
+                    ) : null
                   ) : (
                     props[idx][j].title
                   )}
@@ -198,31 +225,6 @@ const Carousel = ({ props }: any) => {
             />
           </ImageListItem>,
         );
-        //TODO HWI 위에 Buttons 컴포넌트 운영자일경우만 보이도록 수정해야함
-        // childHtml.push(
-        //   <div key={props[idx][j]._id}>
-        //     {/* <Link to="/contents"> */}
-        //     <button
-        //       className={idx == 0 ? 'banners' : 'list'}
-        //   onClick={(e) => {
-        //     if (!dragging) {
-        //       // dispatch(initUnitState());
-        //       dispatch(selectUnitTitle(props[idx][j]._id));
-        //       navigate('/contents');
-        //     }
-        //   }}
-        //     >
-        //       <img
-        //         src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=248&fit=crop&auto=format`}
-        //         srcSet={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=248&fit=crop&auto=format&dpr=2 2x`}
-        //         alt={props[idx][j].title}
-        //         loading="lazy"
-        //       />
-        //       {props[idx][j].title}
-        //     </button>
-        //     {/* </Link> */}
-        //   </div>,
-        // );
       }
     }
     return childHtml;

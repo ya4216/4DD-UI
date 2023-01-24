@@ -1,0 +1,38 @@
+@mixin breakpoint($point) {
+  @if $point == md {
+    // 768px
+    @media (min-width: 48em) {
+      @content;
+    }
+  }
+}
+
+.detail {
+  &__area {
+    width: 100%;
+    overflow: auto;
+    &__title {
+      @include breakpoint(md) {
+        margin: 50px 100px 30px 100px;
+      }
+    }
+    &__contents {
+      @include breakpoint(md) {
+        margin: 0px 100px 0px 100px;
+      }
+    }
+  }
+  &__none {
+    width: 100%;
+    &__title {
+      @include breakpoint(md) {
+        margin: 50px 100px 30px 100px;
+      }
+    }
+    &__contents {
+      @include breakpoint(md) {
+        margin: 0px 100px 0px 100px;
+      }
+    }
+  }
+}
