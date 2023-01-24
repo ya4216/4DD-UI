@@ -8,8 +8,6 @@ import { VscAccount } from "react-icons/vsc";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../../modules";
 import { initUserState } from "../../modules/user";
-import Navbar from "../Navbar";
-import Axios from 'axios';
 
 const Profile = () => {  
   // const [name, setName] = useState(false);
@@ -26,10 +24,9 @@ const Profile = () => {
   const [message, setMessage] = useState('');
   const [isChangePassword, setIsChangePassword] = useState(false);
   let navigate = useNavigate();      
+  const userInfo = useSelector((state: RootState) => state.user.info);
 
   useEffect(() => {
-    const userInfo = useSelector((state: RootState) => state.user.info);
-    const { id, name, email } = userInfo;
     setUserProfile({
       id: userInfo.id,
       name: userInfo.name,
@@ -38,11 +35,12 @@ const Profile = () => {
   }, []);
 
   // 비밀번호 변경 핸들러
-  const handleChange = (formValue: { email: string; password: string }) => {    
-    const { email, password } = formValue;   
+  const handleChange = (formValue: { email: string; curPassword: string; password: string }) => {    
+    const { email, curPassword, password } = formValue;   
     const id =  userProfile.id;
     AuthService.changePassword(
       id,
+      curPassword,
       password
     ).then(
       response => {
@@ -94,8 +92,10 @@ const Profile = () => {
   // Yup을 이용한 Form 제한조건
   const validationSchema = () => {
     return Yup.object().shape({
+      curPassword: Yup.string()
+        .required("현재 비밀번호를 입력해주세요."),
       password: Yup.string()
-        .required("비밀번호를 입력해주세요.")
+        .required("새로운 비밀번호를 입력해주세요.")
         .max(16, "비밀번호는 최대 16자리입니다.")
         .matches(
           /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}[^\s]*$/,
@@ -112,6 +112,7 @@ const Profile = () => {
     email: "",
     password: "",
     password2: "",
+    curPassword: ""
   };
   
 
@@ -153,6 +154,18 @@ const Profile = () => {
 
                     {isChangePassword &&
                       <div>
+                        <div>
+                          <Field
+                            name="curPassword"
+                            type="password"
+                            className="form-control login__input"
+                          />
+                          <ErrorMessage
+                            name="curPassword"
+                            component="div"
+                            className="alert alert-danger danger"
+                          />
+                        </div>
                         <div>
                           <Field
                             name="password"

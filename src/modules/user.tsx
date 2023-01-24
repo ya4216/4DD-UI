@@ -17,7 +17,7 @@ const actions = { setUserInfo, initUserState };
 type userAction = ActionType<typeof actions>;
 
 type userState = {
-    info?: any;
+    info: any;
 };
 const initialState: userState = {
     info: {}
