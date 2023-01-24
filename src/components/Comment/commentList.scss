@@ -1,0 +1,34 @@
+#commentList {
+  .comment {
+    &_container {
+      width: 60%;
+      margin: auto;
+      margin-bottom: 15px;
+    }
+    .tab {
+      background: blue;
+    }
+  }
+  .textfield {
+    &_container {
+      margin: auto;
+      width: 60%;
+    }
+    &_field {
+      width: 100%;
+      display: grid;
+    }
+    &_button {
+      width: 60%;
+      text-align: right;
+      margin: auto;
+      margin-top: 10px;
+    }
+    &_delete {
+      margin-left: 20px;
+      height: 64px;
+      line-height: 3;
+      color: #BDBDBD;
+    }
+  }
+}

@@ -5,19 +5,24 @@ import buttonModule from './buttonModule';
 import counter from './counter';
 import navBar from './navBar';
 import unit from './unit';
+import user from './user';
 import floatingButtonModule from './floatingButtonModule';
+import commentModule from './commentModule';
 
 const persistConfig = {
   key: 'root', // localStorage key
   storage, // localStorage
-  whitelist: ['unit'], // target (reducer name)
+  whitelist: ["unit", "user"], // target (reducer name)
 };
 
 const rootReducer = combineReducers({
   unit,
   navBar,
   buttonModule,
+  counter,
+  user,
   floatingButtonModule,
+  commentModule
 });
 
 // 루트 리듀서를 내보내주세요.

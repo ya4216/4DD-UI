@@ -2,16 +2,17 @@ import axios from "axios";
 import axiosInstance from "./auth-interceptors";
 
 class AuthService {
+
   async login(email: string, password: string) {
     return await axios
       .post("/api/user/login", {
         email,
         password
       })
-      .then(response => {        
-        if (response.data.data?.accessToken) {                    
-          localStorage.setItem("user", JSON.stringify(response.data.data));        
-        }
+      .then(response => {                
+        // if (response.data.data?.accessToken) {                  
+        //   localStorage.setItem("user", JSON.stringify(response.data.data));        
+        // }
         return response.data;
       });
   }
@@ -51,12 +52,12 @@ class AuthService {
     });
   }
 
-  getCurrentUser() {
-    const userStr = localStorage.getItem("user");
-    if (userStr) return JSON.parse(userStr);
+  // getCurrentUser() {
+  //   const userStr = localStorage.getItem("user");
+  //   if (userStr) return JSON.parse(userStr);
 
-    return null;
-  }
+  //   return null;
+  // }
 
   async getUserInfo() {
     return await axiosInstance

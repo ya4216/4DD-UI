@@ -3,7 +3,6 @@ import { ResponsiveBar } from '@nivo/bar';
 import { BiBold } from 'react-icons/bi';
 
 const Barchart = ({isFirst, data}: any) => {
-    console.log("## isFirst : "+ isFirst);
     const handle = {
         barClick: (data: any) => {
             console.log(data);

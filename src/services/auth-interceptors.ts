@@ -15,7 +15,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error: any) => {
-    localStorage.removeItem('user');
+    // localStorage.removeItem("user");
     const {
       config,
       response: { status },
@@ -30,9 +30,9 @@ axiosInstance.interceptors.response.use(
         AuthService.logout().then(
           (response) => {
             //로컬
-            // allDelCookies('localhost', '/');
+            allDelCookies('localhost', '/');
             //운영
-            allDelCookies('fordd.fly.dev', '/');
+            // allDelCookies('fordd.fly.dev', '/');
             window.location.reload();
           },
           (error) => {},

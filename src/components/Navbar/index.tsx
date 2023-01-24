@@ -6,16 +6,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import './navbar.scss';
 import AuthService from '../../services/auth';
 import { useCookies } from 'react-cookie';
-import FloatingButtons from '../../containers/FloatingButtonContainer';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../modules';
+import SwipeableTemporaryDrawer from './drawerNav';
+
+import testLogo from '../../image/test.png';
+import { initUserState } from '../../modules/user';
+import FloatingButtons from '../../containers/FloatingButtonContainer';
 import { Box } from '@mui/material';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false);
   const [footerMenuOpen, setFooterMenuOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [size, setSize] = useState({
@@ -23,6 +26,8 @@ const Navbar = () => {
     height: 0,
   });
   const [cookies, setCookie] = useCookies(['accessToken']);
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state: RootState) => state.user.info);
 
   const flotingButton = useSelector(
     (state: RootState) => state.floatingButtonModule,
@@ -45,9 +50,6 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem('user') !== null) {
-      setIsLogin(true);
-    }
     const handleResize = () => {
       setSize({
         width: window.innerWidth,
@@ -80,15 +82,15 @@ const Navbar = () => {
   const logout = () => {
     AuthService.logout().then(
       (response) => {
-        localStorage.removeItem('user');
+        // localStorage.removeItem("user");
+        dispatch(initUserState());
         setSuccessful(true);
         setMessage(response.data.message);
         navigate('/home');
         //로컬
-        // allDelCookies('localhost', '/');
+        allDelCookies('localhost', '/');
         //운영
-        allDelCookies('fordd.fly.dev', '/');
-        setIsLogin(false);
+        // allDelCookies('fordd.fly.dev', '/');
       },
       (error) => {
         const resMessage = error.response.data?.message;
@@ -119,9 +121,6 @@ const Navbar = () => {
     return (
       <ul>
         <li>
-          <Link to="/">회사검색</Link>
-        </li>
-        <li>
           <Link to="/Works">면접질문</Link>
         </li>
         <li>
@@ -134,7 +133,7 @@ const Navbar = () => {
         {/* <Link to="/register">
             <button className="btn">회원가입</button>
           </Link> */}
-        {!isLogin ? (
+        {!userInfo.id ? (
           <Link to="/login">
             <button className="btn btn__login_out">로그인</button>
           </Link>
@@ -179,7 +178,7 @@ const Navbar = () => {
           <div className="header__content__toggle">
             {!footerMenuOpen ? (
               !headerMenuOpen ? (
-                !isLogin ? (
+                !userInfo.id ? (
                   <BiMenuAltRight onClick={headerMenuToggleHandler} />
                 ) : (
                   <VscAccount onClick={headerMenuToggleHandler} />

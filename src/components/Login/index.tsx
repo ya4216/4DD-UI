@@ -5,12 +5,15 @@ import './index.scss';
 import AuthService from "../../services/auth";
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserInfo } from '../../modules/user';
 
 const Login = () => {
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [registerError, setRegisterError] = useState('');
   const [cookies, setCookie] = useCookies(['accesstoken']);
+  const dispatch = useDispatch();
   let navigate = useNavigate();  
 
   
@@ -26,6 +29,8 @@ const Login = () => {
       password
     ).then(
       response => {
+        console.log("### response : ", response);
+        dispatch(setUserInfo(response.data));
         setSuccessful(true);
         setMessage(response.message);
         // setCookie('accessToken', response.data.accessToken);
