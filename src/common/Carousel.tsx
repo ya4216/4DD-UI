@@ -10,17 +10,16 @@ import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Buttons from '../containers/ButtonContainer';
 
+import './Common.scss';
+
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
-import zIndex from '@mui/material/styles/zIndex';
-import Axios, { AxiosRequestConfig } from 'axios';
+import Axios from 'axios';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 const Carousel = ({ props }: any) => {
-  console.log('home props :: ', props);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let [dragging, setDragging] = useState<boolean>(false);
@@ -39,7 +38,7 @@ const Carousel = ({ props }: any) => {
       dots: type === 'banner' ? true : false,
       infinite: type === 'banner' ? true : false,
       speed: type === 'banner' ? 600 : 300,
-      // autoplay: type === 'banner' ? true : false,
+      autoplay: type === 'banner' ? true : false,
       autoplaySpeed: 4000,
       arrows: type === 'banner' ? false : true,
       slidesToShow: type === 'banner' ? 1 : 5,

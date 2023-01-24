@@ -14,6 +14,9 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
+        //로컬
+        // target: "http://localhost:8080",
+        //운영
         target: 'https://fordd.fly.dev',
         changeOrigin: true,
         // secure: false,
