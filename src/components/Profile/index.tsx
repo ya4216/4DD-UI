@@ -52,9 +52,9 @@ const Profile = () => {
             setSuccessful(true);
             setMessage(response.data.message);
             //로컬
-            allDelCookies('localhost', '/');
+            // allDelCookies('localhost', '/');
             //운영
-            // allDelCookies('fordd.fly.dev', '/');
+            allDelCookies('fordd.fly.dev', '/');
             // window.location.reload();
             navigate('/login');
           },

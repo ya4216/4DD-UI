@@ -88,9 +88,9 @@ const Navbar = () => {
         setMessage(response.data.message);
         navigate('/home');
         //로컬
-        allDelCookies('localhost', '/');
+        // allDelCookies('localhost', '/');
         //운영
-        // allDelCookies('fordd.fly.dev', '/');
+        allDelCookies('fordd.fly.dev', '/');
       },
       (error) => {
         const resMessage = error.response.data?.message;
@@ -161,12 +161,10 @@ const Navbar = () => {
         />
         <div className="header__content">
           <Link to="/" className="header__content__logo">
-            <span className="header__content__logo__name">FOR</span>{' '}
-            {/* &#40;var&nbsp; */} var&nbsp;
-            <span className="header__content__logo__name">DREAM</span> of&nbsp;
+            <span className="header__content__logo__name">FOR</span>&nbsp;&nbsp;
+            <span className="header__content__logo__name">DREAM</span>
+            &nbsp;&nbsp;
             <span className="header__content__logo__name">DEVELOPER</span>
-            {/* &#41; */}
-            {/* &#123; */}
           </Link>
           <nav
             className={`${'header__content__nav'} 
