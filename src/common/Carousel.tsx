@@ -34,8 +34,7 @@ const Carousel = ({ props }: any) => {
 
   const handleAfterChange = useCallback((i: number) => {
     setDragging(false);
-  }, []);
-
+  }, []);  
   //슬라이더 옵션 설정
   let settings = (type: string) => {
     return {
