@@ -113,11 +113,19 @@ $pt: #ffc0cb;
 .MuiImageListItem-root.list img {
   min-height: 262.7px;
   max-height: 262.7px;
+  @include breakpoint(md) {
+    min-height: 150px;
+    max-height: 150px;
+  }
 }
 
 .MuiImageListItem-root.banners img {
   min-height: 360px;
   max-height: 360px;
+  @include breakpoint(md) {
+    min-height: 250px;
+    max-height: 250px;
+  }
 }
 
 .banners {

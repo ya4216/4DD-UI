@@ -9,6 +9,7 @@ import { initUnitState } from '../../modules/unit';
 import { initButtonState } from '../../modules/buttonModule';
 import { Modal, CreateAndUpdate } from '../Common/index';
 import ReactQuill from 'react-quill';
+import './detail.scss';
 
 const ContentDetail = () => {
   const dispatch = useDispatch();
@@ -174,11 +175,12 @@ const ContentDetail = () => {
           }}
         />
       ) : Object.keys(selectedList).length != 0 ? (
-        <div style={{ overflow: 'auto', height: window.innerHeight - 80 }}>
-          <h1 style={{ margin: '50px 100px 30px 100px' }}>
-            {selectedList.title}
-          </h1>
-          <h3 style={{ margin: '0px 100px 0px 100px' }}>
+        <div
+          className="detail__area"
+          style={{ height: window.innerHeight - 80 }}
+        >
+          <h1 className="detail__area__title">{selectedList.title}</h1>
+          <h3 className="detail__area__contents">
             {selectedList.content ? (
               selectedList.content.detail_content ? (
                 <ReactQuill
@@ -191,9 +193,9 @@ const ContentDetail = () => {
           </h3>
         </div>
       ) : (
-        <div>
-          <h1 style={{ margin: '50px 100px 30px 100px' }}>{list.title}</h1>
-          <h2 style={{ margin: '0px 100px 0px 100px' }}>{list.content}</h2>
+        <div className="detail__none">
+          <h1 className="detail__none__title">{list.title}</h1>
+          <h2 className="detail__none__contents">{list.content}</h2>
         </div>
       )}
     </div>

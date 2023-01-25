@@ -12,9 +12,9 @@ const Home = () => {
 
   return (
     <>
-      <div className="home_search_bar_div">
+      {/* <div className="home_search_bar_div">
         <input className="home_search_bar" placeholder="검색" type="text" />
-      </div>
+      </div> */}
 
       <Carousel props={list} />
     </>

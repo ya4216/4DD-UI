@@ -8,23 +8,16 @@ import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { SvgIconProps } from '@mui/material/SvgIcon';
 import { selectUnit } from '../../modules/unit';
 import { setOpenSave } from '../../modules/navBar';
 import { useDispatch } from 'react-redux';
-import TreeItem, {
-  treeItemClasses,
-  TreeItemProps,
-  useTreeItem,
-  TreeItemContentProps,
-} from '@mui/lab/TreeItem';
+import TreeItem, { useTreeItem, TreeItemContentProps } from '@mui/lab/TreeItem';
 import { Button, Typography } from '@mui/material';
 import TreeView from '@mui/lab/TreeView';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useRef } from 'react';
 import Buttons from '../../containers/ButtonContainer';
 import clsx from 'clsx';
-
 import { selectMenuInfo } from '../../modules/buttonModule';
 
 let drawerWidth = 300;
@@ -36,10 +29,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
 }));
-
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@@@@@CustomContent@@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 const CustomContent = React.forwardRef(function CustomContent(
   props: TreeItemContentProps,
@@ -110,108 +99,15 @@ const CustomContent = React.forwardRef(function CustomContent(
   );
 });
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@@@@@CustomContent@@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@@@@@StyledTreeItem nodeId={String(cnt)} labelText={v.title} labelIcon={PendingIcon}@@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-declare module 'react' {
-  interface CSSProperties {
-    '--tree-view-color'?: string;
-    '--tree-view-bg-color'?: string;
-  }
-}
-
-type StyledTreeItemProps = TreeItemProps & {
-  bgColor?: string;
-  color?: string;
-  labelIcon: React.ElementType<SvgIconProps>;
-  labelInfo?: string;
-  labelText: string;
-};
-
-const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  [`& .${treeItemClasses.content}`]: {
-    color: theme.palette.text.secondary,
-    borderTopRightRadius: theme.spacing(2),
-    borderBottomRightRadius: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    fontWeight: theme.typography.fontWeightMedium,
-    '&.Mui-expanded': {
-      fontWeight: theme.typography.fontWeightRegular,
-    },
-    '&:hover': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
-      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
-      color: 'var(--tree-view-color)',
-    },
-    [`& .${treeItemClasses.label}`]: {
-      fontWeight: 'inherit',
-      color: 'inherit',
-    },
-  },
-  [`& .${treeItemClasses.group}`]: {
-    marginLeft: 0,
-    [`& .${treeItemClasses.content}`]: {
-      paddingLeft: theme.spacing(2),
-    },
-  },
-}));
-
-function StyledTreeItem(props: StyledTreeItemProps) {
-  const {
-    bgColor,
-    color,
-    labelIcon: LabelIcon,
-    labelInfo,
-    labelText,
-    ...other
-  } = props;
-
-  return (
-    <StyledTreeItemRoot
-      label={
-        <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-          <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
-          <Typography
-            variant="body2"
-            sx={{ fontWeight: 'inherit', flexGrow: 1 }}
-          >
-            {labelText}
-          </Typography>
-          <Typography variant="caption" color="inherit">
-            {labelInfo}
-          </Typography>
-        </Box>
-      }
-      style={{
-        '--tree-view-color': color,
-        '--tree-view-bg-color': bgColor,
-      }}
-      {...other}
-    />
-  );
-}
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@@@@@StyledTreeItem nodeId={String(cnt)} labelText={v.title} labelIcon={PendingIcon}@@@@@@@@@@@@@@@@@@@@@@@@@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-// import { useDispatch, useSelector } from 'react-redux';
-// import { RootState } from '../../modules';
-// import { initNavState, setOpenSave } from '../../modules/navBar';
-
-// const sideBarOpen = useSelector((state: RootState) => state.navBar.open);
-
 const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+  const [expanded, setExpanded] = React.useState<string[]>([]);
+  const [selected, setSelected] = React.useState<string[]>([]);
+  let cnt = 0;
+  let expandedArr: any[] = [];
+  const inputRef = useRef<any[]>([]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -225,9 +121,6 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
     drawerWidth = 0;
   };
 
-  const [expanded, setExpanded] = React.useState<string[]>([]);
-  const [selected, setSelected] = React.useState<string[]>([]);
-
   const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
     setExpanded(nodeIds);
   };
@@ -240,10 +133,6 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
     setExpanded((oldExpanded) => (oldExpanded.length === 0 ? expandedArr : []));
   };
 
-  let cnt = 0;
-
-  let expandedArr: any[] = [];
-
   const selectMenu = (id: string) => {
     dispatch(selectUnit(id));
   };
@@ -255,10 +144,6 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
       dispatch(setOpenSave(true));
     };
   }, []);
-
-  const [menuOpen, setMenuOpen] = React.useState<boolean>(false);
-
-  const inputRef = useRef<any[]>([]);
 
   const labelAndIcon = (value: any, cnt: number) => {
     return (
@@ -292,22 +177,6 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
     );
   };
 
-  //--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
-  //--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
-
-  // <StyledTreeItem nodeId={String(cnt)} labelText={v.title} labelIcon={PendingIcon}>
-  //   {childTree(v.childMenu)}
-  // </StyledTreeItem>
-
-  // <StyledTreeItem nodeId={String(cnt)} labelText={v.title} labelIcon={PendingIcon} onClick={() => selectMenu(v._id)}/>
-
-  //--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
-  //--------------------- StyledTreeItem 지금 안쓰고있음 ---------------------
-
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-  //@@@@@@@@@@@@@@ 아래 childTree 함수 안에 실험중 >>> ... 버튼 누르면 선택 요소 밑에 버튼 메뉴 나와야함 @@@@@@@@@@@@@@@@@@@@@@@@@
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
   const childTree = (list: { [key: string]: any }) => {
     let innerHtml: JSX.Element[] = [];
     let userId = localStorage.user ? JSON.parse(localStorage.user).id : '';
@@ -315,7 +184,6 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
     list.map((v: { [key: string]: any }, i: number) => {
       cnt++;
 
-      // if (v.useYN == 'Y') {
       if (v.childMenu.length > 0) {
         if (v.useYN == 'N' && userId != '6371e3df99561093efe09cfd') {
           return false;
@@ -349,7 +217,6 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
           </div>,
         );
       }
-      // }
     });
     return innerHtml;
   };
@@ -413,7 +280,8 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
             <Typography
               sx={{ p: 2, fontWeight: 'bold', position: 'fixed', left: 0 }}
             >
-              {menuList.category} &gt; {menuList.title}
+              {menuList ? menuList.category : null} &gt;{' '}
+              {menuList ? menuList.title : null}
             </Typography>
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === 'ltr' ? (
@@ -425,11 +293,13 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
           </DrawerHeader>
           <Divider />
           <>
-            {menuList.childMenu.length > 0 ? (
-              list()
-            ) : (
-              <div>과정이 없습니다.</div>
-            )}
+            {menuList ? (
+              menuList.childMenu && menuList.childMenu.length > 0 ? (
+                list()
+              ) : (
+                <div>과정이 없습니다.</div>
+              )
+            ) : null}
           </>
         </Box>
       </Drawer>
