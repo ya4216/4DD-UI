@@ -146,18 +146,22 @@ const CommentList = ({postId}:any) => {
         <Paper className="comment_container">
           {treeComment}
         </Paper>
-        <div className='textfield_container'>
-          <TextField
-            className='textfield_field'
-            variant="outlined"
-            multiline
-            minRows={3}
-            onChange={fieldContent}
-          />
-        </div>
-        <div className='textfield_button'>
-          <Button variant="contained" onClick={() => addComment()}>댓글 +</Button>          
-        </div>        
+        {userInfo.id && 
+          <>
+            <div className='textfield_container'>
+              <TextField
+                className='textfield_field'
+                variant="outlined"
+                multiline
+                minRows={3}
+                onChange={fieldContent}
+              />
+            </div>
+            <div className='textfield_button'>
+              <Button variant="contained" onClick={() => addComment()}>댓글 +</Button>          
+            </div>        
+          </>
+        }
       </div>
     </>
   );

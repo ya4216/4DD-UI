@@ -35,7 +35,6 @@ function Post() {
   const [open, setOpen] = useState(false);
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const userInfo = useSelector((state: RootState) => state.user.info);
-  const { name, email, id }: any = userInfo;
   
   const handleClickOpen = () => {
     setOpen(true);

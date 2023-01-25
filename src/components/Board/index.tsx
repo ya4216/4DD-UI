@@ -4,6 +4,8 @@ import "./board.scss";
 import Button from '@material-ui/core/Button';
 import { Link, useNavigate } from "react-router-dom";
 import { DataGrid, GridToolbar, GridRowsProp, GridColDef } from "@mui/x-data-grid";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "../../modules";
 import BoardService from "../../services/board";
 
 // const rows: GridRowsProp = [
@@ -21,6 +23,7 @@ const columns: GridColDef[] = [
 
 function Board() {
   const [rows, setRows] = useState([]);
+  const userInfo = useSelector((state: RootState) => state.user.info); 
   let navigate = useNavigate();  
 
   useEffect(() => {
@@ -74,11 +77,13 @@ function Board() {
         </div>
       </div>
       <div className="grid_button">
-      <Link to="/board/post">
-        <Button variant="contained" color="primary" style={{ width: '150px'}}>
-          작성하기
-        </Button>
-      </Link>
+      {userInfo.id &&
+        <Link to="/board/post">
+          <Button variant="contained" color="primary" style={{ width: '150px'}}>
+            작성하기
+          </Button>
+        </Link>
+      }
       </div>
     </div>
   );

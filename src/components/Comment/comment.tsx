@@ -142,8 +142,10 @@ const Comment = ({comInfo, isChild}:any) => {
                         <Delete fontSize='small' style={{ color: 'tomato'}} onClick={() => commentSubmit('delete', comInfo._id)}/>                    
                       </div>
                     ) : (
-                      <div className='comment_title_btn'>
-                        <Reply fontSize='small' style={{ color: 'cadetblue'}} onClick={() => openEditor('reply', comInfo._id)}/>
+                      <div className={userInfo.id ? 'comment_title_btn' : ''}>
+                        {userInfo.id &&
+                          <Reply fontSize='small' style={{ color: 'cadetblue'}} onClick={() => openEditor('reply', comInfo._id)}/>
+                        }
                       </div>
                     )}
                   </div>                           
