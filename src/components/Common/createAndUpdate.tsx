@@ -124,14 +124,8 @@ const createAndUpdate = ({ props }: any) => {
         useYN: 'Y',
         category: selectedMenu.category,
         category_number: selectedMenu.category_number,
-        menu_level: selectedMenu.level,
-        menu_id: selectedMenu.parents_menu_id,
-        parents_menu_id:
-          selectedMenu.parents_menu_id.replace(/[0-9]/g, '') +
-          String(++selectedMenu.parents_menu_id.match(/\d+/g)[0]).padStart(
-            3,
-            '0',
-          ),
+        parent_unit_id: selectedMenu._id,
+        menu_level: selectedMenu.menu_level + 1,
       };
 
       if (flotingButtonType == 'create') {

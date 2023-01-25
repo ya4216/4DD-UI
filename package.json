@@ -4,10 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "homepage": ".",
-  "proxy": "http://localhost:8080/post",
+  "proxy": "https://fordd.fly.dev",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "netlify": "netlify dev",
     "preview": "vite preview",
     "start": "vite --host"
   },

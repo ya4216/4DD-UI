@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import AuthService from "../../services/auth";
-import * as Yup from "yup";
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import AuthService from '../../services/auth';
+import * as Yup from 'yup';
 import './profile.scss';
-import { VscAccount } from "react-icons/vsc";
+import { VscAccount } from 'react-icons/vsc';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../../modules";
 import { initUserState } from "../../modules/user";
 
-const Profile = () => {  
+const Profile = () => {
   // const [name, setName] = useState(false);
   // const [email, setEmail] = useState('');
   const dispatch = useDispatch();
   const [userProfile, setUserProfile] = useState({
     id: '',
     name: '',
-    email: ''
+    email: '',
   });
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
@@ -30,8 +30,8 @@ const Profile = () => {
     setUserProfile({
       id: userInfo.id,
       name: userInfo.name,
-      email: userInfo.email
-    });    
+      email: userInfo.email,
+    });
   }, []);
 
   // 비밀번호 변경 핸들러
@@ -46,31 +46,33 @@ const Profile = () => {
       response => {
         setSuccessful(true);
         setMessage(response.data.message);
-        AuthService.logout()
-        .then(
-          response => {            
+        AuthService.logout().then(
+          (response) => {
             // localStorage.removeItem("user");
             dispatch(initUserState());
             setSuccessful(true);
             setMessage(response.data.message);
+            //로컬
             allDelCookies('localhost', '/');
+            //운영
+            // allDelCookies('fordd.fly.dev', '/');
             // window.location.reload();
             navigate('/login');
           },
-          error => {
+          (error) => {
             const resMessage = error.response.data?.message;
             setSuccessful(false);
             setMessage(resMessage);
-          }
+          },
         );
       },
-      error => {
+      (error) => {
         const resMessage = error.response.data?.message;
         setSuccessful(false);
         setMessage(resMessage);
-      }
+      },
     );
-  }
+  };
 
   // 쿠키 전체 삭제하기
   const allDelCookies = (domain: string, path: string) => {
@@ -99,13 +101,13 @@ const Profile = () => {
         .max(16, "비밀번호는 최대 16자리입니다.")
         .matches(
           /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}[^\s]*$/,
-          "알파벳, 숫자, 공백을 제외한 특수문자를 모두 포함한 8자리 이상 입력해주세요"
-        ), 
+          '알파벳, 숫자, 공백을 제외한 특수문자를 모두 포함한 8자리 이상 입력해주세요',
+        ),
       password2: Yup.string()
-        .required("비밀번호를 다시 입력해주세요.")
-        .oneOf([Yup.ref('password'), null], '비밀번호가 일치하지 않습니다.'),   
+        .required('비밀번호를 다시 입력해주세요.')
+        .oneOf([Yup.ref('password'), null], '비밀번호가 일치하지 않습니다.'),
     });
-  }
+  };
 
   const initialValues = {
     name: "",
@@ -114,18 +116,17 @@ const Profile = () => {
     password2: "",
     curPassword: ""
   };
-  
 
   return (
     <div>
-      <div className="login__content">                
+      <div className="login__content">
         <div className="login__forms">
           <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleChange}
-            >
-              <Form className="login__create">
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleChange}
+          >
+            <Form className="login__create">
               <VscAccount className="account"></VscAccount>
                <span className="sub-title">User Info</span>
                 {!successful && (
@@ -152,7 +153,7 @@ const Profile = () => {
                       </button>
                     </div>
 
-                    {isChangePassword &&
+                    {isChangePassword && (
                       <div>
                         <div>
                           <Field
@@ -199,23 +200,18 @@ const Profile = () => {
                           </button>
                         </div>
                       </div>
-                    }
-                  </div>
-                )}
+                    )}
+                </div>
+              )}
 
-                {message && (
-                  <div>
-                    <div
-                      className={
-                        successful ? "" : "alert__fail"
-                      }
-                      role="alert"
-                    >
-                      {message}
-                    </div>
+              {message && (
+                <div>
+                  <div className={successful ? '' : 'alert__fail'} role="alert">
+                    {message}
                   </div>
-                )}
-              </Form>
+                </div>
+              )}
+            </Form>
           </Formik>
         </div>
       </div>

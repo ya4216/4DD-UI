@@ -7,18 +7,18 @@ import './navbar.scss';
 import AuthService from '../../services/auth';
 import { useCookies } from 'react-cookie';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from "../../modules";
-import SwipeableTemporaryDrawer from "./drawerNav";
+import { RootState } from '../../modules';
+import SwipeableTemporaryDrawer from './drawerNav';
 
 import testLogo from '../../image/test.png';
-import { initUserState } from "../../modules/user";
+import { initUserState } from '../../modules/user';
 import FloatingButtons from '../../containers/FloatingButtonContainer';
 import { Box } from '@mui/material';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false);
-  const [footerMenuOpen, setFooterMenuOpen] = useState(false);  
+  const [footerMenuOpen, setFooterMenuOpen] = useState(false);
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
   const [size, setSize] = useState({
@@ -47,7 +47,7 @@ const Navbar = () => {
 
   const profile = () => {
     navigate('/profile');
-  }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -80,15 +80,17 @@ const Navbar = () => {
   };
 
   const logout = () => {
-    AuthService.logout()
-    .then(
-      response => {
+    AuthService.logout().then(
+      (response) => {
         // localStorage.removeItem("user");
         dispatch(initUserState());
         setSuccessful(true);
         setMessage(response.data.message);
         navigate('/home');
+        //로컬
         allDelCookies('localhost', '/');
+        //운영
+        // allDelCookies('fordd.fly.dev', '/');
       },
       (error) => {
         const resMessage = error.response.data?.message;
@@ -131,21 +133,23 @@ const Navbar = () => {
         {/* <Link to="/register">
             <button className="btn">회원가입</button>
           </Link> */}
-        {!userInfo.id ?
-          (<Link to="/login">
+        {!userInfo.id ? (
+          <Link to="/login">
             <button className="btn btn__login_out">로그인</button>
-          </Link>)
-          : 
-          (<div style={{display: "contents"}}>
-            <button className="btn btn__login_out" onClick={logout}>로그아웃</button>
+          </Link>
+        ) : (
+          <div style={{ display: 'contents' }}>
+            <button className="btn btn__login_out" onClick={logout}>
+              로그아웃
+            </button>
             <Link to="/profile">
               <VscAccount className="account"></VscAccount>
             </Link>
-          </div>)
-        }
+          </div>
+        )}
       </ul>
-    )
-  }
+    );
+  };
 
   return (
     <>
@@ -157,12 +161,10 @@ const Navbar = () => {
         />
         <div className="header__content">
           <Link to="/" className="header__content__logo">
-            <span className="header__content__logo__name">FOR</span>{' '}
-            {/* &#40;var&nbsp; */} var&nbsp;
-            <span className="header__content__logo__name">DREAM</span> of&nbsp;
+            <span className="header__content__logo__name">FOR</span>&nbsp;&nbsp;
+            <span className="header__content__logo__name">DREAM</span>
+            &nbsp;&nbsp;
             <span className="header__content__logo__name">DEVELOPER</span>
-            {/* &#41; */}
-            {/* &#123; */}
           </Link>
           <nav
             className={`${'header__content__nav'} 
@@ -172,9 +174,10 @@ const Navbar = () => {
             {navElement('header')}
           </nav>
           <div className="header__content__toggle">
-            {!footerMenuOpen ? ( !headerMenuOpen ? (
-              !userInfo.id ? (
-                <BiMenuAltRight onClick={headerMenuToggleHandler} />
+            {!footerMenuOpen ? (
+              !headerMenuOpen ? (
+                !userInfo.id ? (
+                  <BiMenuAltRight onClick={headerMenuToggleHandler} />
                 ) : (
                   <VscAccount onClick={headerMenuToggleHandler} />
                 )

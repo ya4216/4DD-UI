@@ -6,7 +6,9 @@ import Carousel from '../../common/Carousel';
 import customAxios from '../../common/CustomAxios';
 
 const Home = () => {
-  const list = customAxios({ url: '/api/unit/title' });
+  const list = customAxios({
+    url: '/api/unit/title',
+  });
 
   return (
     <>
