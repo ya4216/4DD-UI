@@ -121,7 +121,7 @@ const Navbar = () => {
     return (
       <ul>
         <li>
-          <Link to="/Works">면접질문</Link>
+          <Link to="/interview">면접질문</Link>
         </li>
         <li>
           <Link to="/board">자유게시판</Link>
