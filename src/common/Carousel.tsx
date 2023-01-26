@@ -27,7 +27,7 @@ const Carousel = ({ props }: any) => {
   let [dragging, setDragging] = useState<boolean>(false);
 
   const userInfo = useSelector((state: RootState) => state.user.info);
-
+  
   const handleBeforeChange = useCallback(() => {
     setDragging(true);
   }, []);
@@ -102,6 +102,7 @@ const Carousel = ({ props }: any) => {
   const parentsList = () => {
     let parentsHtml = [];
     for (let i in props) {
+      props[i]
       if (props[i]) {
         parentsHtml.push(
           <div key={props[i][0]._id + i}>
@@ -117,9 +118,9 @@ const Carousel = ({ props }: any) => {
     }
     return parentsHtml;
   };
-
+  
   const likeUpdate = (id: string, checked: boolean) => {
-    Axios.post(`/api/user/subinfo/${'63cbe99f9d23e7598cbc7cd5'}`, {
+    Axios.post(`/api/user/subinfo/${userInfo.user_sub_info._id}`, {
       id: id,
       like: checked,
     })
@@ -150,7 +151,7 @@ const Carousel = ({ props }: any) => {
         childHtml.push(
           <ImageListItem
             key={props[idx][j]._id}
-            className={idx == 0 ? 'banners' : 'list'}
+            className={(props[idx][0].category !== '좋아요' && idx == 0) ? 'banners' : 'list'}
             onClick={(e) => {
               if (!dragging) {
                 if (Object(e.target).type == 'checkbox') {
@@ -208,7 +209,7 @@ const Carousel = ({ props }: any) => {
             <ImageListItemBar
               title={
                 <span>
-                  {idx == 0 ? (
+                  {(props[idx][0].category !== '좋아요' && idx == 0) ? (
                     userInfo.id == '6371e3df99561093efe09cfd' ? (
                       <Buttons
                         getTypeArr={['create', 'update', 'remove', 'onoff']}

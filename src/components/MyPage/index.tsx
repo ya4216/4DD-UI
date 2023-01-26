@@ -1,15 +1,11 @@
-import React, { useEffect, useState, useCallback } from "react";
-import Navbar from "../Navbar";
+import React, { useEffect, useState } from "react";
 import "./mypage.scss";
 import { Link, useNavigate } from "react-router-dom";
-import Slider from "react-slick";
 import { VscAccount } from "react-icons/vsc";
 import BarChart from "../../charts/BarChart";
 import Carousel from "../../common/Carousel"
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../../modules";
-import e from "express";
-import { ButtonBase } from "@mui/material";
 
 type carouselForm = {
   category: string;
@@ -34,11 +30,13 @@ function MyPage() {
   const { name, email } = userInfo;
   const [data, setData] = useState<carouselForm[][]>([]);
   let navigate = useNavigate();  
-  const [chart, setChart] = useState<JSX.Element[]>([]);
+  // const [chart, setChart] = useState<JSX.Element[]>([]);
+  const [chart, setChart] = useState<unit[]>([]);
   
   useEffect(() => {    
     console.log("### userInfo : ", userInfo);
-    
+    userInfo.user_sub_info.likes[0].category = '좋아요';
+    setData([userInfo.user_sub_info.likes]);
     barChart();
   }, []);
 
@@ -47,24 +45,25 @@ function MyPage() {
   const barChart = () => {
     // unit 9개마다 자르기
     let tmp: unit[] = [];
-    let groupTmp = [];
-    let cnt = 0;
+    // let groupTmp = [];
+    // let cnt = 0;
     userInfo.user_sub_info.views.map((key: any)=>{
       tmp.push({_id: key.unit._id, title: key.unit.title, percent: key.progress_rate});
-      if(tmp.length%9 === 0){
-        groupTmp.push(tmp);
-        tmp = [];
-      }
-      cnt++;
+      // if(tmp.length%9 === 0){
+      //   groupTmp.push(tmp);
+      //   tmp = [];
+      // }
+      // cnt++;
     });
-    if(cnt !== 0 && cnt%9 !== 0) groupTmp.push(tmp); 
+    // if(cnt !== 0 && cnt%9 !== 0) groupTmp.push(tmp); 
     
-    groupTmp.map((unit, idx)=>{
-      innerHtml.push(
-        <BarChart key={idx} data={unit} />
-      );
-    });
-    setChart(innerHtml);
+    // groupTmp.map((unit, idx)=>{
+      // innerHtml.push(
+      //   <BarChart key={idx} data={unit} />
+      // );
+    // });
+    // setChart(innerHtml);
+    setChart(tmp);
   }
 
   return (
@@ -78,7 +77,8 @@ function MyPage() {
       <Carousel props={data} />
       <div className="contens_title">스터디 진행률</div>
       <div className="barchart_container">
-        {chart}
+        {/* {chart} */}
+        <BarChart data={chart} />
       </div>
       {/* <div>
         <div>
