@@ -187,7 +187,7 @@ const Carousel = ({ props }: any) => {
                   image={`${
                     props[idx][j].title_image_path
                       ? props[idx][j].title_image_path
-                      : '../src/image/noimage1.jpg'
+                      : `/assets/images/noimage1.jpg`
                   }`}
                   alt={props[idx][j].title}
                 />

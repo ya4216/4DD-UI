@@ -127,6 +127,7 @@ const NestedModal = ({ props }: customType.defaultIProps) => {
   return (
     <div>
       <Modal
+        className="modal__popup"
         open={open}
         onClose={cancelHandleClose}
         aria-labelledby="parent-modal-title"

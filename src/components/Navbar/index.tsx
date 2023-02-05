@@ -191,8 +191,8 @@ const Navbar = () => {
               }}
             >
               <img
-                src="../src/image/mainLogo.png"
-                srcSet="../src/image/mainLogo.png"
+                src="/assets/images/mainLogo.png"
+                srcSet="/assets/images/mainLogo.png"
                 alt="logo"
                 style={{ position: 'absolute', top: '-35px', left: '-50px' }}
               />

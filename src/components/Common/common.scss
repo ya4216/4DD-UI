@@ -143,9 +143,13 @@ $xl: 80em; //1280px
   z-index: -2;
 }
 
-.MuiModal-root .MuiBox-root {
-  width: 250px;
-  @include breakpoint(md) {
-    width: 500px;
+.modal {
+  &__popup {
+    .MuiBox-root {
+      width: 250px;
+      @include breakpoint(md) {
+        width: 500px;
+      }
+    }
   }
 }
