@@ -142,3 +142,10 @@ $xl: 80em; //1280px
 .footer {
   z-index: -2;
 }
+
+.MuiModal-root .MuiBox-root {
+  width: 250px;
+  @include breakpoint(md) {
+    width: 500px;
+  }
+}

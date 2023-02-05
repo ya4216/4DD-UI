@@ -274,7 +274,7 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
         anchor="left"
         open={open}
       >
-        <Toolbar sx={{ height: '80px' }} />
+        <Toolbar sx={{ height: '70px' }} />
         <Box sx={{ overflow: 'auto' }}>
           <DrawerHeader>
             <Typography

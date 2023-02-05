@@ -95,31 +95,58 @@ $pt: #ffc0cb;
   text-align: left;
 }
 
+.slick-slide.slick-active.slick-current {
+  text-align: center;
+}
+
 .contens_title {
   margin: 55px 0px 10px 15px;
   font-weight: 600;
   font-size: 20px;
 }
 
-.list {
+.MuiCard-root.list {
   // border: 1px solid black;
   width: 90%;
-  height: 250px;
+  height: 350px;
+  max-width: 360px;
   @include breakpoint(md) {
-    height: 200px;
+    height: 225px;
+    max-width: 195px;
+    // max-width: 360px;
   }
 }
+// MuiCard-root list css-bhp9pd-MuiPaper-root-MuiCard-root
+// .MuiButtonBase-root.MuiCardActionArea-root {
+//   width: 90%;
+//   height: 350px;
+//   @include breakpoint(md) {
+//     height: 200px;
+//   }
+// }
+.MuiButtonBase-root.MuiCardActionArea-root {
+  height: 100%;
+}
 
-.MuiImageListItem-root.list img {
+.css-46bh2p-MuiCardContent-root {
+  padding: 8px;
+}
+
+.MuiButtonBase-root.MuiCardActionArea-root .MuiCardContent-root {
+  padding: 6px;
+}
+
+.carousel__img__list img {
   min-height: 262.7px;
   max-height: 262.7px;
+  margin-top: -15px;
   @include breakpoint(md) {
     min-height: 150px;
     max-height: 150px;
   }
 }
 
-.MuiImageListItem-root.banners img {
+.carousel__img__banners img {
   min-height: 360px;
   max-height: 360px;
   @include breakpoint(md) {
@@ -130,8 +157,11 @@ $pt: #ffc0cb;
 
 .banners {
   // border: 1px solid black;
-  height: 250px;
+  height: 300px;
   width: 100%;
+  @include breakpoint(md) {
+    height: 250px;
+  }
 }
 
 .home_search_bar_div {
