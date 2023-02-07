@@ -13,7 +13,7 @@ import SwipeableTemporaryDrawer from './drawerNav';
 import testLogo from '../../image/test.png';
 import { initUserState } from '../../modules/user';
 import FloatingButtons from '../../containers/FloatingButtonContainer';
-import { Box } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -119,35 +119,54 @@ const Navbar = () => {
 
   const navElement = (elType: string) => {
     return (
-      <ul>
-        <li>
-          <Link to="/Works">면접질문</Link>
-        </li>
-        <li>
-          <Link to="/board">자유게시판</Link>
-        </li>
-        <li>
-          <Link to="/mypage">마이페이지</Link>
-        </li>
-
-        {/* <Link to="/register">
-            <button className="btn">회원가입</button>
-          </Link> */}
-        {!userInfo.id ? (
-          <Link to="/login">
-            <button className="btn btn__login_out">로그인</button>
-          </Link>
-        ) : (
-          <div style={{ display: 'contents' }}>
-            <button className="btn btn__login_out" onClick={logout}>
-              로그아웃
-            </button>
-            <Link to="/profile">
-              <VscAccount className="account"></VscAccount>
+      <>
+        <ul>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <li>
+            <Link to="/interview">면접질문</Link>
+          </li>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <li>
+            <Link to="/board">자유게시판</Link>
+          </li>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <li>
+            <Link to="/mypage">마이페이지</Link>
+          </li>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          {!userInfo.id ? (
+            <Link to="/login">
+              <button className="btn btn__login_out">로그인</button>
             </Link>
-          </div>
-        )}
-      </ul>
+          ) : (
+            <div style={{ display: 'contents' }}>
+              <li>
+                <Link to="/home">로그아웃</Link>
+              </li>
+              <Divider
+                orientation="vertical"
+                variant="middle"
+                flexItem
+                style={{ marginRight: '10px' }}
+              />
+              {/* <button
+              className="btn btn__login_out"
+              onClick={logout}
+              style={{ marginRight: '55px' }}
+            >
+              로그아웃
+            </button> */}
+              {/* <span>
+                LV.0 / {userInfo.name} 님<br />
+                Hello, World !
+              </span> */}
+              <Link to="/profile">
+                <VscAccount className="account"></VscAccount>
+              </Link>
+            </div>
+          )}
+        </ul>
+      </>
     );
   };
 
@@ -160,11 +179,41 @@ const Navbar = () => {
           user-scalable="no"
         />
         <div className="header__content">
-          <Link to="/" className="header__content__logo">
-            <span className="header__content__logo__name">FOR</span>&nbsp;&nbsp;
-            <span className="header__content__logo__name">DREAM</span>
-            &nbsp;&nbsp;
-            <span className="header__content__logo__name">DEVELOPER</span>
+          <Link to="/" className="header__content__logo focus-in-contract-bck">
+            <span
+              style={{
+                position: 'relative',
+                width: '140px',
+                height: '70px',
+                overflow: 'hidden',
+                display: 'flex',
+                float: 'left',
+              }}
+            >
+              <img
+                src="/assets/images/mainLogo.png"
+                srcSet="/assets/images/mainLogo.png"
+                alt="logo"
+                style={{ position: 'absolute', top: '-35px', left: '-50px' }}
+              />
+            </span>
+            <span
+              style={{
+                position: 'absolute',
+                display: 'flex',
+                height: '100%',
+                alignItems: 'center',
+                left: '45px',
+              }}
+            >
+              <span className="header__content__logo__name">FOR</span>
+              <span className="header__content__logo__name header__content__logo__space">
+                DREAM
+              </span>
+              <span className="header__content__logo__name header__content__logo__space">
+                DEVELOPER
+              </span>
+            </span>
           </Link>
           <nav
             className={`${'header__content__nav'} 
@@ -188,7 +237,8 @@ const Navbar = () => {
           </div>
           {/* &#125; */}
         </div>
-      </header>
+      </header>{' '}
+      <Divider className="header__divider" />
       <footer className="footer">
         <nav
           className={`${'footer-by__content__nav'} 

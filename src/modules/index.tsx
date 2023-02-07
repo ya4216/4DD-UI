@@ -8,11 +8,12 @@ import unit from './unit';
 import user from './user';
 import floatingButtonModule from './floatingButtonModule';
 import commentModule from './commentModule';
+import interviewModule from './interviewModule';
 
 const persistConfig = {
   key: 'root', // localStorage key
   storage, // localStorage
-  whitelist: ["unit", "user"], // target (reducer name)
+  whitelist: ['unit', 'user'], // target (reducer name)
 };
 
 const rootReducer = combineReducers({
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
   counter,
   user,
   floatingButtonModule,
-  commentModule
+  commentModule,
+  interviewModule,
 });
 
 // 루트 리듀서를 내보내주세요.

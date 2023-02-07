@@ -19,6 +19,12 @@ import Axios from 'axios';
 import { RootState } from '../modules';
 import { setUserInfo } from '../modules/user';
 
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
+
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 const Carousel = ({ props }: any) => {
@@ -149,7 +155,8 @@ const Carousel = ({ props }: any) => {
     for (let j in props[idx]) {
       if (props[idx][j].menu_level == 1) {
         childHtml.push(
-          <ImageListItem
+          <Card
+            sx={{}}
             key={props[idx][j]._id}
             className={(props[idx][0].category !== '좋아요' && idx == 0) ? 'banners' : 'list'}
             onClick={(e) => {
@@ -168,62 +175,147 @@ const Carousel = ({ props }: any) => {
               }
             }}
           >
-            <div
-              className={
-                idx == 0 ? 'carousel__img__banners' : 'carousel__img__list'
-              }
-            >
-              <img
-                src={`${
-                  props[idx][j].title_image_path
-                    ? props[idx][j].title_image_path
-                    : '../src/image/noimage1.jpg'
-                }`}
-                srcSet={`${
-                  props[idx][j].title_image_path
-                    ? props[idx][j].title_image_path
-                    : '../src/image/noimage1.jpg'
-                }`}
-                alt={props[idx][j].title}
-                loading="lazy"
-              />
-              {idx == 0 ? null : (
-                <div className="carousel__img__list__like">
-                  <Checkbox
-                    {...label}
-                    icon={<FavoriteBorder />}
-                    checkedIcon={<Favorite />}
-                    checked={
-                      userInfo.user_sub_info
-                        ? userInfo.user_sub_info.likes.indexOf(
-                            props[idx][j]._id,
-                          ) != -1
-                          ? true
-                          : false
-                        : false
-                    }
-                  />
-                </div>
-              )}
-            </div>
-            <ImageListItemBar
-              title={
-                <span>
-                  {(props[idx][0].category !== '좋아요' && idx == 0) ? (
-                    userInfo.id == '6371e3df99561093efe09cfd' ? (
-                      <Buttons
-                        getTypeArr={['create', 'update', 'remove', 'onoff']}
+            <CardActionArea>
+              <div
+                className={
+                  idx == 0 ? 'carousel__img__banners' : 'carousel__img__list'
+                }
+              >
+                <CardMedia
+                  component="img"
+                  // height="140"
+                  image={`${
+                    props[idx][j].title_image_path
+                      ? props[idx][j].title_image_path
+                      : `/assets/images/noimage1.jpg`
+                  }`}
+                  alt={props[idx][j].title}
+                />
+                {idx == 0 ? null : (
+                  <>
+                    <div className="carousel__img__list__like">
+                      <Checkbox
+                        {...label}
+                        icon={<FavoriteBorder />}
+                        checkedIcon={<Favorite />}
+                        checked={
+                          userInfo.user_sub_info
+                            ? userInfo.user_sub_info.likes.indexOf(
+                                props[idx][j]._id,
+                              ) != -1
+                              ? true
+                              : false
+                            : false
+                        }
                       />
-                    ) : null
-                  ) : (
-                    props[idx][j].title
-                  )}
-                </span>
-              }
-              subtitle={<span>{idx == 0 ? '' : props[idx][j].content}</span>}
-              position="below"
-            />
-          </ImageListItem>,
+                    </div>
+                    <CardContent>
+                      <Typography gutterBottom variant="h6" component="div">
+                        {idx == 0 ? (
+                          userInfo.id == '6371e3df99561093efe09cfd' ? (
+                            <Buttons
+                              getTypeArr={[
+                                'create',
+                                'update',
+                                'remove',
+                                'onoff',
+                              ]}
+                            />
+                          ) : null
+                        ) : (
+                          props[idx][j].title
+                        )}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {props[idx][j].title}
+                        {/* {idx == 0 ? '' : props[idx][j].content} */}
+                      </Typography>
+                    </CardContent>
+                  </>
+                )}
+              </div>
+            </CardActionArea>
+          </Card>,
+
+          // <ImageListItem
+          //   key={props[idx][j]._id}
+          //   className={
+          //     idx == 0
+          //       ? 'banners text-shadow-drop-center'
+          //       : 'list text-shadow-drop-center'
+          //   }
+          //   onClick={(e) => {
+          //     if (!dragging) {
+          //       if (Object(e.target).type == 'checkbox') {
+          //         likeUpdate(
+          //           props[idx][j]._id,
+          //           Object(e.target).parentElement.className.indexOf(
+          //             'Mui-checked',
+          //           ) === -1,
+          //         );
+          //       } else {
+          //         dispatch(selectUnitTitle(props[idx][j]._id));
+          //         navigate('/contents');
+          //       }
+          //     }
+          //   }}
+          // >
+          //   <div
+          //     className={
+          //       idx == 0 ? 'carousel__img__banners' : 'carousel__img__list'
+          //     }
+          //   >
+          //     <img
+          //       src={`${
+          //         props[idx][j].title_image_path
+          //           ? props[idx][j].title_image_path
+          //           : '../src/image/noimage1.jpg'
+          //       }`}
+          //       srcSet={`${
+          //         props[idx][j].title_image_path
+          //           ? props[idx][j].title_image_path
+          //           : '../src/image/noimage1.jpg'
+          //       }`}
+          //       alt={props[idx][j].title}
+          //       loading="lazy"
+          //     />
+          //     {idx == 0 ? null : (
+          //       <div className="carousel__img__list__like">
+          //         <Checkbox
+          //           {...label}
+          //           icon={<FavoriteBorder />}
+          //           checkedIcon={<Favorite />}
+          //           checked={
+          //             userInfo.user_sub_info
+          //               ? userInfo.user_sub_info.likes.indexOf(
+          //                   props[idx][j]._id,
+          //                 ) != -1
+          //                 ? true
+          //                 : false
+          //               : false
+          //           }
+          //         />
+          //       </div>
+          //     )}
+          //   </div>
+          //   <ImageListItemBar
+          //     title={
+          //       <span>
+          //         {idx == 0 ? (
+          //           userInfo.id == '6371e3df99561093efe09cfd' ? (
+          //             <Buttons
+          //               getTypeArr={['create', 'update', 'remove', 'onoff']}
+          //             />
+          //           ) : null
+          //         ) : (
+          //           props[idx][j].title
+          //         )}
+          //       </span>
+          //     }
+          //     subtitle={<span>{idx == 0 ? '' : props[idx][j].content}</span>}
+          //     position="below"
+          //   />
+          // </ImageListItem>,
         );
       }
     }
