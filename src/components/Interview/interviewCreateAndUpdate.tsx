@@ -36,6 +36,18 @@ const interviewCreateAndUpdate = () => {
     useYN: true,
   });
 
+  let test = {
+    main_category_code: 1,
+  };
+
+  Axios.get(`/api/interview/main`)
+    .then((res) => {
+      console.log('get성공 : ', res);
+    })
+    .catch((err) => {
+      console.log('get실패 :: ', err);
+    });
+
   //새 대분류,중분류,소분류 체크박스 제어
   const newCategory = (e: any) => {
     console.log('ee : ', e.target);
@@ -74,7 +86,7 @@ const interviewCreateAndUpdate = () => {
   };
 
   //보기 추가 제거
-  const addAndDeletexample = (bool: boolean) => {
+  const addAndDeleteExample = (bool: boolean) => {
     if (bool) {
       const answerExample = values.answer_example;
       answerExample.push('');
@@ -153,7 +165,6 @@ const interviewCreateAndUpdate = () => {
       values.multiple_choice === 'multiple' ? true : false;
     values.useYN = values.useYN ? 'Y' : 'N';
 
-    console.log('value1 ::: ', values);
     Axios.post(`/api/interview`, values)
       .then((res) => {
         console.log('성공 : ', res);
@@ -319,7 +330,6 @@ const interviewCreateAndUpdate = () => {
               </table>
             ) : (
               <table
-                border={1}
                 style={{
                   width: '100%',
                   height: '100px',
@@ -494,10 +504,13 @@ const interviewCreateAndUpdate = () => {
             {multipleAnswer ? (
               <div>
                 보기 :{' '}
-                <button type="button" onClick={() => addAndDeletexample(true)}>
+                <button type="button" onClick={() => addAndDeleteExample(true)}>
                   추가
                 </button>
-                <button type="button" onClick={() => addAndDeletexample(false)}>
+                <button
+                  type="button"
+                  onClick={() => addAndDeleteExample(false)}
+                >
                   삭제
                 </button>{' '}
                 <span style={{ color: 'red' }}>

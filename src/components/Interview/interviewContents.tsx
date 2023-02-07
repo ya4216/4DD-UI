@@ -210,11 +210,7 @@ const interviewContents = () => {
             >
               면접질문 풀어보기
             </span>
-            <span className="interview__block__bar__center">
-              {window.innerWidth < 768
-                ? ''
-                : '유저1 / LV.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;맞은문제:0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;틀린문제:0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;복습할문제:0'}
-            </span>
+            <span className="interview__block__bar__center"></span>
             <span className="interview__block__bar__right">
               <select>
                 <option value="1">1개씩 보기</option>
