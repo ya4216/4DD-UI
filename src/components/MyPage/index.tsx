@@ -22,7 +22,7 @@ type unit = {
   title: string;
   title_image_path?: string;
   useYN?: string;
-  percent: number;
+  percent?: number;
 }
 
 function MyPage() {  
@@ -35,9 +35,14 @@ function MyPage() {
   
   useEffect(() => {    
     console.log("### userInfo : ", userInfo);
-    userInfo.user_sub_info.likes[0].category = '좋아요';
-    setData([userInfo.user_sub_info.likes]);
-    barChart();
+    if(userInfo.id){
+      userInfo.user_sub_info.likes.length > 0 &&
+      (userInfo.user_sub_info.likes[0].category = '좋아요');
+      setData([userInfo.user_sub_info.likes]);
+      barChart();
+    }else{
+      navigate('/login');
+    }
   }, []);
 
   // 댓글 트리구조 만들기
@@ -47,8 +52,12 @@ function MyPage() {
     let tmp: unit[] = [];
     // let groupTmp = [];
     // let cnt = 0;
+    let tmpArr: any =  [];
     userInfo.user_sub_info.views.map((key: any)=>{
-      tmp.push({_id: key.unit._id, title: key.unit.title, percent: key.progress_rate});
+      //중복제거를 위해 임시적으로 작성
+      !tmpArr.includes(key.unit.title) && 
+      tmp.push({_id: key.unit._id, title: key.unit.title, [userInfo.name]: key.progress_rate});
+      tmpArr.push(key.unit.title);
       // if(tmp.length%9 === 0){
       //   groupTmp.push(tmp);
       //   tmp = [];

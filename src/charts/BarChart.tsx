@@ -1,6 +1,8 @@
-import * as React from 'react';
+import React, { useEffect } from "react";
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsiveRadar } from '@nivo/radar'
+import { useSelector } from 'react-redux';
+import { RootState } from "../modules";
 import { BiBold } from 'react-icons/bi';
 
 type unit = {
@@ -14,6 +16,7 @@ type unit = {
 }
 
 const Barchart = ({data}: any) => {
+    const userInfo = useSelector((state: RootState) => state.user.info);
     const handle = {
         barClick: (data: any) => {
             console.log(data);
@@ -29,7 +32,7 @@ const Barchart = ({data}: any) => {
         <div style={{ width: '100%', height: '500px' }}>
             <ResponsiveRadar
                 data={data}
-                keys={[ '오리온 ' ]}
+                keys={[userInfo.name]}
                 indexBy="title"
                 valueFormat=">-.2f"
                 margin={{ top: 50, right: 80, bottom: 50, left: 80 }}
