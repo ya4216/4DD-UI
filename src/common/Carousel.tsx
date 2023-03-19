@@ -109,7 +109,7 @@ const Carousel = ({ props }: any) => {
     let parentsHtml = [];
     for (let i in props) {
       props[i]
-      if (props[i]) {
+      if (props[i]) {        
         parentsHtml.push(
           <div key={props[i][0]._id + i}>
             {props[i][0].category === 'banner' ? null : (
