@@ -208,7 +208,7 @@ const Navbar = () => {
             >
               <span className="header__content__logo__name">FOR</span>
               <span className="header__content__logo__name header__content__logo__space">
-                DREAM
+                DREAMING
               </span>
               <span className="header__content__logo__name header__content__logo__space">
                 DEVELOPER

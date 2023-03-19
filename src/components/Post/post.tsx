@@ -46,8 +46,7 @@ function Post() {
   
   let navigate = useNavigate();  
   
-  const { state } = useLocation();
-
+  const { state } = useLocation();  
 
   // Submit 핸들러
   const handleSubmit = (formValue: { title: string }) => {  
@@ -121,9 +120,9 @@ function Post() {
     title: "",
     content: "",
   };
-  return (
+  return (    
     <div id="post">
-      <h1>Post</h1>      
+      <div style={{height: '100px'}}></div>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -249,8 +248,10 @@ function Post() {
             </Form>
           )
         }}
-      </Formik>            
-      <CommentList postId={state._id}></CommentList>
+      </Formik>        
+      <div>
+      </div>
+      {(state && !isSwitch) && <CommentList postId={state._id}></CommentList>}
     </div>
   );
 }
