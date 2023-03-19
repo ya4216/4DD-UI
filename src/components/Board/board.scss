@@ -4,13 +4,17 @@
       text-align: center;
     }
     &_component {
-      height: 550px;
-      width: 80%;
+      height: calc(100vh - 230px);
+      width: 90%;
       display: inline-block;
       .MuiDataGrid-root {
-        >div {
+        > div {
           margin: 8px;
         }
+      }
+
+      .MuiDataGrid-toolbarContainer .MuiButtonBase-root {
+        display: none;
       }
     }
     &_button {
@@ -20,4 +24,3 @@
     }
   }
 }
-

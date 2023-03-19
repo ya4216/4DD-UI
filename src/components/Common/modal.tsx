@@ -13,11 +13,13 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  // border: '2px solid #000',
   boxShadow: 24,
   pt: 2,
   px: 4,
   pb: 3,
+  border: 'none',
+  borderRadius: '10px',
 };
 
 /**
@@ -76,8 +78,7 @@ const NestedModal = ({ props }: customType.defaultIProps) => {
           innerHtml.push(
             <>
               선택된 &#39;
-              {JSON.parse(JSON.stringify(selectButton.selectedList)).title}&#39;
-              항목과
+              {JSON.parse(JSON.stringify(selectButton.selectedList)).title}&#39; 항목과
               <br />그 하위 내용이 모두 '완전 삭제' 됩니다.
               <br />
               삭제가 확실하지 않을 경우 'OFF' 상태로 변경하는 것이 좋습니다.
@@ -126,21 +127,9 @@ const NestedModal = ({ props }: customType.defaultIProps) => {
 
   return (
     <div>
-      <Modal
-        className="modal__popup"
-        open={open}
-        onClose={cancelHandleClose}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-      >
+      <Modal className="modal__popup" open={open} onClose={cancelHandleClose} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
         <Box sx={{ ...style, width: 600 }}>
-          <h2 id="parent-modal-title">
-            {props.title
-              ? props.title
-              : selectButton.type
-              ? selectButton.type
-              : ''}
-          </h2>
+          <h2 id="parent-modal-title">{props.title ? props.title : selectButton.type ? selectButton.type : ''}</h2>
           <p id="parent-modal-description">{getText()}</p>
           <Button onClick={okHandleClose}>확인</Button>
           <Button onClick={cancelHandleClose}>취소</Button>

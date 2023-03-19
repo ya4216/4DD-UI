@@ -123,25 +123,31 @@ const Navbar = () => {
         <ul>
           <Divider orientation="vertical" variant="middle" flexItem />
           <li>
-            <Link to="/interview">면접질문</Link>
+            <Link to="/interview">INTERVIEW</Link>
           </li>
           <Divider orientation="vertical" variant="middle" flexItem />
           <li>
-            <Link to="/board">자유게시판</Link>
+            <Link to="/board">COMMUNITY</Link>
           </li>
           <Divider orientation="vertical" variant="middle" flexItem />
           <li>
-            <Link to="/mypage">마이페이지</Link>
+            <Link to="/mypage">MY PAGE</Link>
+          </li>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <li>
+            <Link to="/about">ABOUT</Link>
           </li>
           <Divider orientation="vertical" variant="middle" flexItem />
           {!userInfo.id ? (
             <Link to="/login">
-              <button className="btn btn__login_out">로그인</button>
+              <button className="btn btn__login_out">LOGIN</button>
             </Link>
           ) : (
             <div style={{ display: 'contents' }}>
               <li>
-                <Link to="/home">로그아웃</Link>
+                <Link to="/home" onClick={logout}>
+                  LOGOUT
+                </Link>
               </li>
               <Divider
                 orientation="vertical"
@@ -183,8 +189,8 @@ const Navbar = () => {
             <span
               style={{
                 position: 'relative',
-                width: '140px',
-                height: '70px',
+                width: '110px',
+                height: '45px',
                 overflow: 'hidden',
                 display: 'flex',
                 float: 'left',
@@ -194,7 +200,7 @@ const Navbar = () => {
                 src="/assets/images/mainLogo.png"
                 srcSet="/assets/images/mainLogo.png"
                 alt="logo"
-                style={{ position: 'absolute', top: '-35px', left: '-50px' }}
+                style={{ position: 'absolute', top: '-33px', left: '-41px' }}
               />
             </span>
             <span
@@ -203,7 +209,7 @@ const Navbar = () => {
                 display: 'flex',
                 height: '100%',
                 alignItems: 'center',
-                left: '45px',
+                left: '40px',
               }}
             >
               <span className="header__content__logo__name">FOR</span>

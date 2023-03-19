@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './interview.scss';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -11,12 +11,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Tooltip from '@mui/material/Tooltip';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import {
-  DataGrid,
-  GridColDef,
-  GridToolbar,
-  GridValueGetterParams,
-} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid';
 import { Divider } from '@mui/material';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -52,7 +47,7 @@ const columns: GridColDef[] = [
 
 const interviewContents = () => {
   const [rows, setRows] = useState<[]>([]);
-  const [markAnswer, setMarkAnswer] = useState<string>('');
+  const [markAnswer, setMarkAnswer] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<{}>();
   const [correctCheck, setCorrectCheck] = useState<JSX.Element>(<></>);
   const [answerHtml, setAnswerHtml] = useState<JSX.Element[]>([]);
@@ -60,9 +55,7 @@ const interviewContents = () => {
   useEffect(() => {
     Axios.get('/api/interview')
       .then((res) => {
-        setSelectedData(
-          res.data.data[Math.floor(Math.random() * res.data.data.length)],
-        );
+        setSelectedData(res.data.data[Math.floor(Math.random() * res.data.data.length)]);
         setRows(res.data.data);
       })
       .catch((err) => {
@@ -71,12 +64,12 @@ const interviewContents = () => {
   }, []);
 
   const selectRow = (e: any) => {
-    setMarkAnswer('');
+    setMarkAnswer(false);
     setSelectedData(e.row);
   };
 
   const answerCheck = (e: any) => {
-    setMarkAnswer('answer__correct__mark');
+    setMarkAnswer(true);
   };
 
   const answerClick = (e: any) => {
@@ -91,78 +84,55 @@ const interviewContents = () => {
     }
   };
 
+  // const getAnswer = React.memo(function getAnswer() {
   const getAnswer = () => {
     let innerHtml: JSX.Element[] = [];
     let answerExample = [];
 
-    answerExample.push(
-      <span className={markAnswer}>
-        {Object(selectedData).interview_answer}
-      </span>,
-    );
+    answerExample.push(<span className={`${markAnswer ? 'answer__correct__mark' : ''}`}>{Object(selectedData).interview_answer}</span>);
 
     for (let i in Object(selectedData).answer_example) {
-      answerExample.push(
-        <span className="answer__example__wrong">
-          {Object(selectedData).answer_example[i]}
-        </span>,
-      );
+      answerExample.push(<span className="answer__example__wrong">{Object(selectedData).answer_example[i]}</span>);
     }
 
     let exampleArr = answerExample.sort(() => Math.random() - 0.5);
 
     if (selectedData) {
       if (Object(selectedData).answer_example[0] === '') {
-        // setAnswerHtml([
-        //   ...answerHtml,
-        //   <div key="answer">A. {Object(selectedData).interview_answer}</div>,
-        // ]);
         innerHtml.push(
           <div className="answer__question" key="answer">
             A. {Object(selectedData).interview_answer}
           </div>,
         );
       } else {
-        // setAnswerHtml([
-        //   ...answerHtml,
-        //   <div className="answer__question" key="answer">
-        //     A. 다음 보기 중 맞는 답을 고르세요. {correctCheck}
-        //     <button
-        //       className="answer__question__correctButton"
-        //       onClick={answerCheck}
-        //     >
-        //       정답확인
-        //     </button>
-        //     <br />
-        //   </div>,
-        // ]);
         innerHtml.push(
           <div className="answer__question" key="answer">
             A. 다음 보기 중 맞는 답을 고르세요. {correctCheck}
-            <button
-              className="answer__question__correctButton"
-              onClick={answerCheck}
-            >
-              정답확인
-            </button>
+            {window.innerWidth < 768 ? null : (
+              <button className="answer__question__correctButton" onClick={answerCheck}>
+                정답확인
+              </button>
+            )}
             <br />
           </div>,
         );
         for (let i = 1; i <= 5; i++) {
-          //   setAnswerHtml([
-          //     ...answerHtml,
-          //     <div key={i} className="answer__example" onClick={answerClick}>
-          //       {i}. {exampleArr[i - 1]}
-          //     </div>,
-          //   ]);
           innerHtml.push(
             <div key={i} className="answer__example" onClick={answerClick}>
               {i}. {exampleArr[i - 1]}
             </div>,
           );
         }
+        innerHtml.push(
+          <div>
+            {window.innerWidth < 768 ? (
+              <button className="answer__question__correctButton" onClick={answerCheck}>
+                정답확인
+              </button>
+            ) : null}
+          </div>,
+        );
       }
-      //   setAnswerHtml(innerHtml);
     }
     return <>{innerHtml}</>;
   };
@@ -170,26 +140,6 @@ const interviewContents = () => {
   const setBookmark = (e: any) => {
     if (e.target.checked) {
       console.log('selectedData 체크 : ', selectedData);
-      //   Axios.post(`/api/user/subinfo/bookmark/${Object(selectedData)._id}`, {
-      //     id: id,
-      //     interview_bookmark: e.target.checked,
-      //   })
-      //     .then((res) => {
-      //       if (userInfo.user_sub_info) {
-      //         if (userInfo.user_sub_info.likes.indexOf(id) == -1) {
-      //           userInfo.user_sub_info.likes.push(id);
-      //         } else {
-      //           userInfo.user_sub_info.likes.splice(
-      //             userInfo.user_sub_info.likes.indexOf(id),
-      //             1,
-      //           );
-      //         }
-      //       }
-      //       dispatch(setUserInfo(userInfo));
-      //     })
-      //     .catch((err) => {
-      //       console.log('실패 :: ', err);
-      //     });
     } else {
       console.log('selectedData 해제 : ', selectedData);
     }
@@ -199,36 +149,25 @@ const interviewContents = () => {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Item
-            className="interview__block__bar"
-            sx={{ textAlign: 'center', color: 'black' }}
-            elevation={5}
-          >
-            <span
-              className="interview__block__bar__left"
-              style={{ float: 'left' }}
-            >
+          <Item className="interview__block__bar" sx={{ textAlign: 'center', color: 'black' }} elevation={0}>
+            <span className="interview__block__bar__left" style={{ float: 'left' }}>
               면접질문 풀어보기
             </span>
             <span className="interview__block__bar__center"></span>
-            <span className="interview__block__bar__right">
+            {/* <span className="interview__block__bar__right">
               <select>
                 <option value="1">1개씩 보기</option>
                 <option value="5">5개씩 보기</option>
                 <option value="10">10개씩 보기</option>
               </select>
-            </span>
+            </span> */}
           </Item>
         </Grid>
         {window.innerWidth < 768 ? (
           <>
             <Grid item xs={12}>
-              <Item style={{ position: 'relative' }} elevation={5}>
-                <div className="answer__question">
-                  {selectedData
-                    ? 'Q. ' + Object(selectedData).interview_contents
-                    : '오류'}
-                </div>
+              <Item style={{ position: 'relative' }} elevation={0}>
+                <div className="answer__question">{selectedData ? 'Q. ' + Object(selectedData).interview_contents : '오류'}</div>
                 <div
                   style={{
                     position: 'absolute',
@@ -258,7 +197,7 @@ const interviewContents = () => {
         ) : (
           <>
             <Grid className="interview__button" item xs={0.5}>
-              <Item className="interview__button__previousButton" elevation={5}>
+              <Item className="interview__button__previousButton" elevation={0}>
                 <span className="interview__button__previousButton__span">
                   <ArrowBackIosNewIcon />
                 </span>
@@ -266,11 +205,7 @@ const interviewContents = () => {
             </Grid>
             <Grid item xs={5.5}>
               <Item style={{ position: 'relative' }} elevation={5}>
-                <div className="answer__question">
-                  {selectedData
-                    ? 'Q. ' + Object(selectedData).interview_contents
-                    : '오류'}
-                </div>
+                <div className="answer__question">{selectedData ? 'Q. ' + Object(selectedData).interview_contents : '오류'}</div>
                 <div
                   style={{
                     position: 'absolute',
@@ -300,7 +235,7 @@ const interviewContents = () => {
               </Item>
             </Grid>
             <Grid className="interview__button" item xs={0.5}>
-              <Item className="interview__button__nextButton" elevation={5}>
+              <Item className="interview__button__nextButton" elevation={0}>
                 <span className="interview__button__nextButton__span">
                   <ArrowForwardIosIcon />
                 </span>
@@ -309,7 +244,7 @@ const interviewContents = () => {
           </>
         )}
         <Grid item xs={12}>
-          <Item elevation={5}>
+          <Item elevation={0}>
             <Box sx={{ height: 400, width: '100%', minHeight: '425px' }}>
               <DataGrid
                 rows={rows}

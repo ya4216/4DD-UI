@@ -29,7 +29,7 @@ $xl: 80em; //1280px
 
 .editor {
   &_container {
-    height: calc(100% - 42px);
+    height: 450px;
     @include breakpoint(sm) {
       height: calc(100% - 66px);
     }
