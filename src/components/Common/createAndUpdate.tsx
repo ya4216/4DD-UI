@@ -4,10 +4,7 @@ import './common.scss';
 import Paper from '@mui/material/Paper';
 import { styled, useTheme } from '@mui/material/styles';
 import Input from '@mui/material/Input';
-import {
-  initFloatingState,
-  setFloatingButton,
-} from '../../modules/floatingButtonModule';
+import { initFloatingState, setFloatingButton } from '../../modules/floatingButtonModule';
 import { useDispatch, useSelector } from 'react-redux';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Button from '@mui/material/Button';
@@ -52,13 +49,9 @@ const createAndUpdate = ({ props }: any) => {
     setContent(content);
   };
 
-  const flotingButtonType = useSelector(
-    (state: RootState) => state.floatingButtonModule.clickState,
-  );
+  const flotingButtonType = useSelector((state: RootState) => state.floatingButtonModule.clickState);
 
-  const selectedMenu = useSelector(
-    (state: RootState) => state.buttonModule.selectedList,
-  );
+  const selectedMenu = useSelector((state: RootState) => state.buttonModule.selectedList);
 
   const editorType = useSelector((state: RootState) => state.buttonModule.type);
 
@@ -88,13 +81,6 @@ const createAndUpdate = ({ props }: any) => {
             confirmType: 'tooltip',
             tooltipButtonType: 'type1',
             confirmMessage: '취소하시겠습니까?',
-          },
-          {
-            type: 'create',
-            icon: 'moreTime',
-            confirmType: 'tooltip',
-            tooltipButtonType: 'type1',
-            confirmMessage: '작성 중인 문서를 임시저장하시겠습니까?',
           },
           {
             type: 'save',
@@ -185,8 +171,8 @@ const createAndUpdate = ({ props }: any) => {
           mx: 'auto',
           p: 2,
           maxWidth: 'none',
-          boxShadow:
-            '0px 3px 10px -1px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 2px 4px 0px rgb(0 0 0 / 12%)',
+          boxShadow: '0px 3px 10px -1px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 2px 4px 0px rgb(0 0 0 / 12%)',
+          height: '525px',
         }}
       >
         <Grid container spacing={2}>
@@ -196,8 +182,9 @@ const createAndUpdate = ({ props }: any) => {
             zeroMinWidth
             sx={{
               position: 'relative',
-              minHeight: 400,
-              maxHeight: 500,
+              minHeight: '400px',
+              height: '525px',
+              maxHeight: '525px',
               // display: 'flex',
               '& .MuiButtonBase-root': {
                 display: 'block',
@@ -210,10 +197,7 @@ const createAndUpdate = ({ props }: any) => {
             // flex-direction="column"
           >
             <Box component="div" className="editor_container">
-              <EditorComponent
-                getContent={getContent}
-                contents={editorType === 'update' ? props.content : ''}
-              />
+              <EditorComponent getContent={getContent} contents={editorType === 'update' ? props.content : ''} />
             </Box>
 
             {/* <Box component="div">
@@ -245,11 +229,11 @@ const createAndUpdate = ({ props }: any) => {
   };
 
   const handleAddTextEditorPopoverOpen = () => {
-    console.log('텍스트 에디터 왔냐');
+    console.log('mouse in');
   };
 
   const handleAddTextEditorPopoverClose = () => {
-    console.log('텍스트 에디터 갔냐');
+    console.log('mouse out');
   };
 
   const handleAddTextBox = () => {
@@ -262,8 +246,7 @@ const createAndUpdate = ({ props }: any) => {
           mx: 'auto',
           p: 2,
           maxWidth: 'none',
-          boxShadow:
-            '0px 3px 10px -1px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 2px 4px 0px rgb(0 0 0 / 12%)',
+          boxShadow: '0px 3px 10px -1px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 2px 4px 0px rgb(0 0 0 / 12%)',
         }}
       >
         <Grid container spacing={2}>
@@ -277,12 +260,7 @@ const createAndUpdate = ({ props }: any) => {
               autoComplete="off"
             >
               <div>
-                <TextField
-                  id="outlined-multiline-static"
-                  multiline
-                  rows={5}
-                  placeholder="내용을 입력하세요."
-                />
+                <TextField id="outlined-multiline-static" multiline rows={5} placeholder="내용을 입력하세요." />
               </div>
             </Box>
           </Grid>
@@ -297,9 +275,7 @@ const createAndUpdate = ({ props }: any) => {
   const fabs = [
     {
       sx: fabStyle as SxProps,
-      icon: (
-        <AddShoppingCartIcon sx={{ fontSize: '50px', color: '#00000052' }} />
-      ),
+      icon: <AddShoppingCartIcon sx={{ fontSize: '50px', color: '#00000052' }} />,
       label: 'Add',
       color: 'primary' as 'primary',
     },
@@ -307,12 +283,7 @@ const createAndUpdate = ({ props }: any) => {
       sx: fabStyle as SxProps,
       icon: (
         <>
-          <Button
-            sx={{ minWidth: 'max-content' }}
-            onClick={handleAddTextEditor}
-            onMouseEnter={handleAddTextEditorPopoverOpen}
-            onMouseLeave={handleAddTextEditorPopoverClose}
-          >
+          <Button sx={{ minWidth: 'max-content' }} onClick={handleAddTextEditor} onMouseEnter={handleAddTextEditorPopoverOpen} onMouseLeave={handleAddTextEditorPopoverClose}>
             <Buttons
               getTypeArr={[
                 {
@@ -326,12 +297,7 @@ const createAndUpdate = ({ props }: any) => {
               ]}
             />
           </Button>
-          <Button
-            sx={{ minWidth: 'max-content' }}
-            onClick={handleAddTextBox}
-            onMouseEnter={handleAddTextEditorPopoverOpen}
-            onMouseLeave={handleAddTextEditorPopoverClose}
-          >
+          <Button sx={{ minWidth: 'max-content' }} onClick={handleAddTextBox} onMouseEnter={handleAddTextEditorPopoverOpen} onMouseLeave={handleAddTextEditorPopoverClose}>
             <Buttons
               getTypeArr={[
                 {
@@ -394,8 +360,7 @@ const createAndUpdate = ({ props }: any) => {
           mx: 'auto',
           p: 2,
           maxWidth: 'none',
-          boxShadow:
-            '0px 3px 10px -1px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 2px 4px 0px rgb(0 0 0 / 12%)',
+          boxShadow: '0px 3px 10px -1px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 2px 4px 0px rgb(0 0 0 / 12%)',
         }}
       >
         <Grid container spacing={2}>
@@ -413,10 +378,7 @@ const createAndUpdate = ({ props }: any) => {
                 id="standard-adornment-weight"
                 onChange={onChangeTitle}
                 startAdornment={
-                  <InputAdornment
-                    sx={{ fontSize: '25px', color: 'rgb(171 171 171)' }}
-                    position="start"
-                  >
+                  <InputAdornment sx={{ fontSize: '25px', color: 'rgb(171 171 171)' }} position="start">
                     제목 :{' '}
                   </InputAdornment>
                 }
@@ -442,8 +404,7 @@ const createAndUpdate = ({ props }: any) => {
           maxWidth: 'none',
           textAlign: 'center',
           alignItems: 'center',
-          boxShadow:
-            '0px 3px 10px -1px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 2px 4px 0px rgb(0 0 0 / 12%)',
+          boxShadow: '0px 3px 10px -1px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 2px 4px 0px rgb(0 0 0 / 12%)',
         }}
       >
         <Grid container spacing={2}>
@@ -462,9 +423,7 @@ const createAndUpdate = ({ props }: any) => {
                 in={mouseEnter === index}
                 timeout={transitionDuration}
                 style={{
-                  transitionDelay: `${
-                    mouseEnter === index ? transitionDuration.exit : 0
-                  }ms`,
+                  transitionDelay: `${mouseEnter === index ? transitionDuration.exit : 0}ms`,
                 }}
               >
                 <Fab sx={fab.sx} aria-label={fab.label} color={fab.color}>

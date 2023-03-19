@@ -26,9 +26,7 @@ const interview = () => {
   const [maxSize, setMaxSize] = useState<boolean>(false);
   // const [pageType, setPageType] = useState<string>('contents');
   const [useModal, setUseModal] = useState<JSX.Element>();
-  const interviewModule = useSelector(
-    (state: RootState) => state.interviewModule,
-  );
+  const interviewModule = useSelector((state: RootState) => state.interviewModule);
   const [values, setValues] = useState({
     main_category: '',
     main_category_code: '',
@@ -63,10 +61,7 @@ const interview = () => {
       setMaxSize(false);
       if (interviewModule.pageType === 'contents') {
         navigate('/home');
-      } else if (
-        interviewModule.pageType === 'create' ||
-        interviewModule.pageType === 'update'
-      ) {
+      } else if (interviewModule.pageType === 'create' || interviewModule.pageType === 'update') {
         // setPageType('contents');
         dispatch(setPageType('contents'));
       }
@@ -82,10 +77,7 @@ const interview = () => {
       setUseModal(
         <Modal
           props={{
-            content:
-              interviewModule.pageType === 'contents'
-                ? '홈 화면으로 돌아갑니다.'
-                : '작성을 취소하시겠습니까?',
+            content: interviewModule.pageType === 'contents' ? '홈 화면으로 돌아갑니다.' : '작성을 취소하시겠습니까?',
             callback: { callbackfunc },
           }}
         />,
@@ -113,10 +105,7 @@ const interview = () => {
         <Paper
           className={maxSize ? 'setMaximumSize' : ''}
           sx={{
-            height:
-              window.innerWidth < 768
-                ? 'calc(100% - 80px)'
-                : 'calc(100% - 90px)',
+            height: window.innerWidth < 768 ? 'calc(100% - 80px)' : 'calc(100% - 90px)',
             width: window.innerWidth < 768 ? '100%' : 'calc(100% - 320px)',
             marginTop: 1,
             position: 'absolute',
@@ -127,14 +116,15 @@ const interview = () => {
           <div
             style={{
               zIndex: 999,
-              background: '#6464ff',
+              background: 'rgb(88 155 255)',
+              // background: '#8fef8f',
               width: '100%',
               height: '35px',
               borderRadius: '5px 5px 0px 0px',
               padding: '5px',
             }}
           >
-            <span style={{ margin: '10px', color: 'white', fontSize: '12px' }}>
+            <span style={{ margin: '10px', color: 'black', fontSize: '1rem', fontWeight: '500' }}>
               {interviewModule.pageType === 'contents'
                 ? '면접질문'
                 : interviewModule.pageType === 'create'
@@ -144,29 +134,13 @@ const interview = () => {
                 : '오류'}
             </span>
             <span style={{ right: '7px', position: 'absolute' }}>
-              <button
-                className="minimization"
-                style={{ height: '22px', width: '22px', marginRight: '4px' }}
-                onClick={() => buttonControl('mini')}
-              >
+              <button className="interview__button__minimization" onClick={() => buttonControl('mini')}>
                 <MinimizeIcon style={{ width: '100%', height: '100%' }} />
               </button>
-              <button
-                className="maximize"
-                style={{ height: '22px', width: '22px', marginRight: '4px' }}
-                onClick={() => buttonControl('max')}
-              >
-                {maxSize ? (
-                  <FilterNoneIcon style={{ width: '100%', height: '100%' }} />
-                ) : (
-                  <CropSquareIcon style={{ width: '100%', height: '100%' }} />
-                )}
+              <button className="interview__button__maximize" onClick={() => buttonControl('max')}>
+                {maxSize ? <FilterNoneIcon style={{ width: '100%', height: '100%' }} /> : <CropSquareIcon style={{ width: '100%', height: '100%' }} />}
               </button>
-              <button
-                className="close"
-                style={{ height: '22px', width: '22px' }}
-                onClick={() => buttonControl('close')}
-              >
+              <button className="interview__button__close" onClick={() => buttonControl('close')}>
                 <CloseIcon style={{ width: '100%', height: '100%' }} />
               </button>
             </span>
@@ -188,16 +162,19 @@ const interview = () => {
             ) : null}
           </div>
           <Divider style={{ margin: '0px 42px 0px 25px' }} />
-          <div>
-            <button
-              onClick={() => {
-                // setPageType('create');
-                dispatch(setPageType('create'));
-              }}
-            >
-              질문 만들기
-            </button>
-          </div>
+          {interviewModule.pageType === 'contents' ? (
+            <div className="interview__button__makediv">
+              <button
+                className="interview__button__make"
+                onClick={() => {
+                  // setPageType('create');
+                  dispatch(setPageType('create'));
+                }}
+              >
+                질문 만들기
+              </button>
+            </div>
+          ) : null}
         </Paper>
       </Box>
     </>

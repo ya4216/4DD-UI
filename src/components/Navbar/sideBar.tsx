@@ -10,7 +10,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { selectUnit } from '../../modules/unit';
 import { setOpenSave } from '../../modules/navBar';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TreeItem, { useTreeItem, TreeItemContentProps } from '@mui/lab/TreeItem';
 import { Button, Typography } from '@mui/material';
 import TreeView from '@mui/lab/TreeView';
@@ -19,6 +19,9 @@ import { useRef } from 'react';
 import Buttons from '../../containers/ButtonContainer';
 import clsx from 'clsx';
 import { selectMenuInfo } from '../../modules/buttonModule';
+import { RootState } from '../../modules';
+import './navbar.scss';
+import NestedModal from '../Common/modal';
 
 let drawerWidth = 300;
 
@@ -30,47 +33,22 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-const CustomContent = React.forwardRef(function CustomContent(
-  props: TreeItemContentProps,
-  ref,
-) {
-  const {
-    classes,
-    className,
-    label,
-    nodeId,
-    icon: iconProp,
-    expansionIcon,
-    displayIcon,
-  } = props;
+const CustomContent = React.forwardRef(function CustomContent(props: TreeItemContentProps, ref) {
+  const { classes, className, label, nodeId, icon: iconProp, expansionIcon, displayIcon } = props;
 
-  const {
-    disabled,
-    expanded,
-    selected,
-    focused,
-    handleExpansion,
-    handleSelection,
-    preventSelection,
-  } = useTreeItem(nodeId);
+  const { disabled, expanded, selected, focused, handleExpansion, handleSelection, preventSelection } = useTreeItem(nodeId);
 
   const icon = iconProp || expansionIcon || displayIcon;
 
-  const handleMouseDown = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     preventSelection(event);
   };
 
-  const handleExpansionClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
+  const handleExpansionClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     handleExpansion(event);
   };
 
-  const handleSelectionClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
+  const handleSelectionClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     handleSelection(event);
   };
 
@@ -88,11 +66,7 @@ const CustomContent = React.forwardRef(function CustomContent(
       <div onClick={handleExpansionClick} className={classes.iconContainer}>
         {icon}
       </div>
-      <Typography
-        onClick={handleSelectionClick}
-        component="div"
-        className={classes.label}
-      >
+      <Typography onClick={handleSelectionClick} component="div" className={classes.label}>
         {label}
       </Typography>
     </div>
@@ -104,7 +78,10 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const [expanded, setExpanded] = React.useState<string[]>([]);
+  const [buttonExpanded, setButtonExpanded] = React.useState<string[]>([]);
   const [selected, setSelected] = React.useState<string[]>([]);
+  const [openModal, setOpenModal] = React.useState<boolean>(false);
+  const userInfo = useSelector((state: RootState) => state.user.info);
   let cnt = 0;
   let expandedArr: any[] = [];
   const inputRef = useRef<any[]>([]);
@@ -149,7 +126,12 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
         <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
-          <Button onClick={() => dispatch(selectMenuInfo(value))}>
+          <Button
+            onClick={() => {
+              selectMenu(value._id);
+              dispatch(selectMenuInfo(value));
+            }}
+          >
             {value.title}
           </Button>
         </Typography>
@@ -159,17 +141,20 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
             aria-label="controlled"
             defaultCollapseIcon={<MoreHorizIcon />}
             defaultExpandIcon={<MoreHorizIcon />}
-            onClick={() => dispatch(selectMenuInfo(value))}
+            onClick={() => {
+              selectMenu(value._id);
+              dispatch(selectMenuInfo(value));
+            }}
+            sx={{
+              '& .MuiTreeItem-root .MuiTreeItem-content .MuiTreeItem-iconContainer': {
+                position: 'absolute',
+                right: 0,
+                transform: 'translate(0, -100%)',
+              },
+            }}
           >
             <TreeItem nodeId="1-1">
-              <TreeItem
-                nodeId="1-2"
-                label={
-                  <Buttons
-                    getTypeArr={['create', 'update', 'remove', 'onoff']}
-                  />
-                }
-              />
+              <TreeItem nodeId="1-2" label={<Buttons getTypeArr={['create', 'update', 'remove', 'onoff']} />} />
             </TreeItem>
           </TreeView>
         </Typography>
@@ -179,13 +164,12 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
 
   const childTree = (list: { [key: string]: any }) => {
     let innerHtml: JSX.Element[] = [];
-    let userId = localStorage.user ? JSON.parse(localStorage.user).id : '';
 
     list.map((v: { [key: string]: any }, i: number) => {
       cnt++;
 
       if (v.childMenu.length > 0) {
-        if (v.useYN == 'N' && userId != '6371e3df99561093efe09cfd') {
+        if (v.useYN == 'N' && userInfo.id != '6371e3df99561093efe09cfd') {
           return false;
         }
         expandedArr.push(String(cnt));
@@ -197,23 +181,23 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
               nodeId={String(cnt)}
               label={labelAndIcon(v, cnt)}
               disabled={v.useYN == 'Y' ? false : true}
+              sx={{
+                '& .MuiTreeItem-content .MuiTreeItem-label .MuiBox-root': {
+                  display: 'contents',
+                },
+              }}
             >
               {childTree(v.childMenu)}
             </TreeItem>
           </div>,
         );
       } else {
-        if (v.useYN == 'N' && userId != '6371e3df99561093efe09cfd') {
+        if (v.useYN == 'N' && userInfo.id != '6371e3df99561093efe09cfd') {
           return false;
         }
         innerHtml.push(
-          <div key={cnt} onClick={() => selectMenu(v._id)}>
-            <TreeItem
-              ContentComponent={CustomContent}
-              nodeId={String(cnt)}
-              label={labelAndIcon(v, cnt)}
-              disabled={v.useYN == 'Y' ? false : true}
-            />
+          <div key={cnt}>
+            <TreeItem ContentComponent={CustomContent} nodeId={String(cnt)} label={labelAndIcon(v, cnt)} disabled={v.useYN == 'Y' ? false : true} />
           </div>,
         );
       }
@@ -221,17 +205,42 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
     return innerHtml;
   };
 
+  const newCreate = () => {
+    // dispatch(selectMenuInfo(value));
+    // setOpenModal(true);
+  };
+
+  const callbackfunc = (prop: any) => {
+    setOpenModal(false);
+    if (prop === 'cancel') return;
+    // dispatch(setButtonType({type: prop.type, content: comment, selectedId: prop._id}));
+    // setUpdateCmt('');
+    // setReplyCmt('');
+  };
+
   const list = () => {
     return (
       <Box sx={{ flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}>
-        <Box sx={{ textAlign: 'right' }}>
-          <input type="text" />
-          <Button onClick={handleExpandClick}>
-            {expanded.length === 0 ? '펼치기' : '접기'}
-          </Button>
+        <Box
+          sx={{
+            textAlign: 'right',
+            '& .mainButtons': {
+              left: 0,
+              position: 'absolute',
+            },
+          }}
+        >
+          {/* <input type="text" /> */}
+          <span className="mainButtons">
+            <Buttons getTypeArr={['create']} />
+            {/* <button className="sideBar__mainButtons__addButton" onClick={() => newCreate()}>
+              새로만들기 +
+            </button> */}
+          </span>
+          <Button onClick={handleExpandClick}>{expanded.length === 0 ? '펼치기' : '접기'}</Button>
           <br />
-          <Buttons getTypeArr={['create', 'update', 'remove', 'onoff']} />
         </Box>
+        {openModal && <NestedModal props={{ title: '새로만들기', content: '새로운 과정을 추가하시겠습니까?', callback: { callbackfunc } }} />}
         <TreeView
           aria-label="controlled"
           defaultCollapseIcon={<ExpandMoreIcon />}
@@ -250,13 +259,7 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <IconButton
-        color="inherit"
-        aria-label="open drawer"
-        onClick={handleDrawerOpen}
-        edge="start"
-        sx={{ mr: 2, ...(open && { display: 'none' }) }}
-      >
+      <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{ mr: 2, ...(open && { display: 'none' }) }}>
         <ChevronRightIcon />
       </IconButton>
       <Drawer
@@ -268,39 +271,25 @@ const PersistentDrawerLeft = (menuList: { [key: string]: any }) => {
             boxSizing: 'border-box',
             boxShadow: '0px 0 25px 0px rgb(0 0 0 / 15%)',
           },
+          '& .MuiToolbar-root': {
+            minHeight: '50px',
+          },
           zIndex: 99,
         }}
         variant="persistent"
         anchor="left"
         open={open}
       >
-        <Toolbar sx={{ height: '70px' }} />
+        <Toolbar sx={{ height: '50px' }} />
         <Box sx={{ overflow: 'auto' }}>
           <DrawerHeader>
-            <Typography
-              sx={{ p: 2, fontWeight: 'bold', position: 'fixed', left: 0 }}
-            >
-              {menuList ? menuList.category : null} &gt;{' '}
-              {menuList ? menuList.title : null}
+            <Typography sx={{ p: 2, fontWeight: 'bold', position: 'fixed', left: 0 }}>
+              {menuList ? menuList.category : null} &gt; {menuList ? menuList.title : null}
             </Typography>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'ltr' ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
+            <IconButton onClick={handleDrawerClose}>{theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}</IconButton>
           </DrawerHeader>
           <Divider />
-          <>
-            {menuList ? (
-              menuList.childMenu && menuList.childMenu.length > 0 ? (
-                list()
-              ) : (
-                <div>과정이 없습니다.</div>
-              )
-            ) : null}
-          </>
+          <>{menuList ? menuList.childMenu && menuList.childMenu.length > 0 ? list() : <div>과정이 없습니다.</div> : null}</>
         </Box>
       </Drawer>
     </Box>

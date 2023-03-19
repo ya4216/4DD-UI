@@ -7,30 +7,6 @@
   }
 }
 
-.header {
-  background: white;
-  width: 100%;
-  height: 60px;
-  @include breakpoint(md) {
-    height: 70px;
-    position: relative;
-    z-index: 100;
-  }
-
-  &__content {
-    overflow: hidden;
-    color: #fff;
-    margin: 0 auto;
-    max-width: 1920px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-    z-index: 100;
-  }
-}
-
 .setMaximumSize {
   width: 100% !important;
   z-index: 999;
@@ -126,6 +102,96 @@
         right: 0;
       }
     }
+
+    &__minimization {
+      height: 22px;
+      width: 22px;
+      margin-right: 4px;
+      border: none;
+      border-radius: 5px;
+      background: white;
+      cursor: pointer;
+
+      &:hover {
+        background: #eaecff;
+      }
+    }
+    &__maximize {
+      height: 22px;
+      width: 22px;
+      margin-right: 4px;
+      border: none;
+      border-radius: 5px;
+      background: white;
+      cursor: pointer;
+
+      &:hover {
+        background: #eaecff;
+      }
+    }
+    &__close {
+      height: 22px;
+      width: 22px;
+      border: none;
+      border-radius: 5px;
+      background: white;
+      cursor: pointer;
+
+      &:hover {
+        background: #eaecff;
+      }
+    }
+
+    &__makediv {
+      text-align: right;
+    }
+
+    &__make {
+      position: absolute;
+      right: 30px;
+      bottom: 60px;
+      width: 110px;
+      height: 40px;
+      border: none;
+      border-radius: 5px;
+      background: rgb(88, 155, 255);
+      color: white;
+      cursor: pointer;
+    }
+  }
+  &__answer {
+    &__add {
+      border: none;
+      border-radius: 3px;
+      background: rgb(88, 155, 255);
+      color: white;
+      width: 50px;
+      height: 25px;
+    }
+    &__remove {
+      border: none;
+      border-radius: 3px;
+      background: rgb(88, 155, 255);
+      color: white;
+      width: 50px;
+      height: 25px;
+      margin-left: 5px;
+    }
+    &__save {
+      border: none;
+      border-radius: 3px;
+      background: rgb(88, 155, 255);
+      color: white;
+      width: 100%;
+      height: 30px;
+      margin-top: 10px;
+
+      @include breakpoint(md) {
+        width: 150px;
+        height: 40px;
+        margin-top: 20px;
+      }
+    }
   }
 }
 
@@ -153,6 +219,24 @@
 
     &__correctButton {
       float: right;
+      border-radius: 5px;
+      border: 3px solid rgb(88 155 255);
+      background: rgb(88 155 255);
+      width: 100%;
+      height: 40px;
+      color: white;
+      margin-top: 20px;
+      cursor: pointer;
+
+      &:hover {
+        background: rgb(88 155 255);
+        color: white;
+      }
+
+      @include breakpoint(md) {
+        width: 90px;
+        margin-top: 0px;
+      }
     }
   }
 }

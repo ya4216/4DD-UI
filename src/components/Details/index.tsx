@@ -21,22 +21,12 @@ const ContentDetail = () => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const selectUnit = useSelector(
-    (state: RootState) => state.unit.selectedUnitId,
-  );
-  const selectMenu = useSelector(
-    (state: RootState) => state.unit.selectedMenuId,
-  );
-  const floatingState = useSelector(
-    (state: RootState) => state.floatingButtonModule.clickState,
-  );
+  const selectUnit = useSelector((state: RootState) => state.unit.selectedUnitId);
+  const selectMenu = useSelector((state: RootState) => state.unit.selectedMenuId);
+  const floatingState = useSelector((state: RootState) => state.floatingButtonModule.clickState);
   const sideBarOpen = useSelector((state: RootState) => state.navBar.open);
 
   const selectButton = useSelector((state: RootState) => state.buttonModule);
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   const [contentMode, setContentMode] = useState<boolean>(false);
 
@@ -52,8 +42,6 @@ const ContentDetail = () => {
       if (selectButton.type == 'create' || selectButton.type == 'update') {
         setContentMode(true);
       } else if (selectButton.type == 'remove') {
-        //삭제하는곳~
-
         Axios.delete('/api/unit/title', {
           data: {
             selectedList: selectButton.selectedList,
@@ -67,18 +55,10 @@ const ContentDetail = () => {
           });
       } else if (selectButton.type == 'onoff') {
         //TODO HWI setCallback 으로 리렌더링 해보려고 했는데 잘 안됨. 업데이트 성공 하고나서 sidebar 리렌더링 되도록 고칠것
-        Axios.put(
-          `/api/unit/title/list/${
-            JSON.parse(JSON.stringify(selectButton.selectedList))._id
-          }`,
-          {
-            useYN:
-              JSON.parse(JSON.stringify(selectButton.selectedList)).useYN == 'Y'
-                ? 'N'
-                : 'Y',
-            selectedList: selectButton.selectedList,
-          },
-        )
+        Axios.put(`/api/unit/title/list/${JSON.parse(JSON.stringify(selectButton.selectedList))._id}`, {
+          useYN: JSON.parse(JSON.stringify(selectButton.selectedList)).useYN == 'Y' ? 'N' : 'Y',
+          selectedList: selectButton.selectedList,
+        })
           .then((res) => {
             console.log('성공 :: ', res);
             setTest(true);
@@ -159,13 +139,7 @@ const ContentDetail = () => {
           }}
         />
       ) : null}
-      {window.innerWidth < 768 ? (
-        Object.keys(list).length != 0 ? (
-          <SwipeableTemporaryDrawer {...list} />
-        ) : null
-      ) : Object.keys(list).length != 0 ? (
-        <SideBar {...list} />
-      ) : null}
+      {window.innerWidth < 768 ? Object.keys(list).length != 0 ? <SwipeableTemporaryDrawer {...list} /> : null : Object.keys(list).length != 0 ? <SideBar {...list} /> : null}
 
       {contentMode ? (
         <CreateAndUpdate
@@ -175,19 +149,12 @@ const ContentDetail = () => {
           }}
         />
       ) : Object.keys(selectedList).length != 0 ? (
-        <div
-          className="detail__area"
-          style={{ height: window.innerHeight - 80 }}
-        >
+        <div className="detail__area" style={{ height: window.innerHeight - 80 }}>
           <h1 className="detail__area__title">{selectedList.title}</h1>
           <h3 className="detail__area__contents">
             {selectedList.content ? (
               selectedList.content.detail_content ? (
-                <ReactQuill
-                  readOnly
-                  className="post_quill"
-                  value={selectedList.content.detail_content}
-                ></ReactQuill>
+                <ReactQuill readOnly className="post_quill" value={selectedList.content.detail_content}></ReactQuill>
               ) : null
             ) : null}
           </h3>

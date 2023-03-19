@@ -1,6 +1,7 @@
 import './App.css';
 import Navbar from './components/Navbar';
-import Footer from './common/Footer';
+import Footer from './components/Footer';
+// import Footer from './common/Footer';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import NotFound from './components/NotFound';
@@ -13,6 +14,7 @@ import Register from './components/Register';
 import Contents from './components/Details';
 import ReduxTest from './containers/CounterContainer';
 import MyPage from './components/MyPage';
+import About from './components/About';
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
       <Route path="register" element={<Register />} />
       <Route path="home" element={<Home />} />
       <Route path="mypage" element={<MyPage />} />
+      <Route path="about" element={<About />} />
       <Route path="/" element={<Home />} />
       <Route path="*" element={<NotFound />} />
 
@@ -39,6 +42,7 @@ export function WrappedApp() {
     <HashRouter>
       <Navbar />
       <App />
+      <Footer />
     </HashRouter>
   );
 }

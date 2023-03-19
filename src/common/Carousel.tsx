@@ -5,20 +5,14 @@ import 'slick-carousel/slick/slick-theme.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { initUnitState, selectUnitTitle } from '../modules/unit';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Buttons from '../containers/ButtonContainer';
-
 import './common.scss';
-
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import Axios from 'axios';
 import { RootState } from '../modules';
 import { setUserInfo } from '../modules/user';
-
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -33,14 +27,14 @@ const Carousel = ({ props }: any) => {
   let [dragging, setDragging] = useState<boolean>(false);
 
   const userInfo = useSelector((state: RootState) => state.user.info);
-  
+
   const handleBeforeChange = useCallback(() => {
     setDragging(true);
   }, []);
 
   const handleAfterChange = useCallback((i: number) => {
     setDragging(false);
-  }, []);  
+  }, []);
   //슬라이더 옵션 설정
   let settings = (type: string) => {
     return {
@@ -108,37 +102,38 @@ const Carousel = ({ props }: any) => {
   const parentsList = () => {
     let parentsHtml = [];
     for (let i in props) {
-      props[i]
+      props[i];
       if (props[i]) {
         parentsHtml.push(
           <div key={props[i][0]._id + i}>
-            {props[i][0].category === 'banner' ? null : (
-              <div className="contens_title">{props[i][0].category}</div>
-            )}
-            <Slider {...settings(props[i][0].category)}>
-              {childList(i as unknown as number)}
-            </Slider>
+            {props[i][0].category === 'banner' ? null : <div className="contens_title">{props[i][0].category}</div>}
+            <Slider {...settings(props[i][0].category)}>{childList(i as unknown as number)}</Slider>
           </div>,
         );
       }
     }
     return parentsHtml;
   };
-  
-  const likeUpdate = (id: string, checked: boolean) => {
+
+  const likeUpdate = (props: any, checked: boolean) => {
+    let existenceBool = true;
+
+    console.log('props: ', props);
+
     Axios.post(`/api/user/subinfo/${userInfo.user_sub_info._id}`, {
-      id: id,
+      id: props.id,
       like: checked,
     })
       .then((res) => {
         if (userInfo.user_sub_info) {
-          if (userInfo.user_sub_info.likes.indexOf(id) == -1) {
-            userInfo.user_sub_info.likes.push(id);
-          } else {
-            userInfo.user_sub_info.likes.splice(
-              userInfo.user_sub_info.likes.indexOf(id),
-              1,
-            );
+          userInfo.user_sub_info.likes.map((v: any, i: number) => {
+            if (v._id === props.id) {
+              userInfo.user_sub_info.likes.splice(i, 1);
+              existenceBool = false;
+            }
+          });
+          if (existenceBool) {
+            userInfo.user_sub_info.likes.push(props);
           }
         }
         dispatch(setUserInfo(userInfo));
@@ -146,6 +141,20 @@ const Carousel = ({ props }: any) => {
       .catch((err) => {
         console.log('실패 :: ', err);
       });
+  };
+
+  const likeIcon = (id: string) => {
+    if (userInfo.user_sub_info.likes.length === 0) {
+      return <Checkbox key="1" {...label} icon={<FavoriteBorder />} checkedIcon={<Favorite />} defaultChecked={false} />;
+    }
+    for (let i = 0; i < userInfo.user_sub_info.likes.length; i++) {
+      if (userInfo.user_sub_info.likes[i]._id === id) {
+        return <Checkbox key={i} {...label} icon={<FavoriteBorder />} checkedIcon={<Favorite />} defaultChecked={true} />;
+      }
+      if (userInfo.user_sub_info.likes.length - 1 === i) {
+        return <Checkbox key={i} {...label} icon={<FavoriteBorder />} checkedIcon={<Favorite />} defaultChecked={false} />;
+      }
+    }
   };
 
   //슬라이더 컴포넌트 하위의 목록들 동적 생성
@@ -158,16 +167,11 @@ const Carousel = ({ props }: any) => {
           <Card
             sx={{}}
             key={props[idx][j]._id}
-            className={(props[idx][0].category !== '좋아요' && idx == 0) ? 'banners' : 'list'}
+            className={props[idx][0].category !== '좋아요' && idx == 0 ? 'banners' : 'list'}
             onClick={(e) => {
               if (!dragging) {
                 if (Object(e.target).type == 'checkbox') {
-                  likeUpdate(
-                    props[idx][j]._id,
-                    Object(e.target).parentElement.className.indexOf(
-                      'Mui-checked',
-                    ) === -1,
-                  );
+                  likeUpdate(props[idx][j], Object(e.target).parentElement.className.indexOf('Mui-checked') === -1);
                 } else {
                   dispatch(selectUnitTitle(props[idx][j]._id));
                   navigate('/contents');
@@ -176,59 +180,22 @@ const Carousel = ({ props }: any) => {
             }}
           >
             <CardActionArea>
-              <div
-                className={
-                  idx == 0 ? 'carousel__img__banners' : 'carousel__img__list'
-                }
-              >
+              <div className={idx == 0 ? 'carousel__img__banners' : 'carousel__img__list'}>
                 <CardMedia
                   component="img"
                   // height="140"
-                  image={`${
-                    props[idx][j].title_image_path
-                      ? props[idx][j].title_image_path
-                      : `/assets/images/noimage1.jpg`
-                  }`}
+                  image={`${props[idx][j].title_image_path ? props[idx][j].title_image_path : `/assets/images/noimage1.jpg`}`}
                   alt={props[idx][j].title}
                 />
                 {idx == 0 ? null : (
                   <>
-                    <div className="carousel__img__list__like">
-                      <Checkbox
-                        {...label}
-                        icon={<FavoriteBorder />}
-                        checkedIcon={<Favorite />}
-                        checked={
-                          userInfo.user_sub_info
-                            ? userInfo.user_sub_info.likes.indexOf(
-                                props[idx][j]._id,
-                              ) != -1
-                              ? true
-                              : false
-                            : false
-                        }
-                      />
-                    </div>
+                    <div className="carousel__img__list__like">{userInfo.user_sub_info ? <>{likeIcon(props[idx][j]._id)}</> : null}</div>
                     <CardContent>
                       <Typography gutterBottom variant="h6" component="div">
-                        {idx == 0 ? (
-                          userInfo.id == '6371e3df99561093efe09cfd' ? (
-                            <Buttons
-                              getTypeArr={[
-                                'create',
-                                'update',
-                                'remove',
-                                'onoff',
-                              ]}
-                            />
-                          ) : null
-                        ) : (
-                          props[idx][j].title
-                        )}
+                        {idx == 0 ? userInfo.id == '6371e3df99561093efe09cfd' ? <Buttons getTypeArr={['create', 'update', 'remove', 'onoff']} /> : null : props[idx][j].title}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {props[idx][j].title}
-                        {/* {idx == 0 ? '' : props[idx][j].content} */}
                       </Typography>
                     </CardContent>
                   </>
@@ -236,86 +203,6 @@ const Carousel = ({ props }: any) => {
               </div>
             </CardActionArea>
           </Card>,
-
-          // <ImageListItem
-          //   key={props[idx][j]._id}
-          //   className={
-          //     idx == 0
-          //       ? 'banners text-shadow-drop-center'
-          //       : 'list text-shadow-drop-center'
-          //   }
-          //   onClick={(e) => {
-          //     if (!dragging) {
-          //       if (Object(e.target).type == 'checkbox') {
-          //         likeUpdate(
-          //           props[idx][j]._id,
-          //           Object(e.target).parentElement.className.indexOf(
-          //             'Mui-checked',
-          //           ) === -1,
-          //         );
-          //       } else {
-          //         dispatch(selectUnitTitle(props[idx][j]._id));
-          //         navigate('/contents');
-          //       }
-          //     }
-          //   }}
-          // >
-          //   <div
-          //     className={
-          //       idx == 0 ? 'carousel__img__banners' : 'carousel__img__list'
-          //     }
-          //   >
-          //     <img
-          //       src={`${
-          //         props[idx][j].title_image_path
-          //           ? props[idx][j].title_image_path
-          //           : '../src/image/noimage1.jpg'
-          //       }`}
-          //       srcSet={`${
-          //         props[idx][j].title_image_path
-          //           ? props[idx][j].title_image_path
-          //           : '../src/image/noimage1.jpg'
-          //       }`}
-          //       alt={props[idx][j].title}
-          //       loading="lazy"
-          //     />
-          //     {idx == 0 ? null : (
-          //       <div className="carousel__img__list__like">
-          //         <Checkbox
-          //           {...label}
-          //           icon={<FavoriteBorder />}
-          //           checkedIcon={<Favorite />}
-          //           checked={
-          //             userInfo.user_sub_info
-          //               ? userInfo.user_sub_info.likes.indexOf(
-          //                   props[idx][j]._id,
-          //                 ) != -1
-          //                 ? true
-          //                 : false
-          //               : false
-          //           }
-          //         />
-          //       </div>
-          //     )}
-          //   </div>
-          //   <ImageListItemBar
-          //     title={
-          //       <span>
-          //         {idx == 0 ? (
-          //           userInfo.id == '6371e3df99561093efe09cfd' ? (
-          //             <Buttons
-          //               getTypeArr={['create', 'update', 'remove', 'onoff']}
-          //             />
-          //           ) : null
-          //         ) : (
-          //           props[idx][j].title
-          //         )}
-          //       </span>
-          //     }
-          //     subtitle={<span>{idx == 0 ? '' : props[idx][j].content}</span>}
-          //     position="below"
-          //   />
-          // </ImageListItem>,
         );
       }
     }

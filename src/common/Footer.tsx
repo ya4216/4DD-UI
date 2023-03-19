@@ -43,20 +43,20 @@ const Footer = () => {
           {menuOpen && size.width < 768 ? (
             <ul>
               <li>
-                <Link to="/interview">면접질문</Link>
+                <Link to="/interview">INTERVIEW</Link>
               </li>
               <li>
-                <Link to="/help">자유게시판</Link>
+                <Link to="/help">COMMUNITY</Link>
               </li>
               <li>
-                <Link to="/mypage">마이페이지</Link>
+                <Link to="/mypage">MYPAGE</Link>
               </li>
 
               <Link to="/register">
-                <button className="btn">회원가입</button>
+                <button className="btn">SIGNUP</button>
               </Link>
               <Link to="/login">
-                <button className="btn btn__login">로그인</button>
+                <button className="btn btn__login">LOGIN</button>
               </Link>
               <div className="home_search_bar_div_footer">
                 <input
