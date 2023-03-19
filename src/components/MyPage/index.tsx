@@ -33,8 +33,7 @@ function MyPage() {
   // const [chart, setChart] = useState<JSX.Element[]>([]);
   const [chart, setChart] = useState<unit[]>([]);
   
-  useEffect(() => {    
-    console.log("### userInfo : ", userInfo);
+  useEffect(() => {        
     if(userInfo.id){
       userInfo.user_sub_info.likes.length > 0 &&
       (userInfo.user_sub_info.likes[0].category = '좋아요');

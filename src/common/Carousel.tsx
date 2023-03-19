@@ -117,9 +117,6 @@ const Carousel = ({ props }: any) => {
 
   const likeUpdate = (props: any, checked: boolean) => {
     let existenceBool = true;
-
-    console.log('props: ', props);
-
     Axios.post(`/api/user/subinfo/${userInfo.user_sub_info._id}`, {
       id: props.id,
       like: checked,
