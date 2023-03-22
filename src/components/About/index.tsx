@@ -22,10 +22,7 @@ const About = () => {
         <span className="root__box__picture">
           <div className="root__box__picture__div">
             <Paper className="root__box__picture__paper" elevation={5}>
-              <img
-                className="root__box__picture__paper__img"
-                src="/assets/images/ohjiwon.jpg"
-              ></img>
+              <img className="root__box__picture__paper__img" src="/assets/images/ohjiwon.jpg"></img>
             </Paper>
             <div>OH JI WON</div>
           </div>
@@ -38,7 +35,7 @@ const About = () => {
               </tr>
               <tr>
                 <th style={{ width: '150px' }}>E-MAIL</th>
-                <td>okwangdori@gmail.com</td>
+                <td>lu521ck@naver.com</td>
               </tr>
               <tr>
                 <th style={{ width: '150px' }}>GITHUB</th>
@@ -50,7 +47,9 @@ const About = () => {
               </tr>
               <tr>
                 <th>PORTFOLIO</th>
-                <td>-</td>
+                <td>
+                  <a href="https://okwangdori.github.io/" target="_blank"></a>
+                </td>
               </tr>
               {/* <tr>
                 <th>CAREER</th>
@@ -83,10 +82,7 @@ const About = () => {
         <span className="root__box__picture">
           <div className="root__box__picture__div">
             <Paper className="root__box__picture__paper" elevation={5}>
-              <img
-                className="root__box__picture__paper__img"
-                src="/assets/images/parkdaehwi.jpg"
-              ></img>
+              <img className="root__box__picture__paper__img" src="/assets/images/parkdaehwi.jpg"></img>
             </Paper>
             <div>PARK DAE HWI</div>
           </div>
@@ -99,7 +95,7 @@ const About = () => {
               </tr>
               <tr>
                 <th style={{ width: '150px' }}>E-MAIL</th>
-                <td>qkreognl1@gamil.com</td>
+                <td>ya4216@naver.com</td>
               </tr>
               <tr>
                 <th style={{ width: '150px' }}>GITHUB</th>
@@ -111,7 +107,11 @@ const About = () => {
               </tr>
               <tr>
                 <th>PORTFOLIO</th>
-                <td>-</td>
+                <td>
+                  <a href="https://ya4216.github.io/portfolio-react/" target="_blank">
+                    https://ya4216.github.io/portfolio-react/
+                  </a>
+                </td>
               </tr>
               {/* <tr>
                 <th>CAREER</th>
