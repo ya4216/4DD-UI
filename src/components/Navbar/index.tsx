@@ -29,9 +29,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.user.info);
 
-  const flotingButton = useSelector(
-    (state: RootState) => state.floatingButtonModule,
-  );
+  const flotingButton = useSelector((state: RootState) => state.floatingButtonModule);
 
   // const getUserInfo = () => {
   //   AuthService.getUserInfo()
@@ -88,9 +86,9 @@ const Navbar = () => {
         setMessage(response.data.message);
         navigate('/home');
         //로컬
-        allDelCookies('localhost', '/');
+        // allDelCookies('localhost', '/');
         //운영
-        // allDelCookies('fordd.fly.dev', '/');
+        allDelCookies('fordd.fly.dev', '/');
       },
       (error) => {
         const resMessage = error.response.data?.message;
@@ -149,12 +147,7 @@ const Navbar = () => {
                   LOGOUT
                 </Link>
               </li>
-              <Divider
-                orientation="vertical"
-                variant="middle"
-                flexItem
-                style={{ marginRight: '10px' }}
-              />
+              <Divider orientation="vertical" variant="middle" flexItem style={{ marginRight: '10px' }} />
               {/* <button
               className="btn btn__login_out"
               onClick={logout}
@@ -179,11 +172,7 @@ const Navbar = () => {
   return (
     <>
       <header className="header">
-        <meta
-          name="viewport"
-          content="width=device-width,initial-scale=1"
-          user-scalable="no"
-        />
+        <meta name="viewport" content="width=device-width,initial-scale=1" user-scalable="no" />
         <div className="header__content">
           <Link to="/" className="header__content__logo focus-in-contract-bck">
             <span
@@ -196,12 +185,7 @@ const Navbar = () => {
                 float: 'left',
               }}
             >
-              <img
-                src="/assets/images/mainLogo.png"
-                srcSet="/assets/images/mainLogo.png"
-                alt="logo"
-                style={{ position: 'absolute', top: '-33px', left: '-41px' }}
-              />
+              <img src="/assets/images/mainLogo.png" srcSet="/assets/images/mainLogo.png" alt="logo" style={{ position: 'absolute', top: '-33px', left: '-41px' }} />
             </span>
             <span
               style={{
@@ -213,12 +197,8 @@ const Navbar = () => {
               }}
             >
               <span className="header__content__logo__name">FOR</span>
-              <span className="header__content__logo__name header__content__logo__space">
-                DREAMING
-              </span>
-              <span className="header__content__logo__name header__content__logo__space">
-                DEVELOPER
-              </span>
+              <span className="header__content__logo__name header__content__logo__space">DREAMING</span>
+              <span className="header__content__logo__name header__content__logo__space">DEVELOPER</span>
             </span>
           </Link>
           <nav
@@ -254,13 +234,7 @@ const Navbar = () => {
           {footerMenuOpen && size.width < 768 ? navElement('footer') : null}
         </nav>
         <div className="footer-by__content__toggle">
-          {!headerMenuOpen ? (
-            !footerMenuOpen ? (
-              <BiMenuAltRight onClick={footerMenuToggleHandler} />
-            ) : (
-              <AiOutlineClose onClick={footerMenuToggleHandler} />
-            )
-          ) : null}
+          {!headerMenuOpen ? !footerMenuOpen ? <BiMenuAltRight onClick={footerMenuToggleHandler} /> : <AiOutlineClose onClick={footerMenuToggleHandler} /> : null}
         </div>
 
         {flotingButton.on && (

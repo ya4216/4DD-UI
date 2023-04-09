@@ -48,7 +48,9 @@ const About = () => {
               <tr>
                 <th>PORTFOLIO</th>
                 <td>
-                  <a href="https://okwangdori.github.io/" target="_blank"></a>
+                  <a href="https://okwangdori.github.io/" target="_blank">
+                    https://okwangdori.github.io/
+                  </a>
                 </td>
               </tr>
               {/* <tr>
